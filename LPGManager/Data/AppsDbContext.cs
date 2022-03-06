@@ -13,15 +13,21 @@ namespace LPGManager.Data
 
         public DbSet<PurchaseDetails> PurchasesDetails { get; set; }
         public DbSet<PurchaseMaster> PurchaseMasters { get; set; }
-        public DbSet<Sell> Sells { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
+        public DbSet<SellDetails> SellsDetails { get; set; }
+        public DbSet<SellMaster> SellMasters { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<PurchaseDetails>()
                 .HasOne(p => p.PurchaseMaster)
                 .WithMany(b => b.PurchasesDetails)
-                .HasForeignKey(p => p.PurchaseMasterId);   
+                .HasForeignKey(p => p.PurchaseMasterId);
+
+            modelBuilder.Entity<SellDetails>()
+                .HasOne(p => p.SellMaster)
+                .WithMany(b => b.SellsDetails)
+                .HasForeignKey(p => p.SellMasterId);
         }
         
     }

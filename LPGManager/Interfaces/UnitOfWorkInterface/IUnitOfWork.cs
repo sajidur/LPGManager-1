@@ -9,7 +9,8 @@ namespace LPGManager.Interfaces.UnitOfWorkInterface
         IPurchaseDetailsService purchaseDetailsService { get; }
         IPurchaseMasterService purchaseMasterService { get; }
         ISupplierService supplierService { get; }
-        ISellService sellService { get; }
+        ISellDetailsService sellDetailsService { get; }
+        ISellMasterService sellMasterService { get; }
         Task<bool> SaveAsync();
     }
 }

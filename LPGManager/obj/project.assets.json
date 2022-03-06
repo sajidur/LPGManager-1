@@ -2063,11 +2063,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Dell\\Desktop\\LGHManeger\\.net project\\LPGManager\\LPGManager\\LPGManager.csproj",
+      "projectUniqueName": "C:\\Users\\Dell\\Desktop\\LGHManeger\\.net project\\Test\\LPGManager\\LPGManager\\LPGManager.csproj",
       "projectName": "LPGManager",
-      "projectPath": "C:\\Users\\Dell\\Desktop\\LGHManeger\\.net project\\LPGManager\\LPGManager\\LPGManager.csproj",
+      "projectPath": "C:\\Users\\Dell\\Desktop\\LGHManeger\\.net project\\Test\\LPGManager\\LPGManager\\LPGManager.csproj",
       "packagesPath": "C:\\Users\\Dell\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Dell\\Desktop\\LGHManeger\\.net project\\LPGManager\\LPGManager\\obj\\",
+      "outputPath": "C:\\Users\\Dell\\Desktop\\LGHManeger\\.net project\\Test\\LPGManager\\LPGManager\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Dell\\AppData\\Roaming\\NuGet\\NuGet.Config",

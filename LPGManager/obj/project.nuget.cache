@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "IZGnW4t77BDLeyEQC8x4FJCJyJQScY9VlryoBNNwtZRPt1pI9Evd4wnOkpa1y/d/lsZXz6GpbPBEOTnnhk9z0A==",
+  "dgSpecHash": "8Y+QWM2KxW0iiQFJMbbqSFmorEUmL6DXpcs0OC/pViOUCvZe+sYMmNhJByhfZBwVu5Hnr2ZLTAkfBre7SHg/aQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Dell\\Desktop\\LGHManeger\\.net project\\LPGManager\\LPGManager\\LPGManager.csproj",
+  "projectFilePath": "C:\\Users\\Dell\\Desktop\\LGHManeger\\.net project\\Test\\LPGManager\\LPGManager\\LPGManager.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Dell\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Dell\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",

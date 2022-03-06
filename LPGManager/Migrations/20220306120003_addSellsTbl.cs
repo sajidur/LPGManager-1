@@ -1,47 +1,34 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace LPGManager.Migrations
 {
-    public partial class createInitials : Migration
+    public partial class addSellsTbl : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "PurchaseMasters",
+                name: "SellMasters",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TotalPrice = table.Column<int>(type: "int", nullable: false),
-                    TotalCommission = table.Column<int>(type: "int", nullable: true),
+                    Discount = table.Column<int>(type: "int", nullable: true),
                     DueAdvance = table.Column<int>(type: "int", nullable: true),
                     PaymentType = table.Column<int>(type: "int", nullable: true),
-                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PurchaseMasters", x => x.Id);
-                });           
-
-            migrationBuilder.CreateTable(
-                name: "Suppliers",
-                columns: table => new
-                {
-                    SupplierId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SupplierName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Phone = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Suppliers", x => x.SupplierId);
+                    table.PrimaryKey("PK_SellMasters", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "PurchasesDetails",
+                name: "SellsDetails",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -55,36 +42,33 @@ namespace LPGManager.Migrations
                     ReceivingQuantity = table.Column<int>(type: "int", nullable: true),
                     ReturnQuantity = table.Column<int>(type: "int", nullable: true),
                     DamageQuantity = table.Column<int>(type: "int", nullable: true),
-                    SaleQuantity = table.Column<int>(type: "int", nullable: false),
-                    PurchaseMasterId = table.Column<int>(type: "int", nullable: false)
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SellMasterId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PurchasesDetails", x => x.Id);
+                    table.PrimaryKey("PK_SellsDetails", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PurchasesDetails_PurchaseMasters_PurchaseMasterId",
-                        column: x => x.PurchaseMasterId,
-                        principalTable: "PurchaseMasters",
+                        name: "FK_SellsDetails_SellMasters_SellMasterId",
+                        column: x => x.SellMasterId,
+                        principalTable: "SellMasters",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_PurchasesDetails_PurchaseMasterId",
-                table: "PurchasesDetails",
-                column: "PurchaseMasterId");
+                name: "IX_SellsDetails_SellMasterId",
+                table: "SellsDetails",
+                column: "SellMasterId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PurchasesDetails");           
+                name: "SellsDetails");
 
             migrationBuilder.DropTable(
-                name: "Suppliers");
-
-            migrationBuilder.DropTable(
-                name: "PurchaseMasters");
+                name: "SellMasters");
         }
     }
 }

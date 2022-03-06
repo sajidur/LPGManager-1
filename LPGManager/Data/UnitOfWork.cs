@@ -20,7 +20,8 @@ namespace LPGManager.Data
 
         public ISupplierService supplierService => new SupplierService(_dbContext);
 
-        public ISellService sellService => new SellService(_dbContext);
+        public ISellDetailsService sellDetailsService => new SellDetailsService(_dbContext);
+        public ISellMasterService sellMasterService => new SellMasterService(_dbContext);
 
         public async Task<bool> SaveAsync()
         {

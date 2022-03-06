@@ -15,7 +15,9 @@ namespace LPGManager.Data.Services.PurchaseService
         }
         public async Task<PurchaseMaster> AddAsync(PurchaseMaster purchaseMaster)
         {
-            _dbContext.PurchaseMasters.Add(purchaseMaster);
+            purchaseMaster.CreatedOn = DateTime.UtcNow;
+
+             _dbContext.PurchaseMasters.Add(purchaseMaster);
             return purchaseMaster;
         }
 
@@ -24,7 +26,7 @@ namespace LPGManager.Data.Services.PurchaseService
             var existing = await _dbContext.PurchaseMasters.FirstOrDefaultAsync(c => c.Id == id);
 
             if (existing == null)
-                throw new ArgumentException("Purchase Details is not exist");
+                throw new ArgumentException("Purchase is not exist");
 
             _dbContext.PurchaseMasters.Remove(existing);
         }
@@ -47,7 +49,7 @@ namespace LPGManager.Data.Services.PurchaseService
         {
             var existing = await _dbContext.PurchaseMasters.FirstOrDefaultAsync(c => c.Id == model.Id);
             if (existing == null)
-                throw new ArgumentException("Purchase Details is not exist");
+                throw new ArgumentException("Purchase Master is not exist");
 
             _dbContext.Entry(existing).CurrentValues.SetValues(model);
 

@@ -4,36 +4,33 @@ using LPGManager.Models;
 
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace LPGManager.Controllers
 {
-
     [ApiController]
     [Route("api/[controller]")]
-    public class PurchaseDetailsController : ControllerBase
+    public class SellDetailsController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public PurchaseDetailsController(IUnitOfWork unitOfWork)
+        public SellDetailsController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
-        // GET: api/<PurchaseController>      
+        // GET: api/<SellDetailsController>      
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var data = await _unitOfWork.purchaseDetailsService.GetAllAsync();
+            var data = await _unitOfWork.sellDetailsService.GetAllAsync();
             return Ok(data);
         }
 
         [HttpPost("add")]
-        public async Task<IActionResult> Create(PurchaseDetailsDtos model)
+        public async Task<IActionResult> Create(SellDetailsDtos model)
         {
-            PurchaseDetails result;
+            SellDetails result;
             try
             {
-                var purchaseDetails = new PurchaseDetails
+                var sellDetails = new SellDetails
                 {
                     ProductName = model.ProductName,
                     Size = model.Size,
@@ -44,11 +41,10 @@ namespace LPGManager.Controllers
                     ReceivingQuantity = model.ReceivingQuantity,
                     ReturnQuantity = model.ReturnQuantity,
                     DamageQuantity = model.DamageQuantity,
-                    SaleQuantity = model.SaleQuantity,
-                    PurchaseMasterId = model.PurchaseMasterId,
+                    SellMasterId = model.SellMasterId,
 
                 };
-                result = await _unitOfWork.purchaseDetailsService.AddAsync(purchaseDetails);
+                result = await _unitOfWork.sellDetailsService.AddAsync(sellDetails);
                 await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)
@@ -60,12 +56,12 @@ namespace LPGManager.Controllers
             return Ok(new { data = result });
         }
         [HttpPost("edit/{id:int}")]
-        public async Task<IActionResult> Update(PurchaseDetailsDtos model)
+        public async Task<IActionResult> Update(SellDetailsDtos model)
         {
-            PurchaseDetails result;
+            SellDetails result;
             try
             {
-                var purchaseDetails = new PurchaseDetails
+                var sellDetails = new SellDetails
                 {
                     Id = model.Id,
                     ProductName = model.ProductName,
@@ -77,11 +73,10 @@ namespace LPGManager.Controllers
                     ReceivingQuantity = model.ReceivingQuantity,
                     ReturnQuantity = model.ReturnQuantity,
                     DamageQuantity = model.DamageQuantity,
-                    SaleQuantity = model.SaleQuantity,
-                    PurchaseMasterId = model.PurchaseMasterId,
+                    SellMasterId = model.SellMasterId,                    
 
                 };
-                result = await _unitOfWork.purchaseDetailsService.UpdateAsync(purchaseDetails);
+                result = await _unitOfWork.sellDetailsService.UpdateAsync(sellDetails);
                 await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)
@@ -97,7 +92,7 @@ namespace LPGManager.Controllers
         {
             try
             {
-                await _unitOfWork.purchaseDetailsService.DeleteAsync(id);
+                await _unitOfWork.sellDetailsService.DeleteAsync(id);
                 await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)

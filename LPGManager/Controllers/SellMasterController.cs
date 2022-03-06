@@ -1,17 +1,19 @@
 ﻿using LPGManager.Dtos;
 using LPGManager.Interfaces.UnitOfWorkInterface;
 using LPGManager.Models;
+
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LPGManager.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PurchaseMasterController : ControllerBase
+    public class SellMasterController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public PurchaseMasterController(IUnitOfWork unitOfWork)
+        public SellMasterController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -19,25 +21,25 @@ namespace LPGManager.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var data = await _unitOfWork.purchaseMasterService.GetAllAsync();
+            var data = await _unitOfWork.sellMasterService.GetAllAsync();
             return Ok(data);
         }
 
         [HttpPost("add")]
-        public async Task<IActionResult> Create(PurchaseMasterDtos model)
+        public async Task<IActionResult> Create(SellMasterDtos model)
         {
-            PurchaseMaster result;
+            SellMaster result;
             try
             {
-                var purchaseMaster = new PurchaseMaster
+                var sellMaster = new SellMaster
                 {
                     TotalPrice = model.TotalPrice,
-                    TotalCommission = model.TotalCommission,
+                    Discount = model.Discount,
                     DueAdvance = model.DueAdvance,
                     PaymentType = model.PaymentType,
                     Notes = model.Notes,
                 };
-                result = await _unitOfWork.purchaseMasterService.AddAsync(purchaseMaster);
+                result = await _unitOfWork.sellMasterService.AddAsync(sellMaster);
                 await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)
@@ -49,21 +51,21 @@ namespace LPGManager.Controllers
             return Ok(new { data = result });
         }
         [HttpPost("edit/{id:int}")]
-        public async Task<IActionResult> Update(PurchaseMasterDtos model)
+        public async Task<IActionResult> Update(SellMasterDtos model)
         {
-            PurchaseMaster result;
+            SellMaster result;
             try
             {
-                var purchaseMaster = new PurchaseMaster
+                var sellMaster = new SellMaster
                 {
                     Id = model.Id,
                     TotalPrice = model.TotalPrice,
-                    TotalCommission = model.TotalCommission,
+                    Discount = model.Discount,
                     DueAdvance = model.DueAdvance,
                     PaymentType = model.PaymentType,
                     Notes = model.Notes,
                 };
-                result = await _unitOfWork.purchaseMasterService.UpdateAsync(purchaseMaster);
+                result = await _unitOfWork.sellMasterService.UpdateAsync(sellMaster);
                 await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)
@@ -79,7 +81,7 @@ namespace LPGManager.Controllers
         {
             try
             {
-                await _unitOfWork.purchaseMasterService.DeleteAsync(id);
+                await _unitOfWork.sellMasterService.DeleteAsync(id);
                 await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)
