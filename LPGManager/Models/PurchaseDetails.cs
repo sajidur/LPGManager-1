@@ -20,6 +20,7 @@ namespace LPGManager.Models
         public DateTime CreatedOn { get; set; }
 
         public int PurchaseMasterId { get; set; }
+
         [JsonIgnore]
         public PurchaseMaster PurchaseMaster { get; set; }
 

@@ -16,8 +16,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AppsDbContext>(options =>
-                options.UseSqlServer(
-                    builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(
+                    builder.Configuration.GetConnectionString("PostgreConnection")));
 builder.Services.AddScoped<ISupplierService, SupplierService>();
 builder.Services.AddScoped<IPurchaseDetailsService, PurchaseDetailsService>();
 builder.Services.AddScoped<IPurchaseMasterService, PurchaseMasterService>();
