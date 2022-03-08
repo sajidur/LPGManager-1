@@ -16,6 +16,7 @@ namespace LPGManager.Data
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<SellDetails> SellsDetails { get; set; }
         public DbSet<SellMaster> SellMasters { get; set; }
+        public DbSet<Company> Companies { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,6 +29,16 @@ namespace LPGManager.Data
                 .HasOne(p => p.SellMaster)
                 .WithMany(b => b.SellsDetails)
                 .HasForeignKey(p => p.SellMasterId);
+
+            modelBuilder.Entity<PurchaseDetails>()
+                .HasOne<Supplier>()
+                .WithMany()
+                .HasForeignKey(p => p.SupplierId);
+
+            modelBuilder.Entity<PurchaseMaster>()
+                .HasOne<Supplier>()
+                .WithMany()
+                .HasForeignKey(p => p.SupplierId);
         }
         
     }

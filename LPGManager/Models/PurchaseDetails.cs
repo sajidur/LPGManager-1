@@ -4,9 +4,8 @@ namespace LPGManager.Models
 {
     public class PurchaseDetails
     {        
-        public int Id { get; set; } 
-        
-        //public int SupplierId { get; set; }        
+        public int Id { get; set; }         
+        public int SupplierId { get; set; }        
         public string ProductName { get; set; }        
         public string Size { get; set; }        
         public string? ProductType { get; set; }        
