@@ -1,7 +1,9 @@
 global using LPGManager.Data;
+using LPGManager.Data.Services.CompanyService;
 using LPGManager.Data.Services.PurchaseService;
 using LPGManager.Data.Services.SellService;
 using LPGManager.Data.Services.SupplierService;
+using LPGManager.Interfaces.CompanyInterface;
 using LPGManager.Interfaces.PurchasesInterface;
 using LPGManager.Interfaces.SellsInterface;
 using LPGManager.Interfaces.SupplierInterface;
@@ -23,6 +25,7 @@ builder.Services.AddScoped<IPurchaseDetailsService, PurchaseDetailsService>();
 builder.Services.AddScoped<IPurchaseMasterService, PurchaseMasterService>();
 builder.Services.AddScoped<ISellDetailsService, SellDetailsService>();
 builder.Services.AddScoped<ISellMasterService, SellMasterService>();
+builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

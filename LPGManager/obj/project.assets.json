@@ -2210,28 +2210,20 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\sajid\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
-    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {}
+    "C:\\Users\\Dell\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\My data\\LPGManager\\LPGManager\\LPGManager.csproj",
+      "projectUniqueName": "C:\\Users\\Dell\\Desktop\\LGHManeger\\.net project\\LPGManager\\LPGManager\\LPGManager\\LPGManager.csproj",
       "projectName": "LPGManager",
-      "projectPath": "C:\\My data\\LPGManager\\LPGManager\\LPGManager.csproj",
-      "packagesPath": "C:\\Users\\sajid\\.nuget\\packages\\",
-      "outputPath": "C:\\My data\\LPGManager\\LPGManager\\obj\\",
+      "projectPath": "C:\\Users\\Dell\\Desktop\\LGHManeger\\.net project\\LPGManager\\LPGManager\\LPGManager\\LPGManager.csproj",
+      "packagesPath": "C:\\Users\\Dell\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Dell\\Desktop\\LGHManeger\\.net project\\LPGManager\\LPGManager\\LPGManager\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
-      ],
       "configFilePaths": [
-        "C:\\Users\\sajid\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        "C:\\Users\\Dell\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
@@ -2307,7 +2299,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.200\\RuntimeIdentifierGraph.json"
       }
     }
   }

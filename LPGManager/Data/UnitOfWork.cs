@@ -1,6 +1,8 @@
-﻿using LPGManager.Data.Services.PurchaseService;
+﻿using LPGManager.Data.Services.CompanyService;
+using LPGManager.Data.Services.PurchaseService;
 using LPGManager.Data.Services.SellService;
 using LPGManager.Data.Services.SupplierService;
+using LPGManager.Interfaces.CompanyInterface;
 using LPGManager.Interfaces.PurchasesInterface;
 using LPGManager.Interfaces.SellsInterface;
 using LPGManager.Interfaces.SupplierInterface;
@@ -22,6 +24,8 @@ namespace LPGManager.Data
 
         public ISellDetailsService sellDetailsService => new SellDetailsService(_dbContext);
         public ISellMasterService sellMasterService => new SellMasterService(_dbContext);
+
+        public ICompanyService companyService => new CompanyService(_dbContext);
 
         public async Task<bool> SaveAsync()
         {

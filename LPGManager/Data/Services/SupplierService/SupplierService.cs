@@ -20,6 +20,8 @@ namespace LPGManager.Data.Services.SupplierService
                 throw new ArgumentException("write supplier name");            
             if (existing != null)
                 throw new ArgumentException("Already exist");
+
+            supplier.CreatedOn = DateTime.UtcNow;
             _dbContext.Suppliers.Add(supplier);
 
             return supplier;
@@ -44,6 +46,7 @@ namespace LPGManager.Data.Services.SupplierService
             if (existing == null)
                 throw new ArgumentException("Supplier is not exist");
 
+            model.CreatedOn = DateTime.UtcNow;
             _dbContext.Entry(existing).CurrentValues.SetValues(model);
 
             return model;

@@ -4,17 +4,16 @@ using LPGManager.Models;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace LPGManager.Controllers
 {
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("api/[controller]")]    
-    public class SupplierController : ControllerBase
+    public class CompanyController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public SupplierController(IUnitOfWork unitOfWork)
+        public CompanyController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -23,26 +22,26 @@ namespace LPGManager.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var allSupplier = await _unitOfWork.supplierService.GetAllAsync();
+            var allSupplier = await _unitOfWork.companyService.GetAllAsync();
             return Ok(allSupplier);
         }
 
         [HttpPost("add")]
-        public async Task<IActionResult> Create(SupplierDtos model)
+        public async Task<IActionResult> Create(CompanyDtos model)
         {
-            Supplier result;
+            Company result;
             try
             {
-                var supplier = new Supplier
+                var supplier = new Company
                 {
-                    SupplierName = model.Name,
+                    CompanyName = model.CompanyName,
                     Image = model.Image,
                     Address = model.Address,
                     Phone = model.Phone,
-                    Companytype = model.Companytype,                  
+                    CompanyType = model.CompanyType,
 
                 };
-                result = await _unitOfWork.supplierService.AddAsync(supplier);
+                result = await _unitOfWork.companyService.AddAsync(supplier);
                 await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)
@@ -54,22 +53,22 @@ namespace LPGManager.Controllers
             return Ok(new { data = result });
         }
         [HttpPost("edit/{id:int}")]
-        public async Task<IActionResult> Update(SupplierDtos model)
+        public async Task<IActionResult> Update(CompanyDtos model)
         {
-            Supplier result;
+            Company result;
             try
             {
-                var supplier = new Supplier
+                var company = new Company
                 {
-                    SupplierId = model.Id,
-                    SupplierName = model.Name,
+                    Id = model.Id,
+                    CompanyName = model.CompanyName,
                     Image = model.Image,
                     Address = model.Address,
                     Phone = model.Phone,
-                    Companytype = model.Companytype,
+                    CompanyType = model.CompanyType,
 
                 };
-                result = await _unitOfWork.supplierService.AddAsync(supplier);
+                result = await _unitOfWork.companyService.AddAsync(company);
                 await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)
@@ -86,7 +85,7 @@ namespace LPGManager.Controllers
         {
             try
             {
-                await _unitOfWork.supplierService.DeleteAsync(id);
+                await _unitOfWork.companyService.DeleteAsync(id);
                 await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)
@@ -96,6 +95,5 @@ namespace LPGManager.Controllers
             }
             return Ok();
         }
-
     }
 }
