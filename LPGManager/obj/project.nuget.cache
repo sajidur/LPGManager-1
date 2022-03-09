@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "9yDtaKdHGT7iYIkEnP5TaIPsT87N5Cc9wWJcaioMkkRtVOYvIIx5WpGVOp5HlSfHymCbQkTbg6DwoP+8XhplwQ==",
+  "dgSpecHash": "1NQjtTQpbWNhpWme+MBD6+Gt5jSQRuwY2IcqagoKecprbNZvwNEZVv2ii8dwQufYW2MCU+T0boD2FHygd8KrFA==",
   "success": true,
   "projectFilePath": "C:\\My data\\LPGManager\\LPGManager\\LPGManager.csproj",
   "expectedPackageFiles": [
@@ -33,6 +33,7 @@
     "C:\\Users\\sajid\\.nuget\\packages\\microsoft.identitymodel.tokens\\6.8.0\\microsoft.identitymodel.tokens.6.8.0.nupkg.sha512",
     "C:\\Users\\sajid\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "C:\\Users\\sajid\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\sajid\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.14.0\\microsoft.visualstudio.azure.containers.tools.targets.1.14.0.nupkg.sha512",
     "C:\\Users\\sajid\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
     "C:\\Users\\sajid\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",
     "C:\\Users\\sajid\\.nuget\\packages\\npgsql\\6.0.3\\npgsql.6.0.3.nupkg.sha512",
