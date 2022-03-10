@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Dell\\Desktop\\LGHManeger\\.net project\\LPGManager\\LPGManager\\LPGManager\\LPGManager.csproj": {}
+    "C:\\Users\\Dell\\Desktop\\LGHManeger\\.net project\\LPGManager_3-10-2022\\LPGManager\\LPGManager\\LPGManager.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Dell\\Desktop\\LGHManeger\\.net project\\LPGManager\\LPGManager\\LPGManager\\LPGManager.csproj": {
+    "C:\\Users\\Dell\\Desktop\\LGHManeger\\.net project\\LPGManager_3-10-2022\\LPGManager\\LPGManager\\LPGManager.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Dell\\Desktop\\LGHManeger\\.net project\\LPGManager\\LPGManager\\LPGManager\\LPGManager.csproj",
+        "projectUniqueName": "C:\\Users\\Dell\\Desktop\\LGHManeger\\.net project\\LPGManager_3-10-2022\\LPGManager\\LPGManager\\LPGManager.csproj",
         "projectName": "LPGManager",
-        "projectPath": "C:\\Users\\Dell\\Desktop\\LGHManeger\\.net project\\LPGManager\\LPGManager\\LPGManager\\LPGManager.csproj",
+        "projectPath": "C:\\Users\\Dell\\Desktop\\LGHManeger\\.net project\\LPGManager_3-10-2022\\LPGManager\\LPGManager\\LPGManager.csproj",
         "packagesPath": "C:\\Users\\Dell\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Dell\\Desktop\\LGHManeger\\.net project\\LPGManager\\LPGManager\\LPGManager\\obj\\",
+        "outputPath": "C:\\Users\\Dell\\Desktop\\LGHManeger\\.net project\\LPGManager_3-10-2022\\LPGManager\\LPGManager\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Dell\\AppData\\Roaming\\NuGet\\NuGet.Config",

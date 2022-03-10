@@ -1,5 +1,7 @@
 ﻿using LPGManager.Interfaces.CompanyInterface;
+using LPGManager.Interfaces.InventoryInterface;
 using LPGManager.Interfaces.PurchasesInterface;
+using LPGManager.Interfaces.RoleInterface;
 using LPGManager.Interfaces.SellsInterface;
 using LPGManager.Interfaces.SupplierInterface;
 
@@ -13,6 +15,8 @@ namespace LPGManager.Interfaces.UnitOfWorkInterface
         ISellDetailsService sellDetailsService { get; }
         ISellMasterService sellMasterService { get; }
         ICompanyService companyService { get; }
+        IInventoryService inventoryService { get; }
+        IRoleService roleService { get; }
         Task<bool> SaveAsync();
     }
 }
