@@ -1,4 +1,5 @@
 ﻿using LPGManager.Models;
+using LPGManager.Models.Settings;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,12 @@ namespace LPGManager.Data
         public DbSet<SellDetails> SellsDetails { get; set; }
         public DbSet<SellMaster> SellMasters { get; set; }
         public DbSet<Company> Companies { get; set; }
+        public DbSet<Inventory> Inventories { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductType> ProductTypes { get; set; }
+        public DbSet<Size> Sizes { get; set; }
+        public DbSet<Warehouse> Warehouses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -35,10 +42,16 @@ namespace LPGManager.Data
                 .WithMany()
                 .HasForeignKey(p => p.SupplierId);
 
-            modelBuilder.Entity<PurchaseMaster>()
+            modelBuilder.Entity<Inventory>()
                 .HasOne<Supplier>()
                 .WithMany()
                 .HasForeignKey(p => p.SupplierId);
+
+            modelBuilder.Entity<Inventory>()
+                .HasOne<Warehouse>()
+                .WithMany()
+                .HasForeignKey(p => p.WarehouseId);
+
         }
         
     }

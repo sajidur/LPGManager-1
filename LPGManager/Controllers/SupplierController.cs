@@ -1,7 +1,6 @@
 ﻿using LPGManager.Dtos;
 using LPGManager.Interfaces.UnitOfWorkInterface;
 using LPGManager.Models;
-
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -36,7 +35,7 @@ namespace LPGManager.Controllers
                 var supplier = new Supplier
                 {
                     SupplierName = model.Name,
-                    Image = model.Image,
+                   // Image = model.Image,
                     Address = model.Address,
                     Phone = model.Phone,
                     Companytype = model.Companytype,                  
@@ -63,7 +62,7 @@ namespace LPGManager.Controllers
                 {
                     SupplierId = model.Id,
                     SupplierName = model.Name,
-                    Image = model.Image,
+                   // Image = model.Image,
                     Address = model.Address,
                     Phone = model.Phone,
                     Companytype = model.Companytype,

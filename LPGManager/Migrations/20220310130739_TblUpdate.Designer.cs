@@ -3,6 +3,7 @@ using System;
 using LPGManager.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LPGManager.Migrations
 {
     [DbContext(typeof(AppsDbContext))]
-    partial class AppsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220310130739_TblUpdate")]
+    partial class TblUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -103,10 +105,6 @@ namespace LPGManager.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SupplierId");
-
-                    b.HasIndex("WarehouseId");
 
                     b.ToTable("Inventories");
                 });
@@ -199,6 +197,8 @@ namespace LPGManager.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SupplierId");
 
                     b.ToTable("PurchaseMasters");
                 });
@@ -401,21 +401,6 @@ namespace LPGManager.Migrations
                     b.ToTable("Suppliers");
                 });
 
-            modelBuilder.Entity("LPGManager.Models.Inventory", b =>
-                {
-                    b.HasOne("LPGManager.Models.Supplier", null)
-                        .WithMany()
-                        .HasForeignKey("SupplierId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("LPGManager.Models.Settings.Warehouse", null)
-                        .WithMany()
-                        .HasForeignKey("WarehouseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("LPGManager.Models.PurchaseDetails", b =>
                 {
                     b.HasOne("LPGManager.Models.PurchaseMaster", "PurchaseMaster")
@@ -431,6 +416,15 @@ namespace LPGManager.Migrations
                         .IsRequired();
 
                     b.Navigation("PurchaseMaster");
+                });
+
+            modelBuilder.Entity("LPGManager.Models.PurchaseMaster", b =>
+                {
+                    b.HasOne("LPGManager.Models.Supplier", null)
+                        .WithMany()
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("LPGManager.Models.SellDetails", b =>
