@@ -17,6 +17,12 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+static IHostBuilder CreateHostBuilder(string[] args) =>
+     Host.CreateDefaultBuilder(args)
+         .ConfigureWebHostDefaults(webBuilder =>
+         {
+             webBuilder.UseUrls("http://localhost:3000", "https://localhost:3000");
+         });
 
 // Add services to the container.
 
