@@ -182,7 +182,6 @@ C:\My data\LPGManager\LPGManager\obj\Debug\net6.0\LPGManager.pdb
 C:\My data\LPGManager\LPGManager\obj\Debug\net6.0\LPGManager.genruntimeconfig.cache
 C:\My data\LPGManager\LPGManager\bin\Debug\net6.0\Npgsql.dll
 C:\My data\LPGManager\LPGManager\bin\Debug\net6.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
-C:\My data\LPGManager\LPGManager\obj\Debug\net6.0\LPGManager.csproj.AssemblyReference.cache
 C:\Users\Dell\Desktop\LGHManeger\.net project\LPGManager\LPGManager\LPGManager\bin\Debug\net6.0\appsettings.Development.json
 C:\Users\Dell\Desktop\LGHManeger\.net project\LPGManager\LPGManager\LPGManager\bin\Debug\net6.0\appsettings.json
 C:\Users\Dell\Desktop\LGHManeger\.net project\LPGManager\LPGManager\LPGManager\bin\Debug\net6.0\LPGManager.exe
@@ -246,3 +245,4 @@ C:\Users\Dell\Desktop\LGHManeger\.net project\LPGManager\LPGManager\LPGManager\o
 C:\Users\Dell\Desktop\LGHManeger\.net project\LPGManager\LPGManager\LPGManager\obj\Debug\net6.0\LPGManager.pdb
 C:\Users\Dell\Desktop\LGHManeger\.net project\LPGManager\LPGManager\LPGManager\obj\Debug\net6.0\LPGManager.genruntimeconfig.cache
 C:\Users\Dell\Desktop\LGHManeger\.net project\LPGManager\LPGManager\LPGManager\obj\Debug\net6.0\ref\LPGManager.dll
+C:\My data\LPGManager\LPGManager\obj\Debug\net6.0\LPGManager.csproj.AssemblyReference.cache
