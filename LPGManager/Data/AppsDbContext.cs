@@ -24,6 +24,7 @@ namespace LPGManager.Data
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<Size> Sizes { get; set; }
         public DbSet<Warehouse> Warehouses { get; set; }
+        public DbSet<Exchange> Exchanges { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
