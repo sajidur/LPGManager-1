@@ -53,6 +53,11 @@ namespace LPGManager.Data
                 .WithMany()
                 .HasForeignKey(p => p.WarehouseId);
 
+            modelBuilder.Entity<Exchange>()
+                .HasOne<Company>()
+                .WithMany()
+                .HasForeignKey(p => p.ComapnyId);
+
         }
         
     }
