@@ -245,7 +245,6 @@ C:\Users\Dell\Desktop\LGHManeger\.net project\LPGManager\LPGManager\LPGManager\o
 C:\Users\Dell\Desktop\LGHManeger\.net project\LPGManager\LPGManager\LPGManager\obj\Debug\net6.0\LPGManager.pdb
 C:\Users\Dell\Desktop\LGHManeger\.net project\LPGManager\LPGManager\LPGManager\obj\Debug\net6.0\LPGManager.genruntimeconfig.cache
 C:\Users\Dell\Desktop\LGHManeger\.net project\LPGManager\LPGManager\LPGManager\obj\Debug\net6.0\ref\LPGManager.dll
-C:\My data\LPGManager\LPGManager\obj\Debug\net6.0\LPGManager.csproj.AssemblyReference.cache
 C:\Users\Dell\Desktop\LGHManeger\.net project\LPGManager_3-10-2022\LPGManager\LPGManager\bin\Debug\net6.0\appsettings.Development.json
 C:\Users\Dell\Desktop\LGHManeger\.net project\LPGManager_3-10-2022\LPGManager\LPGManager\bin\Debug\net6.0\appsettings.json
 C:\Users\Dell\Desktop\LGHManeger\.net project\LPGManager_3-10-2022\LPGManager\LPGManager\bin\Debug\net6.0\LPGManager.exe
