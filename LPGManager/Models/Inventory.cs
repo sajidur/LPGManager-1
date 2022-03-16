@@ -1,4 +1,6 @@
-﻿namespace LPGManager.Models
+﻿using LPGManager.Models.Settings;
+
+namespace LPGManager.Models
 {
     public class Inventory
     {
@@ -17,5 +19,8 @@
 
         public int SupplierId { get; set; }
         public int WarehouseId { get; set; }
+
+        public Supplier Supplier { get; set; }
+        public Warehouse Warehouse { get; set; }
     }
 }

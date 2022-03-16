@@ -24,6 +24,7 @@ namespace LPGManager.Data
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<Size> Sizes { get; set; }
         public DbSet<Warehouse> Warehouses { get; set; }
+        public DbSet<Exchange> Exchanges { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -51,6 +52,11 @@ namespace LPGManager.Data
                 .HasOne<Warehouse>()
                 .WithMany()
                 .HasForeignKey(p => p.WarehouseId);
+
+            modelBuilder.Entity<Exchange>()
+                .HasOne<Company>()
+                .WithMany()
+                .HasForeignKey(p => p.ComapnyId);
 
         }
         
