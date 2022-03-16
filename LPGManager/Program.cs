@@ -12,7 +12,7 @@ using LPGManager.Interfaces.RoleInterface;
 using LPGManager.Interfaces.SellsInterface;
 using LPGManager.Interfaces.SupplierInterface;
 using LPGManager.Interfaces.UnitOfWorkInterface;
-
+using Microsoft.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,9 +21,8 @@ static IHostBuilder CreateHostBuilder(string[] args) =>
      Host.CreateDefaultBuilder(args)
          .ConfigureWebHostDefaults(webBuilder =>
          {
-             webBuilder.UseUrls("http://localhost:3000", "https://localhost:3000");
+             webBuilder.UseUrls("http://0.0.0.0:3000", "https://0.0.0.0:3000");
          });
-
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -46,16 +45,20 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI();
+//}
+app.UseSwagger();
+app.UseSwaggerUI();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.UseCors(policy =>
+{
+    policy.AllowAnyOrigin();
+});
 app.Run();
