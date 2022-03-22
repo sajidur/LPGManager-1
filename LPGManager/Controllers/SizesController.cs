@@ -1,5 +1,5 @@
 ﻿using LPGManager.Interfaces.UnitOfWorkInterface;
-using LPGManager.Models;
+using LPGManager.Models.Settings;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,29 +8,29 @@ namespace LPGManager.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RoleController : ControllerBase
+    public class SizesController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public RoleController(IUnitOfWork unitOfWork)
+        public SizesController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        // GET: api/<RoleController>
+        // GET: api/<SupplierController>
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var allrole = await _unitOfWork.roleService.GetAllAsync();
+            var allrole = await _unitOfWork.sizeService.GetAllAsync();
             return Ok(allrole);
         }
 
         [HttpPost("add")]
-        public async Task<IActionResult> Create(Role model)
+        public async Task<IActionResult> Create(Size model)
         {
             try
             {
-                await _unitOfWork.roleService.AddAsync(model);
+                await _unitOfWork.sizeService.AddAsync(model);
                 await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)
@@ -42,12 +42,12 @@ namespace LPGManager.Controllers
             return Ok(new { data = model });
         }
         [HttpPost("edit/{id:int}")]
-        public async Task<IActionResult> Update(Role model)
+        public async Task<IActionResult> Update(Size model)
         {
 
             try
             {
-                await _unitOfWork.roleService.AddAsync(model);
+                await _unitOfWork.sizeService.AddAsync(model);
                 await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)
@@ -64,7 +64,7 @@ namespace LPGManager.Controllers
         {
             try
             {
-                await _unitOfWork.roleService.DeleteAsync(id);
+                await _unitOfWork.sizeService.DeleteAsync(id);
                 await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)
