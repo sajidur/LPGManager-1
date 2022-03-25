@@ -4,6 +4,7 @@ using LPGManager.Interfaces.InventoryInterface;
 using LPGManager.Interfaces.PurchasesInterface;
 using LPGManager.Interfaces.RoleInterface;
 using LPGManager.Interfaces.SellsInterface;
+using LPGManager.Interfaces.SettingsInterface;
 using LPGManager.Interfaces.SupplierInterface;
 
 namespace LPGManager.Interfaces.UnitOfWorkInterface
@@ -19,6 +20,10 @@ namespace LPGManager.Interfaces.UnitOfWorkInterface
         IInventoryService inventoryService { get; }
         IRoleService roleService { get; }
         IExchangeService exchangeService { get; }
+        IProductService productService { get; }
+        IProductTypeService productTypeService { get; }
+        ISizeService sizeService { get; }
+        IWarehouseService warehouseService { get; }
         Task<bool> SaveAsync();
     }
 }
