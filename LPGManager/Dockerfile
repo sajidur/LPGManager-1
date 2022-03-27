@@ -20,3 +20,7 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "LPGManager.dll"]
+
+#help
+#docker pull sajidur07/lpgmanager:latest
+#docker run -p 3000:3000 sajidur07/lpgmanager:latest

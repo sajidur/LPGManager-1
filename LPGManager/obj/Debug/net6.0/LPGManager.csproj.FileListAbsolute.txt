@@ -308,4 +308,3 @@ C:\Users\Dell\Desktop\LGHManeger\.net project\LPGManager_3-10-2022\LPGManager\LP
 C:\Users\Dell\Desktop\LGHManeger\.net project\LPGManager_3-10-2022\LPGManager\LPGManager\obj\Debug\net6.0\LPGManager.pdb
 C:\Users\Dell\Desktop\LGHManeger\.net project\LPGManager_3-10-2022\LPGManager\LPGManager\obj\Debug\net6.0\LPGManager.genruntimeconfig.cache
 C:\Users\Dell\Desktop\LGHManeger\.net project\LPGManager_3-10-2022\LPGManager\LPGManager\obj\Debug\net6.0\ref\LPGManager.dll
-C:\My data\LPGManager\LPGManager\obj\Debug\net6.0\LPGManager.csproj.AssemblyReference.cache

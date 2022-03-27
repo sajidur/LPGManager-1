@@ -65,4 +65,4 @@ app.UseCors(policy =>
 {
     policy.AllowAnyOrigin();
 });
-app.Run();
+app.Run("http://0.0.0.0:3000");
