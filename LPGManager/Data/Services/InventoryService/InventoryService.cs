@@ -15,10 +15,10 @@ namespace LPGManager.Data.Services.InventoryService
         }
         public async Task<Inventory> AddAsync(Inventory inventory)
         {
-            var existing = await _dbContext.Inventories.FirstOrDefaultAsync(c => c.Id == inventory.WarehouseId);
+            var existing = await _dbContext.Warehouses.FirstOrDefaultAsync(c => c.Id == inventory.WarehouseId);
             if (existing == null)
                 throw new ArgumentException("Warehouse Id is not exist");
-            var existingSupplierId = await _dbContext.Inventories.FirstOrDefaultAsync(c => c.SupplierId == inventory.SupplierId);
+            var existingSupplierId = await _dbContext.Suppliers.FirstOrDefaultAsync(c => c.SupplierId == inventory.SupplierId);
             if (existingSupplierId == null)
                 throw new ArgumentException("Supplier Id is not exist");
 
@@ -59,7 +59,7 @@ namespace LPGManager.Data.Services.InventoryService
             var existing = await _dbContext.Inventories.FirstOrDefaultAsync(c => c.Id == model.Id);
             if (existing == null)
                 throw new ArgumentException("Inventories is not exist");
-            var existingOfMasterId = await _dbContext.Inventories.FirstOrDefaultAsync(c => c.Id == model.WarehouseId);
+            var existingOfMasterId = await _dbContext.Warehouses.FirstOrDefaultAsync(c => c.Id == model.WarehouseId);
             if (existingOfMasterId == null)
                 throw new ArgumentException("Warehouse Id is not exist");
             var existingSupplierId = await _dbContext.Suppliers.FirstOrDefaultAsync(c => c.SupplierId == model.SupplierId);

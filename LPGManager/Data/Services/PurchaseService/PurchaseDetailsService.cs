@@ -23,7 +23,7 @@ namespace LPGManager.Data.Services.PurchaseService
             if (existingSupplierId == null)
                 throw new ArgumentException("Supplier Id is not exist");
 
-            purchaseDetails.CreatedOn = DateTime.UtcNow;
+            purchaseDetails.CreatedOn = DateTime.UtcNow;       
 
             _dbContext.PurchasesDetails.Add(purchaseDetails);
             return purchaseDetails;

@@ -9,7 +9,7 @@ namespace LPGManager.Data.Services.CompanyService
     public class CompanyService : ICompanyService
     {
         private readonly AppsDbContext _dbContext;
-
+       
         public CompanyService(AppsDbContext dbContext)
         {
             _dbContext = dbContext;

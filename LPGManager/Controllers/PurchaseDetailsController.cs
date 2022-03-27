@@ -46,9 +46,28 @@ namespace LPGManager.Controllers
                     DamageQuantity = model.DamageQuantity,
                     SaleQuantity = model.SaleQuantity,
                     PurchaseMasterId = model.PurchaseMasterId,
+                    SupplierId = model.SupplierId,
+
+                };
+                Inventory inventory = new Inventory
+                {
+                    ProductName = purchaseDetails.ProductName,
+                    Size = purchaseDetails.Size,
+                    ProductType = purchaseDetails.ProductType,
+                    Price = purchaseDetails.Price,
+                    Quantity = purchaseDetails.Quantity,
+                    OpeningQuantity = purchaseDetails.OpeningQuantity,
+                    ReceivingQuantity = purchaseDetails.ReceivingQuantity,
+                    ReturnQuantity = purchaseDetails.ReturnQuantity,
+                    DamageQuantity = purchaseDetails.DamageQuantity,
+                    SaleQuantity = purchaseDetails.SaleQuantity,
+                    WarehouseId = 1,
+                    SupplierId = purchaseDetails.SupplierId,
+
 
                 };
                 result = await _unitOfWork.purchaseDetailsService.AddAsync(purchaseDetails);
+                await _unitOfWork.inventoryService.AddAsync(inventory);   
                 await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)
@@ -79,6 +98,7 @@ namespace LPGManager.Controllers
                     DamageQuantity = model.DamageQuantity,
                     SaleQuantity = model.SaleQuantity,
                     PurchaseMasterId = model.PurchaseMasterId,
+                    SupplierId = model.SupplierId,
 
                 };
                 result = await _unitOfWork.purchaseDetailsService.UpdateAsync(purchaseDetails);

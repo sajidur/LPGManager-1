@@ -8,5 +8,6 @@
         public int? DueAdvance { get; set; }
         public int? PaymentType { get; set; }
         public string? Notes { get; set; }
+        public int SupplierId { get; set; }
     }
 }

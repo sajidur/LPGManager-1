@@ -15,5 +15,6 @@
         public int SaleQuantity { get; set; }
 
         public int PurchaseMasterId { get; set; }
+        public int SupplierId { get; set; }
     }
 }

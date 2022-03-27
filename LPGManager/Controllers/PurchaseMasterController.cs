@@ -36,6 +36,7 @@ namespace LPGManager.Controllers
                     DueAdvance = model.DueAdvance,
                     PaymentType = model.PaymentType,
                     Notes = model.Notes,
+                    SupplierId = model.SupplierId,
                 };
                 result = await _unitOfWork.purchaseMasterService.AddAsync(purchaseMaster);
                 await _unitOfWork.SaveAsync();
@@ -62,6 +63,7 @@ namespace LPGManager.Controllers
                     DueAdvance = model.DueAdvance,
                     PaymentType = model.PaymentType,
                     Notes = model.Notes,
+                    SupplierId = model.SupplierId,
                 };
                 result = await _unitOfWork.purchaseMasterService.UpdateAsync(purchaseMaster);
                 await _unitOfWork.SaveAsync();
