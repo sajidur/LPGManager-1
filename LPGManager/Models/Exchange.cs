@@ -12,7 +12,7 @@
         public int? ReturnQuantity { get; set; }
         public int? DamageQuantity { get; set; }
         public DateTime CreatedOn { get; set; }
-        public int ComapnyId { get; set; }
+        public long ComapnyId { get; set; }
         public Company Company { get; set; }
 
     }

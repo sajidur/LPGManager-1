@@ -20,7 +20,6 @@ namespace LPGManager.Data.Services.SellService
             if (existing == null)
                 throw new ArgumentException("Sell Master Id is not exist");
 
-            sell.CreatedOn = DateTime.UtcNow;
 
             _dbContext.SellsDetails.Add(sell);
             return sell;
@@ -58,8 +57,6 @@ namespace LPGManager.Data.Services.SellService
             var existingOfMasterId = await _dbContext.SellMasters.FirstOrDefaultAsync(c => c.Id == model.SellMasterId);
             if (existingOfMasterId == null)
                 throw new ArgumentException("Sells Master Id is not exist");
-
-            model.CreatedOn = DateTime.UtcNow;
 
             _dbContext.Entry(existing).CurrentValues.SetValues(model);
 

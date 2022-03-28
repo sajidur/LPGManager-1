@@ -46,7 +46,7 @@ namespace LPGManager.Controllers
                     DamageQuantity = model.DamageQuantity,
                     SaleQuantity = model.SaleQuantity,
                     PurchaseMasterId = model.PurchaseMasterId,
-                    SupplierId = model.SupplierId,
+                    CompanyId = model.CompanyId,
 
                 };
                 Inventory inventory = new Inventory
@@ -62,7 +62,7 @@ namespace LPGManager.Controllers
                     DamageQuantity = purchaseDetails.DamageQuantity,
                     SaleQuantity = purchaseDetails.SaleQuantity,
                     WarehouseId = 1,
-                    SupplierId = purchaseDetails.SupplierId,
+                    CompanyId = purchaseDetails.CompanyId,
 
 
                 };
@@ -98,7 +98,7 @@ namespace LPGManager.Controllers
                     DamageQuantity = model.DamageQuantity,
                     SaleQuantity = model.SaleQuantity,
                     PurchaseMasterId = model.PurchaseMasterId,
-                    SupplierId = model.SupplierId,
+                    CompanyId = model.CompanyId,
 
                 };
                 result = await _unitOfWork.purchaseDetailsService.UpdateAsync(purchaseDetails);

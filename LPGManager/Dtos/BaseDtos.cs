@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace LPGManager.Models
+﻿namespace LPGManager.Dtos
 {
-    public class BaseEntity
+    public class BaseDtos
     {
-        public BaseEntity()
+        public BaseDtos()
         {
             CreatedDate = DateTime.Now;
             UpdatedDate = DateTime.Now;
@@ -19,6 +14,5 @@ namespace LPGManager.Models
         public long CreatedBy { get; set; }
         public long UpdatedBy { get; set; }
         public int IsActive { get; set; }
-
     }
 }

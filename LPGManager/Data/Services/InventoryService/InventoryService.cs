@@ -18,11 +18,9 @@ namespace LPGManager.Data.Services.InventoryService
             var existing = await _dbContext.Warehouses.FirstOrDefaultAsync(c => c.Id == inventory.WarehouseId);
             if (existing == null)
                 throw new ArgumentException("Warehouse Id is not exist");
-            var existingSupplierId = await _dbContext.Suppliers.FirstOrDefaultAsync(c => c.SupplierId == inventory.SupplierId);
+            var existingSupplierId = await _dbContext.Companies.FirstOrDefaultAsync(c => c.Id == inventory.CompanyId);
             if (existingSupplierId == null)
                 throw new ArgumentException("Supplier Id is not exist");
-
-            inventory.CreatedOn = DateTime.UtcNow;
 
             _dbContext.Inventories.Add(inventory);
             return inventory;
@@ -48,7 +46,7 @@ namespace LPGManager.Data.Services.InventoryService
         {
             var data = await _dbContext.Inventories
                            .Include(c => c.WarehouseId)
-                           .Include(c => c.SupplierId).FirstOrDefaultAsync(i => i.Id == id);
+                           .Include(c => c.CompanyId).FirstOrDefaultAsync(i => i.Id == id);
             if (data == null)
                 throw new ArgumentException("Inventories is not exist");
             return (data);
@@ -62,11 +60,10 @@ namespace LPGManager.Data.Services.InventoryService
             var existingOfMasterId = await _dbContext.Warehouses.FirstOrDefaultAsync(c => c.Id == model.WarehouseId);
             if (existingOfMasterId == null)
                 throw new ArgumentException("Warehouse Id is not exist");
-            var existingSupplierId = await _dbContext.Suppliers.FirstOrDefaultAsync(c => c.SupplierId == model.SupplierId);
+            var existingSupplierId = await _dbContext.Companies.FirstOrDefaultAsync(c => c.Id == model.CompanyId);
             if (existingSupplierId == null)
                 throw new ArgumentException("Supplier Id is not exist");
 
-            model.CreatedOn = DateTime.UtcNow;
 
             _dbContext.Entry(existing).CurrentValues.SetValues(model);
 

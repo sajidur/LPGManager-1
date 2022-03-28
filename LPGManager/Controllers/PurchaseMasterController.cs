@@ -1,19 +1,22 @@
-﻿using LPGManager.Dtos;
+﻿using AutoMapper;
+using LPGManager.Dtos;
 using LPGManager.Interfaces.UnitOfWorkInterface;
 using LPGManager.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LPGManager.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/purchase")]
     [ApiController]
     public class PurchaseMasterController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
+        public readonly IMapper _mapper;
 
-        public PurchaseMasterController(IUnitOfWork unitOfWork)
+        public PurchaseMasterController(IUnitOfWork unitOfWork,IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
         // GET: api/<PurchaseMasterController(>        
         [HttpGet]
@@ -29,16 +32,8 @@ namespace LPGManager.Controllers
             PurchaseMaster result;
             try
             {
-                var purchaseMaster = new PurchaseMaster
-                {
-                    TotalPrice = model.TotalPrice,
-                    TotalCommission = model.TotalCommission,
-                    DueAdvance = model.DueAdvance,
-                    PaymentType = model.PaymentType,
-                    Notes = model.Notes,
-                    SupplierId = model.SupplierId,
-                };
-                result = await _unitOfWork.purchaseMasterService.AddAsync(purchaseMaster);
+                var purchase=_mapper.Map<PurchaseMaster>(model);
+                result = await _unitOfWork.purchaseMasterService.AddAsync(purchase);
                 await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)

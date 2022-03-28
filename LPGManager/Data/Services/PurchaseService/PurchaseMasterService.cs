@@ -18,9 +18,6 @@ namespace LPGManager.Data.Services.PurchaseService
             var existingSupplierId = await _dbContext.Suppliers.FirstOrDefaultAsync(c => c.SupplierId == purchaseMaster.SupplierId);
             if (existingSupplierId == null)
                 throw new ArgumentException("Supplier Id is not exist");
-
-            purchaseMaster.CreatedOn = DateTime.UtcNow;
-
              _dbContext.PurchaseMasters.Add(purchaseMaster);
             return purchaseMaster;
         }

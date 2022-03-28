@@ -16,8 +16,6 @@ namespace LPGManager.Data.Services.SellService
 
         public async Task<SellMaster> AddAsync(SellMaster sells)
         {
-            sells.CreatedOn = DateTime.UtcNow;
-
             _dbContext.SellMasters.Add(sells);
             return sells;
         }

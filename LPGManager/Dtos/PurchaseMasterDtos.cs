@@ -1,14 +1,13 @@
 ﻿namespace LPGManager.Dtos
 {
-    public class PurchaseMasterDtos
+    public class PurchaseMasterDtos:BaseDtos
     {
-        public int Id { get; set; }
-        public int TotalPrice { get; set; }
-        public int? TotalCommission { get; set; }
-        public int? DueAdvance { get; set; }
-        public int? PaymentType { get; set; }
-        public string? Notes { get; set; }
         public int SupplierId { get; set; }
+        public decimal TotalPrice { get; set; }
+        public decimal TotalCommission { get; set; }
+        public decimal DueAdvance { get; set; }
+        public string PaymentType { get; set; }
+        public string? Notes { get; set; }
         public PurchaseDetailsDtos PurchaseDetails { get; set; }
     }
 }

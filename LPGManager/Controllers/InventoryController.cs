@@ -44,7 +44,7 @@ namespace LPGManager.Controllers
                     DamageQuantity = model.DamageQuantity,
                     SaleQuantity = model.SaleQuantity,
                     WarehouseId = model.WarehouseId,
-                    SupplierId = model.SupplierId,
+                    CompanyId = model.CompanyId,
 
                 };
                 result = await _unitOfWork.inventoryService.AddAsync(inventory);
@@ -77,7 +77,7 @@ namespace LPGManager.Controllers
                     DamageQuantity = model.DamageQuantity,
                     SaleQuantity = model.SaleQuantity,
                     WarehouseId = model.WarehouseId,
-                    SupplierId = model.SupplierId,
+                    CompanyId = model.CompanyId,
 
                 };
                 result = await _unitOfWork.inventoryService.AddAsync(inventory);

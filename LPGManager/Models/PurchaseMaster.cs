@@ -1,15 +1,13 @@
 ﻿namespace LPGManager.Models
 {
     public class PurchaseMaster : BaseEntity
-    {        
-        public int SupplierId { get; set; }
-        public int TotalPrice { get; set; }
-        public int? TotalCommission { get; set; }
-        public int? DueAdvance { get; set; }
-        public int? PaymentType { get; set; }
+    {  
+        public long SupplierId { get; set; }
+        public decimal TotalPrice { get; set; }
+        public decimal TotalCommission { get; set; }
+        public decimal DueAdvance { get; set; }
+        public string PaymentType { get; set; }
         public string? Notes { get; set; }
-        public DateTime CreatedOn { get; set; }
         public List<PurchaseDetails> PurchasesDetails { get; set; }
-
     }
 }

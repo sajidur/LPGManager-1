@@ -1,12 +1,11 @@
 ﻿namespace LPGManager.Dtos
 {
-    public class SellMasterDtos
+    public class SellMasterDtos:BaseDtos
     {
-        public int Id { get; set; }
-        public int TotalPrice { get; set; }
-        public int? Discount { get; set; }
-        public int? DueAdvance { get; set; }
-        public int? PaymentType { get; set; }
-        public string? Notes { get; set; }
+        public decimal TotalPrice { get; set; }
+        public decimal Discount { get; set; }
+        public decimal DueAdvance { get; set; }
+        public int PaymentType { get; set; }
+        public string Notes { get; set; }
     }
 }

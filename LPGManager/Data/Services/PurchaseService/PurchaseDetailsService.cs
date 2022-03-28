@@ -19,11 +19,9 @@ namespace LPGManager.Data.Services.PurchaseService
             var existing = await _dbContext.PurchaseMasters.FirstOrDefaultAsync(c => c.Id == purchaseDetails.PurchaseMasterId);            
             if (existing == null)
                 throw new ArgumentException("Purchase Master Id is not exist");
-            var existingSupplierId = await _dbContext.Suppliers.FirstOrDefaultAsync(c => c.SupplierId == purchaseDetails.SupplierId);
+            var existingSupplierId = await _dbContext.Companies.FirstOrDefaultAsync(c => c.Id == purchaseDetails.CompanyId);
             if (existingSupplierId == null)
                 throw new ArgumentException("Supplier Id is not exist");
-
-            purchaseDetails.CreatedOn = DateTime.UtcNow;       
 
             _dbContext.PurchasesDetails.Add(purchaseDetails);
             return purchaseDetails;
@@ -49,7 +47,7 @@ namespace LPGManager.Data.Services.PurchaseService
         {
             var data = await _dbContext.PurchasesDetails
                            .Include(c => c.PurchaseMasterId)
-                           .Include(c =>c.SupplierId).FirstOrDefaultAsync(i => i.Id == id);
+                           .Include(c =>c.CompanyId).FirstOrDefaultAsync(i => i.Id == id);
             if (data == null)
                 throw new ArgumentException("Purchase Details is not exist");
             return (data);
@@ -63,12 +61,9 @@ namespace LPGManager.Data.Services.PurchaseService
             var existingOfMasterId = await _dbContext.PurchaseMasters.FirstOrDefaultAsync(c => c.Id == model.PurchaseMasterId);
             if (existingOfMasterId == null)
                 throw new ArgumentException("Purchase Master Id is not exist");
-            var existingSupplierId = await _dbContext.Suppliers.FirstOrDefaultAsync(c => c.SupplierId == model.SupplierId);
+            var existingSupplierId = await _dbContext.Companies.FirstOrDefaultAsync(c => c.Id == model.CompanyId);
             if (existingSupplierId == null)
                 throw new ArgumentException("Supplier Id is not exist");
-
-            model.CreatedOn = DateTime.UtcNow;
-
             _dbContext.Entry(existing).CurrentValues.SetValues(model);
 
             return model;

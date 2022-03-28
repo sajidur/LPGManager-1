@@ -41,12 +41,12 @@ namespace LPGManager.Data
             modelBuilder.Entity<PurchaseDetails>()
                 .HasOne<Supplier>()
                 .WithMany()
-                .HasForeignKey(p => p.SupplierId);
+                .HasForeignKey(p => p.CompanyId);
 
             modelBuilder.Entity<Inventory>()
                 .HasOne<Supplier>()
                 .WithMany()
-                .HasForeignKey(p => p.SupplierId);
+                .HasForeignKey(p => p.CompanyId);
 
             modelBuilder.Entity<Inventory>()
                 .HasOne<Warehouse>()

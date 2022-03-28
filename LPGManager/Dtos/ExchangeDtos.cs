@@ -12,6 +12,6 @@
         public int? ReceivingQuantity { get; set; }
         public int? ReturnQuantity { get; set; }
         public int? DamageQuantity { get; set; }
-        public int ComapnyId { get; set; }
+        public long ComapnyId { get; set; }
     }
 }
