@@ -2,7 +2,6 @@
 {
     public class Supplier:BaseEntity
     {
-        public int SupplierId { get; set; }        
         public string SupplierName { get; set; }
         public string? Image { get; set; }
         public string? Address { get; set; }

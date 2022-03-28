@@ -46,16 +46,16 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-var devCorsPolicy = "devCorsPolicy";
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(devCorsPolicy, builder => {
-        //builder.WithOrigins("http://localhost:800").AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-        //builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
-        //builder.SetIsOriginAllowed(origin => true);
-    });
-});
+//var devCorsPolicy = "devCorsPolicy";
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy(devCorsPolicy, builder => {
+//        //builder.WithOrigins("http://localhost:800").AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+//        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+//        //builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
+//        //builder.SetIsOriginAllowed(origin => true);
+//    });
+//});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -75,4 +75,4 @@ app.MapControllers();
 //{
 //    policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
 //});
-app.Run("http://0.0.0.0:3000");
+app.Run();

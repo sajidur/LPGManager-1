@@ -33,6 +33,14 @@ namespace LPGManager.Controllers
             try
             {
                 var purchase=_mapper.Map<PurchaseMaster>(model);
+                if (model.PurchaseDetails!=null)
+                {
+                    foreach (var item in model.PurchaseDetails)
+                    {
+                        var purchasedetails = _mapper.Map<PurchaseDetails>(item);
+                        purchase.PurchasesDetails.Add(purchasedetails);
+                    }
+                }
                 result = await _unitOfWork.purchaseMasterService.AddAsync(purchase);
                 await _unitOfWork.SaveAsync();
             }

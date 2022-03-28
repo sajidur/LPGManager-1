@@ -8,8 +8,8 @@ namespace LPGManager.Common
     {
         public UserProfile()
         {
-            CreateMap<PurchaseDetailsDtos, PurchaseDetails>();
-            CreateMap<PurchaseMasterDtos, PurchaseMaster>();
+            CreateMap<PurchaseDetailsDtos, PurchaseDetails>().ReverseMap();
+            CreateMap<PurchaseMasterDtos, PurchaseMaster>().ReverseMap();
         }
     }
 }

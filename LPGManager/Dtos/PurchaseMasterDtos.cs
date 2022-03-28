@@ -8,6 +8,6 @@
         public decimal DueAdvance { get; set; }
         public string PaymentType { get; set; }
         public string? Notes { get; set; }
-        public PurchaseDetailsDtos PurchaseDetails { get; set; }
+        public List<PurchaseDetailsDtos> PurchaseDetails { get; set; }
     }
 }

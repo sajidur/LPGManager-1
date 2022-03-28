@@ -60,7 +60,7 @@ namespace LPGManager.Controllers
             {
                 var supplier = new Supplier
                 {
-                    SupplierId = model.Id,
+                    Id = model.Id,
                     SupplierName = model.Name,
                    // Image = model.Image,
                     Address = model.Address,

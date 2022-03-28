@@ -15,7 +15,7 @@ namespace LPGManager.Data.Services.PurchaseService
         }
         public async Task<PurchaseMaster> AddAsync(PurchaseMaster purchaseMaster)
         {
-            var existingSupplierId = await _dbContext.Suppliers.FirstOrDefaultAsync(c => c.SupplierId == purchaseMaster.SupplierId);
+            var existingSupplierId = await _dbContext.Suppliers.FirstOrDefaultAsync(c => c.Id == purchaseMaster.SupplierId);
             if (existingSupplierId == null)
                 throw new ArgumentException("Supplier Id is not exist");
              _dbContext.PurchaseMasters.Add(purchaseMaster);
@@ -34,7 +34,7 @@ namespace LPGManager.Data.Services.PurchaseService
 
         public async Task<IEnumerable<PurchaseMaster>> GetAllAsync()
         {
-            var data = await _dbContext.PurchaseMasters.ToListAsync();
+            var data = await _dbContext.PurchaseMasters.Include(c => c.PurchasesDetails).ToListAsync();
             return (data);
         }
 
@@ -54,7 +54,7 @@ namespace LPGManager.Data.Services.PurchaseService
             if (existing == null)
                 throw new ArgumentException("Purchase Master is not exist");
 
-            var existingSupplierId = await _dbContext.Suppliers.FirstOrDefaultAsync(c => c.SupplierId == model.SupplierId);
+            var existingSupplierId = await _dbContext.Suppliers.FirstOrDefaultAsync(c => c.Id == model.SupplierId);
             if (existingSupplierId == null)
                 throw new ArgumentException("Supplier Id is not exist");
 

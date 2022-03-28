@@ -15,13 +15,11 @@ namespace LPGManager.Data.Services.SupplierService
         }
         public async Task<Supplier> AddAsync(Supplier supplier)
         {
-            var existing = await _dbContext.Suppliers.FirstOrDefaultAsync(c => c.SupplierId == supplier.SupplierId);
+            var existing = await _dbContext.Suppliers.FirstOrDefaultAsync(c => c.SupplierName == supplier.SupplierName);
             if (string.IsNullOrWhiteSpace(supplier.SupplierName))
                 throw new ArgumentException("write supplier name");            
             if (existing != null)
                 throw new ArgumentException("Already exist");
-
-            supplier.CreatedOn = DateTime.UtcNow;
             _dbContext.Suppliers.Add(supplier);
 
             return supplier;
@@ -33,14 +31,14 @@ namespace LPGManager.Data.Services.SupplierService
         }
         public async Task<Supplier> GetAsync(int id)
         {
-            var data = await _dbContext.Suppliers.FirstOrDefaultAsync(i => i.SupplierId == id);
+            var data = await _dbContext.Suppliers.FirstOrDefaultAsync(i => i.Id == id);
             if (data == null)
                 throw new ArgumentException("Suppliers is not exist");
             return (data);
         }
         public async Task<Supplier> UpdateAsync(Supplier model)
         {
-            var existing = await _dbContext.Suppliers.FirstOrDefaultAsync(c => c.SupplierId == model.SupplierId);
+            var existing = await _dbContext.Suppliers.FirstOrDefaultAsync(c => c.Id == model.Id);
             if (string.IsNullOrWhiteSpace(model.SupplierName))
                 throw new ArgumentException("Supplier name not found");
             if (existing == null)
@@ -53,7 +51,7 @@ namespace LPGManager.Data.Services.SupplierService
         }
         public async Task DeleteAsync(int id)
         {
-            var existing = await _dbContext.Suppliers.FirstOrDefaultAsync(c => c.SupplierId == id);
+            var existing = await _dbContext.Suppliers.FirstOrDefaultAsync(c => c.Id == id);
 
             if (existing == null)
                 throw new ArgumentException("Supplier is not exist");

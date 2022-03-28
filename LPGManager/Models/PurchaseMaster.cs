@@ -1,7 +1,11 @@
 ﻿namespace LPGManager.Models
 {
     public class PurchaseMaster : BaseEntity
-    {  
+    { 
+        public PurchaseMaster()
+        {
+            PurchasesDetails = new List<PurchaseDetails>();
+        }
         public long SupplierId { get; set; }
         public decimal TotalPrice { get; set; }
         public decimal TotalCommission { get; set; }

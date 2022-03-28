@@ -9,8 +9,8 @@ namespace LPGManager.Models
     {
         public BaseEntity()
         {
-            CreatedDate = DateTime.Now;
-            UpdatedDate = DateTime.Now;
+            CreatedDate = DateTime.UtcNow;
+            UpdatedDate = DateTime.UtcNow;
             IsActive = 1;
         }
         public long Id { get; set; }
