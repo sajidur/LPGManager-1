@@ -1,6 +1,6 @@
 ﻿namespace LPGManager.Models
 {
-    public class Supplier
+    public class Supplier:BaseEntity
     {
         public int SupplierId { get; set; }        
         public string SupplierName { get; set; }

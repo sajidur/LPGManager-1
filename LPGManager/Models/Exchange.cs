@@ -1,8 +1,7 @@
 ﻿namespace LPGManager.Models
 {
-    public class Exchange
+    public class Exchange : BaseEntity
     {
-        public int Id { get; set; }
         public string ProductName { get; set; }
         public string? Size { get; set; }
         public int Price { get; set; }

@@ -9,5 +9,6 @@
         public int? PaymentType { get; set; }
         public string? Notes { get; set; }
         public int SupplierId { get; set; }
+        public PurchaseDetailsDtos PurchaseDetails { get; set; }
     }
 }

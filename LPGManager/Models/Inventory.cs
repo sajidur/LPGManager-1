@@ -2,9 +2,8 @@
 
 namespace LPGManager.Models
 {
-    public class Inventory
+    public class Inventory : BaseEntity
     {
-        public int Id { get; set; }
         public string ProductName { get; set; }
         public string Size { get; set; }
         public string? ProductType { get; set; }

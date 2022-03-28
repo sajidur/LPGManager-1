@@ -1,8 +1,7 @@
 ﻿namespace LPGManager.Models
 {
-    public class SellMaster
+    public class SellMaster : BaseEntity
     {
-        public int Id { get; set; }
         public int TotalPrice { get; set; }
         public int? Discount { get; set; }
         public int? DueAdvance { get; set; }
