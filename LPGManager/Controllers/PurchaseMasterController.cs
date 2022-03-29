@@ -58,17 +58,16 @@ namespace LPGManager.Controllers
             PurchaseMaster result;
             try
             {
-                var purchaseMaster = new PurchaseMaster
+                var purchase = _mapper.Map<PurchaseMaster>(model);
+                if (model.PurchaseDetails != null)
                 {
-                    Id = model.Id,
-                    TotalPrice = model.TotalPrice,
-                    TotalCommission = model.TotalCommission,
-                    DueAdvance = model.DueAdvance,
-                    PaymentType = model.PaymentType,
-                    Notes = model.Notes,
-                    SupplierId = model.SupplierId,
-                };
-                result = await _unitOfWork.purchaseMasterService.UpdateAsync(purchaseMaster);
+                    foreach (var item in model.PurchaseDetails)
+                    {
+                        var purchasedetails = _mapper.Map<PurchaseDetails>(item);
+                        purchase.PurchasesDetails.Add(purchasedetails);
+                    }
+                }
+                result = await _unitOfWork.purchaseMasterService.UpdateAsync(purchase);
                 await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)

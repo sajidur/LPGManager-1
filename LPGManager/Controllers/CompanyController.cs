@@ -1,4 +1,6 @@
-﻿using LPGManager.Dtos;
+﻿using AutoMapper;
+
+using LPGManager.Dtos;
 using LPGManager.Interfaces.UnitOfWorkInterface;
 using LPGManager.Models;
 
@@ -12,13 +14,15 @@ namespace LPGManager.Controllers
     public class CompanyController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public CompanyController(IUnitOfWork unitOfWork)
+        public CompanyController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        // GET: api/<SupplierController>
+        // GET: api/<CompanyController>
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -32,16 +36,8 @@ namespace LPGManager.Controllers
             Company result;
             try
             {
-                var supplier = new Company
-                {
-                    CompanyName = model.CompanyName,
-                   // Image = model.Image,
-                    Address = model.Address,
-                    Phone = model.Phone,
-                    CompanyType = model.CompanyType,
-
-                };
-                result = await _unitOfWork.companyService.AddAsync(supplier);
+                var company = _mapper.Map<Company>(model);                
+                result = await _unitOfWork.companyService.AddAsync(company);
                 await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)
@@ -58,17 +54,8 @@ namespace LPGManager.Controllers
             Company result;
             try
             {
-                var company = new Company
-                {
-                    Id = model.Id,
-                    CompanyName = model.CompanyName,
-                    // Image = model.Image,
-                    Address = model.Address,
-                    Phone = model.Phone,
-                    CompanyType = model.CompanyType,
-
-                };
-                result = await _unitOfWork.companyService.AddAsync(company);
+                var company = _mapper.Map<Company>(model);
+                result = await _unitOfWork.companyService.UpdateAsync(company);
                 await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)

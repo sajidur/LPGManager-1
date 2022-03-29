@@ -1,4 +1,6 @@
-﻿using LPGManager.Dtos;
+﻿using AutoMapper;
+
+using LPGManager.Dtos;
 using LPGManager.Interfaces.UnitOfWorkInterface;
 using LPGManager.Models;
 
@@ -12,13 +14,15 @@ namespace LPGManager.Controllers
     public class ExchangeController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public ExchangeController(IUnitOfWork unitOfWork)
+        public ExchangeController(IUnitOfWork unitOfWork,IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        // GET: api/<SupplierController>
+        // GET: api/<ExchangeController>
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -32,19 +36,7 @@ namespace LPGManager.Controllers
             Exchange result;
             try
             {
-                var exchange = new Exchange
-                {
-                    ProductName = model.ProductName,                   
-                    Size = model.Size,
-                    Price = model.Quantity,
-                    AdjustmentAmount = model.AdjustmentAmount,
-                    DueAdvance = model.DueAdvance,
-                    ReceivingQuantity = model.ReceivingQuantity,
-                    ReturnQuantity = model.ReturnQuantity,
-                    DamageQuantity = model.DamageQuantity,
-                    ComapnyId = model.ComapnyId,
-
-                };
+                var exchange = _mapper.Map<Exchange>(model);                
                 result = await _unitOfWork.exchangeService.AddAsync(exchange);
                 await _unitOfWork.SaveAsync();
             }
@@ -62,21 +54,8 @@ namespace LPGManager.Controllers
             Exchange result;
             try
             {
-                var exchange = new Exchange
-                {
-                    Id = model.Id,
-                    ProductName = model.ProductName,
-                    Size = model.Size,
-                    Price = model.Quantity,
-                    AdjustmentAmount = model.AdjustmentAmount,
-                    DueAdvance = model.DueAdvance,
-                    ReceivingQuantity = model.ReceivingQuantity,
-                    ReturnQuantity = model.ReturnQuantity,
-                    DamageQuantity = model.DamageQuantity,
-                    ComapnyId = model.ComapnyId,
-
-                };
-                result = await _unitOfWork.exchangeService.AddAsync(exchange);
+                var exchange = _mapper.Map<Exchange>(model);
+                result = await _unitOfWork.exchangeService.UpdateAsync(exchange);
                 await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)
