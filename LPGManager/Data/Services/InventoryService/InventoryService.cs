@@ -36,6 +36,11 @@ namespace LPGManager.Data.Services.InventoryService
             _dbContext.Inventories.Remove(existing);
         }
 
+        public  Inventory GetInventory(string productName,string sizeName, int companyId,string productType, int warehouse)
+        {
+            var data = _dbContext.Inventories.Where(a=>a.WarehouseId==warehouse&&a.ProductName==productName&&a.Size==sizeName&&a.ProductType==productType).FirstOrDefault();
+            return data;
+        }
         public async Task<IEnumerable<Inventory>> GetAllAsync()
         {
             var data = await _dbContext.Inventories.ToListAsync();

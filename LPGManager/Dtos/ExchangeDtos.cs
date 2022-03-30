@@ -1,17 +1,16 @@
 ﻿namespace LPGManager.Dtos
 {
-    public class ExchangeDtos
+    public class ExchangeDtos:BaseDtos
     {
-        public int Id { get; set; }
-        public string? ProductName { get; set; }
-        public string? Size { get; set; }
-        public int Price { get; set; }
-        public int Quantity { get; set; }
-        public string? AdjustmentAmount { get; set; }
-        public int? DueAdvance { get; set; }
-        public int? ReceivingQuantity { get; set; }
-        public int? ReturnQuantity { get; set; }
-        public int? DamageQuantity { get; set; }
+        public string ProductName { get; set; }
+        public string Size { get; set; }
+        public decimal Price { get; set; }
+        public decimal Quantity { get; set; }
+        public decimal AdjustmentAmount { get; set; }
+        public decimal DueAdvance { get; set; }
+        public decimal ReceivingQuantity { get; set; }
+        public decimal ReturnQuantity { get; set; }
+        public decimal DamageQuantity { get; set; }
         public long ComapnyId { get; set; }
     }
 }

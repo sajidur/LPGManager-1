@@ -1,4 +1,5 @@
-﻿using LPGManager.Interfaces.UnitOfWorkInterface;
+﻿using LPGManager.Interfaces.SettingsInterface;
+using LPGManager.Interfaces.UnitOfWorkInterface;
 using LPGManager.Models.Settings;
 
 using Microsoft.AspNetCore.Http;
@@ -10,18 +11,17 @@ namespace LPGManager.Controllers
     [ApiController]
     public class SizesController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly ISizeService _sizeService;
 
-        public SizesController(IUnitOfWork unitOfWork)
+        public SizesController(ISizeService sizeService)
         {
-            _unitOfWork = unitOfWork;
+            _sizeService = sizeService;
         }
-
         // GET: api/<SupplierController>
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var allrole = await _unitOfWork.sizeService.GetAllAsync();
+            var allrole = await _sizeService.GetAllAsync();
             return Ok(allrole);
         }
 
@@ -30,8 +30,7 @@ namespace LPGManager.Controllers
         {
             try
             {
-                await _unitOfWork.sizeService.AddAsync(model);
-                await _unitOfWork.SaveAsync();
+                await _sizeService.AddAsync(model);
             }
             catch (Exception ex)
             {
@@ -47,8 +46,7 @@ namespace LPGManager.Controllers
 
             try
             {
-                await _unitOfWork.sizeService.AddAsync(model);
-                await _unitOfWork.SaveAsync();
+                await _sizeService.AddAsync(model);
             }
             catch (Exception ex)
             {
@@ -64,8 +62,7 @@ namespace LPGManager.Controllers
         {
             try
             {
-                await _unitOfWork.sizeService.DeleteAsync(id);
-                await _unitOfWork.SaveAsync();
+                await _sizeService.DeleteAsync(id);
             }
             catch (Exception ex)
             {

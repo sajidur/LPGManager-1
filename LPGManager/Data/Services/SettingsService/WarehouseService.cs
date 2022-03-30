@@ -7,56 +7,49 @@ namespace LPGManager.Data.Services.SettingsService
 {
     public class WarehouseService: IWarehouseService
     {
-        private readonly AppsDbContext _dbContext;
+        private IGenericRepository<Warehouse> _genericRepository;
 
-        public WarehouseService(AppsDbContext dbContext)
+        public WarehouseService(IGenericRepository<Warehouse> genericRepository)
         {
-            _dbContext = dbContext;
+            _genericRepository = genericRepository;
         }
         public async Task<Warehouse> AddAsync(Warehouse house)
         {
-            var existing = await _dbContext.Warehouses.FirstOrDefaultAsync(c => c.Id == house.Id);
+            var existing = await _genericRepository.GetById(house.Id);
             if (string.IsNullOrWhiteSpace(house.Name))
                 throw new ArgumentException("Write Warehouse name");
             if (existing != null)
                 throw new ArgumentException("Already exist");
 
-            _dbContext.Warehouses.Add(house);
-
+            _genericRepository.Insert(house);
+            _genericRepository.Save();
             return house;
         }
         public async Task<IEnumerable<Warehouse>> GetAllAsync()
         {
-            var data = await _dbContext.Warehouses.ToListAsync();
-            return (data);
-        }
-        public async Task<Warehouse> GetAsync(int id)
-        {
-            var data = await _dbContext.Warehouses.FirstOrDefaultAsync(i => i.Id == id);
-            if (data == null)
-                throw new ArgumentException("Warehouse is not exist");
+            var data = await _genericRepository.GetAll();
             return (data);
         }
         public async Task<Warehouse> UpdateAsync(Warehouse model)
         {
-            var existing = await _dbContext.Warehouses.FirstOrDefaultAsync(c => c.Id == model.Id);
+            var existing = await _genericRepository.GetById(model.Id);
             if (string.IsNullOrWhiteSpace(model.Name))
                 throw new ArgumentException("Warehouse name not found");
             if (existing == null)
                 throw new ArgumentException("Warehouse is not exist");
 
-            _dbContext.Entry(existing).CurrentValues.SetValues(model);
+            _genericRepository.Update(existing);
 
             return model;
         }
         public async Task DeleteAsync(int id)
         {
-            var existing = await _dbContext.Warehouses.FirstOrDefaultAsync(c => c.Id == id);
+            var existing = await _genericRepository.GetById(id);
 
             if (existing == null)
                 throw new ArgumentException("Warehouse is not exist");
 
-            _dbContext.Warehouses.Remove(existing);
+            _genericRepository.Delete(existing);
         }
     }
 }

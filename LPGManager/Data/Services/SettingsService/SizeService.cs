@@ -7,56 +7,57 @@ namespace LPGManager.Data.Services.SettingsService
 {
     public class SizeService : ISizeService
     {
-        private readonly AppsDbContext _dbContext;
+        private IGenericRepository<Size> _genericRepository;
 
-        public SizeService(AppsDbContext dbContext)
+        public SizeService(IGenericRepository<Size> genericRepository)
         {
-            _dbContext = dbContext;
+            _genericRepository = genericRepository;
         }
-        public async Task<Size> AddAsync(Size size)
+        public async Task<Size> AddAsync(Size product)
         {
-            var existing = await _dbContext.Sizes.FirstOrDefaultAsync(c => c.Id == size.Id);
-            if (string.IsNullOrWhiteSpace(size.Name))
+            var existing = await _genericRepository.GetById(product.Id);
+            if (string.IsNullOrWhiteSpace(product.Name))
                 throw new ArgumentException("Write Size name");
             if (existing != null)
                 throw new ArgumentException("Already exist");
 
-            _dbContext.Sizes.Add(size);
+            _genericRepository.Insert(product);
+            _genericRepository.Save();
 
-            return size;
+            return product;
         }
         public async Task<IEnumerable<Size>> GetAllAsync()
         {
-            var data = await _dbContext.Sizes.ToListAsync();
+            var data = await _genericRepository.GetAll();
             return (data);
         }
         public async Task<Size> GetAsync(int id)
         {
-            var data = await _dbContext.Sizes.FirstOrDefaultAsync(i => i.Id == id);
-            if (data == null)
+            var existing = await _genericRepository.GetById(id);
+            if (existing == null)
                 throw new ArgumentException("Size is not exist");
-            return (data);
+            return (existing);
         }
         public async Task<Size> UpdateAsync(Size model)
         {
-            var existing = await _dbContext.Sizes.FirstOrDefaultAsync(c => c.Id == model.Id);
+            var existing = await _genericRepository.GetById(model.Id);
             if (string.IsNullOrWhiteSpace(model.Name))
                 throw new ArgumentException("Size name not found");
             if (existing == null)
                 throw new ArgumentException("Size is not exist");
 
-            _dbContext.Entry(existing).CurrentValues.SetValues(model);
+            _genericRepository.Update(existing);
 
             return model;
         }
         public async Task DeleteAsync(int id)
         {
-            var existing = await _dbContext.Sizes.FirstOrDefaultAsync(c => c.Id == id);
+            var existing = await _genericRepository.GetById(id);
 
             if (existing == null)
                 throw new ArgumentException("Size is not exist");
 
-            _dbContext.Sizes.Remove(existing);
+            _genericRepository.Delete(existing);
         }
     }
 }

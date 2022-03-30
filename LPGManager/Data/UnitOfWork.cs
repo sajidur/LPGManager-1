@@ -26,21 +26,18 @@ namespace LPGManager.Data
             _dbContext = dbContext;
         }
         public IPurchaseDetailsService purchaseDetailsService => new PurchaseDetailsService(_dbContext);
-        public IPurchaseMasterService purchaseMasterService => new PurchaseMasterService(_dbContext);
+     //   public IPurchaseMasterService purchaseMasterService => new PurchaseMasterService(_dbContext);
 
         public ISupplierService supplierService => new SupplierService(_dbContext);
 
         public ISellDetailsService sellDetailsService => new SellDetailsService(_dbContext);
         public ISellMasterService sellMasterService => new SellMasterService(_dbContext);
 
-        public ICompanyService companyService => new CompanyService(_dbContext);
+      //  public ICompanyService companyService => new CompanyService(_dbContext);
         public IInventoryService inventoryService => new InventoryService(_dbContext);
         public IRoleService roleService => new RoleService(_dbContext);
         public IExchangeService exchangeService => new ExchangeService(_dbContext);
-        public IProductService productService => new ProductService(_dbContext);
         public IProductTypeService productTypeService => new ProductTypeService(_dbContext);
-        public ISizeService sizeService => new SizeService(_dbContext);
-        public IWarehouseService warehouseService => new WarehouseService(_dbContext);
         public async Task<bool> SaveAsync()
         {
             return await _dbContext.SaveChangesAsync() > 0;

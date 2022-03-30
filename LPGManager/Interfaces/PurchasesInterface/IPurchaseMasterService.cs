@@ -1,4 +1,5 @@
-﻿using LPGManager.Models;
+﻿using LPGManager.Dtos;
+using LPGManager.Models;
 
 namespace LPGManager.Interfaces.PurchasesInterface
 {
@@ -6,7 +7,7 @@ namespace LPGManager.Interfaces.PurchasesInterface
     {
         Task<IEnumerable<PurchaseMaster>> GetAllAsync();        
         Task<PurchaseMaster> GetAsync(int id);
-        Task<PurchaseMaster> AddAsync(PurchaseMaster purchase);
+        PurchaseMaster AddAsync(PurchaseMasterDtos model);
         Task<PurchaseMaster> UpdateAsync(PurchaseMaster model);
         Task DeleteAsync(int id);
     }

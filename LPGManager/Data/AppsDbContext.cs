@@ -25,7 +25,7 @@ namespace LPGManager.Data
         public DbSet<Size> Sizes { get; set; }
         public DbSet<Warehouse> Warehouses { get; set; }
         public DbSet<Exchange> Exchanges { get; set; }
-
+        public DbSet<CustomerEntity> Customers { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<PurchaseDetails>()
@@ -37,22 +37,6 @@ namespace LPGManager.Data
                 .HasOne(p => p.SellMaster)
                 .WithMany(b => b.SellsDetails)
                 .HasForeignKey(p => p.SellMasterId);
-
-            modelBuilder.Entity<PurchaseDetails>()
-                .HasOne<Supplier>()
-                .WithMany()
-                .HasForeignKey(p => p.CompanyId);
-
-            modelBuilder.Entity<Inventory>()
-                .HasOne<Supplier>()
-                .WithMany()
-                .HasForeignKey(p => p.CompanyId);
-
-            modelBuilder.Entity<Inventory>()
-                .HasOne<Warehouse>()
-                .WithMany()
-                .HasForeignKey(p => p.WarehouseId);
-
             modelBuilder.Entity<Exchange>()
                 .HasOne<Company>()
                 .WithMany()

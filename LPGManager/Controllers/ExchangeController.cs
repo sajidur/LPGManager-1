@@ -18,13 +18,6 @@ namespace LPGManager.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        // GET: api/<SupplierController>
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            var allSupplier = await _unitOfWork.companyService.GetAllAsync();
-            return Ok(allSupplier);
-        }
 
         [HttpPost("add")]
         public async Task<IActionResult> Create(ExchangeDtos model)

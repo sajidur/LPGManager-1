@@ -1,4 +1,6 @@
-﻿using LPGManager.Dtos;
+﻿using LPGManager.Data.Services.CompanyService;
+using LPGManager.Dtos;
+using LPGManager.Interfaces.CompanyInterface;
 using LPGManager.Interfaces.UnitOfWorkInterface;
 using LPGManager.Models;
 
@@ -11,18 +13,18 @@ namespace LPGManager.Controllers
     [ApiController]
     public class CompanyController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly ICompanyService _companyService;
 
-        public CompanyController(IUnitOfWork unitOfWork)
+        public CompanyController(ICompanyService companyService)
         {
-            _unitOfWork = unitOfWork;
+            _companyService = companyService;
         }
 
         // GET: api/<SupplierController>
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var allSupplier = await _unitOfWork.companyService.GetAllAsync();
+            var allSupplier = await _companyService.GetAllAsync();
             return Ok(allSupplier);
         }
 
@@ -41,8 +43,7 @@ namespace LPGManager.Controllers
                     CompanyType = model.CompanyType,
 
                 };
-                result = await _unitOfWork.companyService.AddAsync(supplier);
-                await _unitOfWork.SaveAsync();
+                result = await _companyService.AddAsync(supplier);
             }
             catch (Exception ex)
             {
@@ -68,8 +69,7 @@ namespace LPGManager.Controllers
                     CompanyType = model.CompanyType,
 
                 };
-                result = await _unitOfWork.companyService.AddAsync(company);
-                await _unitOfWork.SaveAsync();
+                result = await _companyService.AddAsync(company);
             }
             catch (Exception ex)
             {
@@ -85,8 +85,7 @@ namespace LPGManager.Controllers
         {
             try
             {
-                await _unitOfWork.companyService.DeleteAsync(id);
-                await _unitOfWork.SaveAsync();
+                await _companyService.DeleteAsync(id);
             }
             catch (Exception ex)
             {

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LPGManager.Migrations
 {
     [DbContext(typeof(AppsDbContext))]
-    [Migration("20220328163329_changesupplier")]
-    partial class changesupplier
+    [Migration("20220330041112_customer")]
+    partial class customer
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -39,7 +39,7 @@ namespace LPGManager.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("CompanyType")
+                    b.Property<int>("CompanyType")
                         .HasColumnType("integer");
 
                     b.Property<long>("CreatedBy")
@@ -57,8 +57,9 @@ namespace LPGManager.Migrations
                     b.Property<int>("IsActive")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("Phone")
-                        .HasColumnType("integer");
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<long>("UpdatedBy")
                         .HasColumnType("bigint");
@@ -71,6 +72,52 @@ namespace LPGManager.Migrations
                     b.ToTable("Companies");
                 });
 
+            modelBuilder.Entity("LPGManager.Models.CustomerEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("CustomerType")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("text");
+
+                    b.Property<int>("IsActive")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Customers");
+                });
+
             modelBuilder.Entity("LPGManager.Models.Exchange", b =>
                 {
                     b.Property<long>("Id")
@@ -79,9 +126,8 @@ namespace LPGManager.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("AdjustmentAmount")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<decimal>("AdjustmentAmount")
+                        .HasColumnType("numeric");
 
                     b.Property<long>("ComapnyId")
                         .HasColumnType("bigint");
@@ -98,30 +144,30 @@ namespace LPGManager.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("DamageQuantity")
-                        .HasColumnType("integer");
+                    b.Property<decimal>("DamageQuantity")
+                        .HasColumnType("numeric");
 
-                    b.Property<int?>("DueAdvance")
-                        .HasColumnType("integer");
+                    b.Property<decimal>("DueAdvance")
+                        .HasColumnType("numeric");
 
                     b.Property<int>("IsActive")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Price")
-                        .HasColumnType("integer");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
 
                     b.Property<string>("ProductName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("numeric");
 
-                    b.Property<int?>("ReceivingQuantity")
-                        .HasColumnType("integer");
+                    b.Property<decimal>("ReceivingQuantity")
+                        .HasColumnType("numeric");
 
-                    b.Property<int?>("ReturnQuantity")
-                        .HasColumnType("integer");
+                    b.Property<decimal>("ReturnQuantity")
+                        .HasColumnType("numeric");
 
                     b.Property<string>("Size")
                         .HasColumnType("text");

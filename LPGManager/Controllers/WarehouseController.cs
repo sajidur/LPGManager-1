@@ -1,4 +1,5 @@
-﻿using LPGManager.Interfaces.UnitOfWorkInterface;
+﻿using LPGManager.Interfaces.SettingsInterface;
+using LPGManager.Interfaces.UnitOfWorkInterface;
 using LPGManager.Models.Settings;
 
 using Microsoft.AspNetCore.Http;
@@ -10,18 +11,18 @@ namespace LPGManager.Controllers
     [ApiController]
     public class WarehouseController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IWarehouseService _warehouseService;
 
-        public WarehouseController(IUnitOfWork unitOfWork)
+        public WarehouseController(IWarehouseService warehouseService)
         {
-            _unitOfWork = unitOfWork;
+            _warehouseService = warehouseService;
         }
 
         // GET: api/<SupplierController>
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var allrole = await _unitOfWork.warehouseService.GetAllAsync();
+            var allrole = await _warehouseService.GetAllAsync();
             return Ok(allrole);
         }
 
@@ -30,8 +31,7 @@ namespace LPGManager.Controllers
         {
             try
             {
-                await _unitOfWork.warehouseService.AddAsync(model);
-                await _unitOfWork.SaveAsync();
+                await _warehouseService.AddAsync(model);
             }
             catch (Exception ex)
             {
@@ -47,8 +47,7 @@ namespace LPGManager.Controllers
 
             try
             {
-                await _unitOfWork.warehouseService.AddAsync(model);
-                await _unitOfWork.SaveAsync();
+                await _warehouseService.AddAsync(model);
             }
             catch (Exception ex)
             {
@@ -64,8 +63,7 @@ namespace LPGManager.Controllers
         {
             try
             {
-                await _unitOfWork.warehouseService.DeleteAsync(id);
-                await _unitOfWork.SaveAsync();
+                await _warehouseService.DeleteAsync(id);
             }
             catch (Exception ex)
             {

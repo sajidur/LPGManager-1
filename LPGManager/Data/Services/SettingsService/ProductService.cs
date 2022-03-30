@@ -7,56 +7,57 @@ namespace LPGManager.Data.Services.SettingsService
 {
     public class ProductService : IProductService
     {
-        private readonly AppsDbContext _dbContext;
+        private IGenericRepository<Product> _genericRepository;
 
-        public ProductService(AppsDbContext dbContext)
+        public ProductService(IGenericRepository<Product> genericRepository)
         {
-            _dbContext = dbContext;
+            _genericRepository = genericRepository;
         }
         public async Task<Product> AddAsync(Product product)
         {
-            var existing = await _dbContext.Products.FirstOrDefaultAsync(c => c.Id == product.Id);
+            var existing = await _genericRepository.GetById(product.Id);
             if (string.IsNullOrWhiteSpace(product.Name))
                 throw new ArgumentException("Write product name");
             if (existing != null)
                 throw new ArgumentException("Already exist");
 
-            _dbContext.Products.Add(product);
+            _genericRepository.Insert(product);
+            _genericRepository.Save();
 
             return product;
         }
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
-            var data = await _dbContext.Products.ToListAsync();
+            var data = await _genericRepository.GetAll();
             return (data);
         }
         public async Task<Product> GetAsync(int id)
         {
-            var data = await _dbContext.Products.FirstOrDefaultAsync(i => i.Id == id);
-            if (data == null)
+            var existing = await _genericRepository.GetById(id);
+            if (existing == null)
                 throw new ArgumentException("Product is not exist");
-            return (data);
+            return (existing);
         }
         public async Task<Product> UpdateAsync(Product model)
         {
-            var existing = await _dbContext.Products.FirstOrDefaultAsync(c => c.Id == model.Id);
+            var existing = await _genericRepository.GetById(model.Id);
             if (string.IsNullOrWhiteSpace(model.Name))
                 throw new ArgumentException("Products name not found");
             if (existing == null)
                 throw new ArgumentException("Products is not exist");
 
-            _dbContext.Entry(existing).CurrentValues.SetValues(model);
+            _genericRepository.Update(existing);
 
             return model;
         }
         public async Task DeleteAsync(int id)
         {
-            var existing = await _dbContext.Products.FirstOrDefaultAsync(c => c.Id == id);
+            var existing = await _genericRepository.GetById(id);
 
             if (existing == null)
                 throw new ArgumentException("Product is not exist");
 
-            _dbContext.Products.Remove(existing);
+            _genericRepository.Delete(existing);
         }
     }
 }

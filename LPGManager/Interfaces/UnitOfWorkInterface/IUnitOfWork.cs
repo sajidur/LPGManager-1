@@ -12,18 +12,15 @@ namespace LPGManager.Interfaces.UnitOfWorkInterface
     public interface IUnitOfWork
     {
         IPurchaseDetailsService purchaseDetailsService { get; }
-        IPurchaseMasterService purchaseMasterService { get; }
+      //  IPurchaseMasterService purchaseMasterService { get; }
         ISupplierService supplierService { get; }
         ISellDetailsService sellDetailsService { get; }
         ISellMasterService sellMasterService { get; }
-        ICompanyService companyService { get; }
+       // ICompanyService companyService { get; }
         IInventoryService inventoryService { get; }
         IRoleService roleService { get; }
         IExchangeService exchangeService { get; }
-        IProductService productService { get; }
         IProductTypeService productTypeService { get; }
-        ISizeService sizeService { get; }
-        IWarehouseService warehouseService { get; }
         Task<bool> SaveAsync();
     }
 }
