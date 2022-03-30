@@ -1,4 +1,6 @@
-﻿using LPGManager.Dtos;
+﻿using AutoMapper;
+
+using LPGManager.Dtos;
 using LPGManager.Interfaces.UnitOfWorkInterface;
 using LPGManager.Models;
 
@@ -12,12 +14,13 @@ namespace LPGManager.Controllers
     public class InventoryController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
         public InventoryController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
-        // GET: api/<PurchaseController>      
+        // GET: api/<InventoryController>      
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
