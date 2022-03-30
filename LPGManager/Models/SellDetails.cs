@@ -5,7 +5,9 @@ namespace LPGManager.Models
     public class SellDetails : BaseEntity
     {
 
-        //public int SupplierId { get; set; }        
+        //public int SupplierId { get; set; }
+        //
+        public long CompanyId { get; set; }
         public string ProductName { get; set; }
         public string Size { get; set; }
         public string? ProductType { get; set; }

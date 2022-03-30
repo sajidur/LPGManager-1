@@ -31,7 +31,6 @@ namespace LPGManager.Data
         public ISupplierService supplierService => new SupplierService(_dbContext);
 
         public ISellDetailsService sellDetailsService => new SellDetailsService(_dbContext);
-        public ISellMasterService sellMasterService => new SellMasterService(_dbContext);
 
       //  public ICompanyService companyService => new CompanyService(_dbContext);
         public IInventoryService inventoryService => new InventoryService(_dbContext);

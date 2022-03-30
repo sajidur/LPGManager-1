@@ -2,6 +2,7 @@
 {
     public class SellDetailsDtos:BaseDtos
     {
+        public long CompanyId { get; set; }
         public string ProductName { get; set; }
         public string Size { get; set; }
         public string? ProductType { get; set; }

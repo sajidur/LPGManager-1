@@ -1,4 +1,5 @@
 ﻿using LPGManager.Dtos;
+using LPGManager.Interfaces.SellsInterface;
 using LPGManager.Interfaces.UnitOfWorkInterface;
 using LPGManager.Models;
 
@@ -7,21 +8,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LPGManager.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Sales")]
     [ApiController]
     public class SellMasterController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly ISellMasterService _sellService;
 
-        public SellMasterController(IUnitOfWork unitOfWork)
+        public SellMasterController(ISellMasterService sellService)
         {
-            _unitOfWork = unitOfWork;
+            _sellService = sellService;
         }
         // GET: api/<PurchaseMasterController(>        
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var data = await _unitOfWork.sellMasterService.GetAllAsync();
+            var data = await _sellService.GetAllAsync();
             return Ok(data);
         }
 
@@ -31,16 +32,7 @@ namespace LPGManager.Controllers
             SellMaster result;
             try
             {
-                var sellMaster = new SellMaster
-                {
-                    TotalPrice = model.TotalPrice,
-                    Discount = model.Discount,
-                    DueAdvance = model.DueAdvance,
-                    PaymentType = model.PaymentType,
-                    Notes = model.Notes,
-                };
-                result = await _unitOfWork.sellMasterService.AddAsync(sellMaster);
-                await _unitOfWork.SaveAsync();
+                result = _sellService.AddAsync(model);
             }
             catch (Exception ex)
             {
@@ -56,17 +48,7 @@ namespace LPGManager.Controllers
             SellMaster result;
             try
             {
-                var sellMaster = new SellMaster
-                {
-                    Id = model.Id,
-                    TotalPrice = model.TotalPrice,
-                    Discount = model.Discount,
-                    DueAdvance = model.DueAdvance,
-                    PaymentType = model.PaymentType,
-                    Notes = model.Notes,
-                };
-                result = await _unitOfWork.sellMasterService.UpdateAsync(sellMaster);
-                await _unitOfWork.SaveAsync();
+                result = await _sellService.UpdateAsync(model);
             }
             catch (Exception ex)
             {
@@ -81,8 +63,7 @@ namespace LPGManager.Controllers
         {
             try
             {
-                await _unitOfWork.sellMasterService.DeleteAsync(id);
-                await _unitOfWork.SaveAsync();
+                await _sellService.DeleteAsync(id);
             }
             catch (Exception ex)
             {

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LPGManager.Migrations
 {
     [DbContext(typeof(AppsDbContext))]
-    [Migration("20220330040451_initial")]
-    partial class initial
+    [Migration("20220330174152_sellfixupj")]
+    partial class sellfixupj
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -46,10 +46,10 @@ namespace LPGManager.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Image")
                         .HasColumnType("text");
@@ -65,11 +65,57 @@ namespace LPGManager.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
                     b.ToTable("Companies");
+                });
+
+            modelBuilder.Entity("LPGManager.Models.CustomerEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int?>("CustomerType")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("text");
+
+                    b.Property<int>("IsActive")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("LPGManager.Models.Exchange", b =>
@@ -93,10 +139,10 @@ namespace LPGManager.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal>("DamageQuantity")
                         .HasColumnType("numeric");
@@ -130,7 +176,7 @@ namespace LPGManager.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -152,14 +198,11 @@ namespace LPGManager.Migrations
                     b.Property<long>("CompanyId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("CompanyId1")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal>("DamageQuantity")
                         .HasColumnType("numeric");
@@ -201,23 +244,16 @@ namespace LPGManager.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long>("WarehouseId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("WarehouseId1")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
 
-                    b.HasIndex("CompanyId1");
-
                     b.HasIndex("WarehouseId");
-
-                    b.HasIndex("WarehouseId1");
 
                     b.ToTable("Inventories");
                 });
@@ -240,7 +276,7 @@ namespace LPGManager.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal>("DamageQuantity")
                         .HasColumnType("numeric");
@@ -285,11 +321,9 @@ namespace LPGManager.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CompanyId");
 
                     b.HasIndex("PurchaseMasterId");
 
@@ -308,7 +342,7 @@ namespace LPGManager.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal>("DueAdvance")
                         .HasColumnType("numeric");
@@ -336,7 +370,7 @@ namespace LPGManager.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -355,7 +389,7 @@ namespace LPGManager.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("IsActive")
                         .HasColumnType("integer");
@@ -368,7 +402,7 @@ namespace LPGManager.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -383,11 +417,14 @@ namespace LPGManager.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<long>("CompanyId")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal>("DamageQuantity")
                         .HasColumnType("numeric");
@@ -428,7 +465,7 @@ namespace LPGManager.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -449,7 +486,10 @@ namespace LPGManager.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<long>("CustomerId")
+                        .HasColumnType("bigint");
 
                     b.Property<decimal>("Discount")
                         .HasColumnType("numeric");
@@ -473,7 +513,7 @@ namespace LPGManager.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -492,7 +532,7 @@ namespace LPGManager.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("IsActive")
                         .HasColumnType("integer");
@@ -505,7 +545,7 @@ namespace LPGManager.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -524,7 +564,7 @@ namespace LPGManager.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("IsActive")
                         .HasColumnType("integer");
@@ -537,7 +577,7 @@ namespace LPGManager.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -556,7 +596,7 @@ namespace LPGManager.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("IsActive")
                         .HasColumnType("integer");
@@ -569,7 +609,7 @@ namespace LPGManager.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -588,7 +628,7 @@ namespace LPGManager.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("IsActive")
                         .HasColumnType("integer");
@@ -601,7 +641,7 @@ namespace LPGManager.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -619,17 +659,17 @@ namespace LPGManager.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("text");
 
-                    b.Property<string>("Companytype")
-                        .HasColumnType("text");
+                    b.Property<int>("Companytype")
+                        .HasColumnType("integer");
 
                     b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Image")
                         .HasColumnType("text");
@@ -637,8 +677,8 @@ namespace LPGManager.Migrations
                     b.Property<int>("IsActive")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("Phone")
-                        .HasColumnType("integer");
+                    b.Property<string>("Phone")
+                        .HasColumnType("text");
 
                     b.Property<string>("SupplierName")
                         .IsRequired()
@@ -648,7 +688,7 @@ namespace LPGManager.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -674,27 +714,15 @@ namespace LPGManager.Migrations
 
             modelBuilder.Entity("LPGManager.Models.Inventory", b =>
                 {
-                    b.HasOne("LPGManager.Models.Supplier", null)
+                    b.HasOne("LPGManager.Models.Company", "Company")
                         .WithMany()
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LPGManager.Models.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("LPGManager.Models.Settings.Warehouse", null)
-                        .WithMany()
-                        .HasForeignKey("WarehouseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("LPGManager.Models.Settings.Warehouse", "Warehouse")
                         .WithMany()
-                        .HasForeignKey("WarehouseId1")
+                        .HasForeignKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -705,12 +733,6 @@ namespace LPGManager.Migrations
 
             modelBuilder.Entity("LPGManager.Models.PurchaseDetails", b =>
                 {
-                    b.HasOne("LPGManager.Models.Supplier", null)
-                        .WithMany()
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("LPGManager.Models.PurchaseMaster", "PurchaseMaster")
                         .WithMany("PurchasesDetails")
                         .HasForeignKey("PurchaseMasterId")

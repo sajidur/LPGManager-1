@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace LPGManager.Migrations
 {
-    public partial class initial : Migration
+    public partial class sellfixupj : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -21,9 +21,9 @@ namespace LPGManager.Migrations
                     Address = table.Column<string>(type: "text", nullable: true),
                     Phone = table.Column<string>(type: "text", nullable: false),
                     CompanyType = table.Column<int>(type: "integer", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: false),
                     IsActive = table.Column<int>(type: "integer", nullable: false)
@@ -34,14 +34,36 @@ namespace LPGManager.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Customers",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Image = table.Column<string>(type: "text", nullable: true),
+                    CompanyName = table.Column<string>(type: "text", nullable: false),
+                    Address = table.Column<string>(type: "text", nullable: false),
+                    Phone = table.Column<string>(type: "text", nullable: false),
+                    CustomerType = table.Column<int>(type: "integer", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    CreatedBy = table.Column<long>(type: "bigint", nullable: false),
+                    UpdatedBy = table.Column<long>(type: "bigint", nullable: false),
+                    IsActive = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: false),
                     IsActive = table.Column<int>(type: "integer", nullable: false)
@@ -58,8 +80,8 @@ namespace LPGManager.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: false),
                     IsActive = table.Column<int>(type: "integer", nullable: false)
@@ -81,8 +103,8 @@ namespace LPGManager.Migrations
                     DueAdvance = table.Column<decimal>(type: "numeric", nullable: false),
                     PaymentType = table.Column<string>(type: "text", nullable: false),
                     Notes = table.Column<string>(type: "text", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: false),
                     IsActive = table.Column<int>(type: "integer", nullable: false)
@@ -99,8 +121,8 @@ namespace LPGManager.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: false),
                     IsActive = table.Column<int>(type: "integer", nullable: false)
@@ -116,13 +138,14 @@ namespace LPGManager.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CustomerId = table.Column<long>(type: "bigint", nullable: false),
                     TotalPrice = table.Column<decimal>(type: "numeric", nullable: false),
                     Discount = table.Column<decimal>(type: "numeric", nullable: false),
                     DueAdvance = table.Column<decimal>(type: "numeric", nullable: false),
                     PaymentType = table.Column<decimal>(type: "numeric", nullable: false),
                     Notes = table.Column<string>(type: "text", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: false),
                     IsActive = table.Column<int>(type: "integer", nullable: false)
@@ -139,8 +162,8 @@ namespace LPGManager.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: false),
                     IsActive = table.Column<int>(type: "integer", nullable: false)
@@ -159,11 +182,11 @@ namespace LPGManager.Migrations
                     SupplierName = table.Column<string>(type: "text", nullable: false),
                     Image = table.Column<string>(type: "text", nullable: true),
                     Address = table.Column<string>(type: "text", nullable: true),
-                    Phone = table.Column<int>(type: "integer", nullable: true),
-                    Companytype = table.Column<string>(type: "text", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Phone = table.Column<string>(type: "text", nullable: true),
+                    Companytype = table.Column<int>(type: "integer", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: false),
                     IsActive = table.Column<int>(type: "integer", nullable: false)
@@ -180,8 +203,8 @@ namespace LPGManager.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: false),
                     IsActive = table.Column<int>(type: "integer", nullable: false)
@@ -206,11 +229,11 @@ namespace LPGManager.Migrations
                     ReceivingQuantity = table.Column<decimal>(type: "numeric", nullable: false),
                     ReturnQuantity = table.Column<decimal>(type: "numeric", nullable: false),
                     DamageQuantity = table.Column<decimal>(type: "numeric", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     ComapnyId = table.Column<long>(type: "bigint", nullable: false),
                     CompanyId = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: false),
                     IsActive = table.Column<int>(type: "integer", nullable: false)
@@ -228,39 +251,6 @@ namespace LPGManager.Migrations
                         name: "FK_Exchanges_Companies_CompanyId",
                         column: x => x.CompanyId,
                         principalTable: "Companies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SellsDetails",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ProductName = table.Column<string>(type: "text", nullable: false),
-                    Size = table.Column<string>(type: "text", nullable: false),
-                    ProductType = table.Column<string>(type: "text", nullable: true),
-                    Price = table.Column<decimal>(type: "numeric", nullable: false),
-                    Quantity = table.Column<decimal>(type: "numeric", nullable: false),
-                    OpeningQuantity = table.Column<decimal>(type: "numeric", nullable: false),
-                    ReceivingQuantity = table.Column<decimal>(type: "numeric", nullable: false),
-                    ReturnQuantity = table.Column<decimal>(type: "numeric", nullable: false),
-                    DamageQuantity = table.Column<decimal>(type: "numeric", nullable: false),
-                    SellMasterId = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedBy = table.Column<long>(type: "bigint", nullable: false),
-                    UpdatedBy = table.Column<long>(type: "bigint", nullable: false),
-                    IsActive = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SellsDetails", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SellsDetails_SellMasters_SellMasterId",
-                        column: x => x.SellMasterId,
-                        principalTable: "SellMasters",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -284,8 +274,8 @@ namespace LPGManager.Migrations
                     DamageQuantity = table.Column<decimal>(type: "numeric", nullable: false),
                     SaleQuantity = table.Column<decimal>(type: "numeric", nullable: false),
                     PurchaseMasterId = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: false),
                     IsActive = table.Column<int>(type: "integer", nullable: false)
@@ -299,10 +289,38 @@ namespace LPGManager.Migrations
                         principalTable: "PurchaseMasters",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SellsDetails",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CompanyId = table.Column<long>(type: "bigint", nullable: false),
+                    ProductName = table.Column<string>(type: "text", nullable: false),
+                    Size = table.Column<string>(type: "text", nullable: false),
+                    ProductType = table.Column<string>(type: "text", nullable: true),
+                    Price = table.Column<decimal>(type: "numeric", nullable: false),
+                    Quantity = table.Column<decimal>(type: "numeric", nullable: false),
+                    OpeningQuantity = table.Column<decimal>(type: "numeric", nullable: false),
+                    ReceivingQuantity = table.Column<decimal>(type: "numeric", nullable: false),
+                    ReturnQuantity = table.Column<decimal>(type: "numeric", nullable: false),
+                    DamageQuantity = table.Column<decimal>(type: "numeric", nullable: false),
+                    SellMasterId = table.Column<long>(type: "bigint", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    CreatedBy = table.Column<long>(type: "bigint", nullable: false),
+                    UpdatedBy = table.Column<long>(type: "bigint", nullable: false),
+                    IsActive = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SellsDetails", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PurchasesDetails_Suppliers_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "Suppliers",
+                        name: "FK_SellsDetails_SellMasters_SellMasterId",
+                        column: x => x.SellMasterId,
+                        principalTable: "SellMasters",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -325,10 +343,8 @@ namespace LPGManager.Migrations
                     SaleQuantity = table.Column<decimal>(type: "numeric", nullable: false),
                     CompanyId = table.Column<long>(type: "bigint", nullable: false),
                     WarehouseId = table.Column<long>(type: "bigint", nullable: false),
-                    CompanyId1 = table.Column<long>(type: "bigint", nullable: false),
-                    WarehouseId1 = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: false),
                     IsActive = table.Column<int>(type: "integer", nullable: false)
@@ -337,26 +353,14 @@ namespace LPGManager.Migrations
                 {
                     table.PrimaryKey("PK_Inventories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Inventories_Companies_CompanyId1",
-                        column: x => x.CompanyId1,
-                        principalTable: "Companies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Inventories_Suppliers_CompanyId",
+                        name: "FK_Inventories_Companies_CompanyId",
                         column: x => x.CompanyId,
-                        principalTable: "Suppliers",
+                        principalTable: "Companies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Inventories_Warehouses_WarehouseId",
                         column: x => x.WarehouseId,
-                        principalTable: "Warehouses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Inventories_Warehouses_WarehouseId1",
-                        column: x => x.WarehouseId1,
                         principalTable: "Warehouses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -378,24 +382,9 @@ namespace LPGManager.Migrations
                 column: "CompanyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Inventories_CompanyId1",
-                table: "Inventories",
-                column: "CompanyId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Inventories_WarehouseId",
                 table: "Inventories",
                 column: "WarehouseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Inventories_WarehouseId1",
-                table: "Inventories",
-                column: "WarehouseId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PurchasesDetails_CompanyId",
-                table: "PurchasesDetails",
-                column: "CompanyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PurchasesDetails_PurchaseMasterId",
@@ -410,6 +399,9 @@ namespace LPGManager.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Customers");
+
             migrationBuilder.DropTable(
                 name: "Exchanges");
 
@@ -435,6 +427,9 @@ namespace LPGManager.Migrations
                 name: "Sizes");
 
             migrationBuilder.DropTable(
+                name: "Suppliers");
+
+            migrationBuilder.DropTable(
                 name: "Companies");
 
             migrationBuilder.DropTable(
@@ -442,9 +437,6 @@ namespace LPGManager.Migrations
 
             migrationBuilder.DropTable(
                 name: "PurchaseMasters");
-
-            migrationBuilder.DropTable(
-                name: "Suppliers");
 
             migrationBuilder.DropTable(
                 name: "SellMasters");

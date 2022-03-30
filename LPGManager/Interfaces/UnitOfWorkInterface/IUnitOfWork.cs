@@ -15,8 +15,6 @@ namespace LPGManager.Interfaces.UnitOfWorkInterface
       //  IPurchaseMasterService purchaseMasterService { get; }
         ISupplierService supplierService { get; }
         ISellDetailsService sellDetailsService { get; }
-        ISellMasterService sellMasterService { get; }
-       // ICompanyService companyService { get; }
         IInventoryService inventoryService { get; }
         IRoleService roleService { get; }
         IExchangeService exchangeService { get; }
