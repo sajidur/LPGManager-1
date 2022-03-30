@@ -87,9 +87,13 @@ namespace LPGManager.Data.Services.PurchaseService
             //_dbContext.PurchaseMasters.Remove(existing);
         }
 
-        public IEnumerable<PurchaseMaster> GetAllAsync()
+        public async Task<IEnumerable<PurchaseMaster>> GetAllAsync()
         {
             var data = _purchaseMasterRepository.GetAll();
+            foreach (var item in data.Result)
+            {
+                item.PurchasesDetails = _purchaseDetailsRepository.FindBy(a => a.PurchaseMasterId == item.Id).ToList();
+            }
             return (data.Result);
         }
 
@@ -120,9 +124,6 @@ namespace LPGManager.Data.Services.PurchaseService
             return null;
         }
 
-        Task<IEnumerable<PurchaseMaster>> IPurchaseMasterService.GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
+  
     }
 }

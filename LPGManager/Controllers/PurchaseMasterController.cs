@@ -23,9 +23,8 @@ namespace LPGManager.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            //var data = await _unitOfWork.purchaseMasterService.GetAllAsync();
-            //return Ok(data);
-            return null;
+            var data = await _masterService.GetAllAsync();
+            return Ok(data);
         }
 
         [HttpPost("add")]

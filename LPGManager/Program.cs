@@ -34,6 +34,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<AppsDbContext>(options =>
                 options.UseNpgsql(
                     builder.Configuration.GetConnectionString("PostgreConnection")));
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<ISupplierService, SupplierService>();
 builder.Services.AddScoped<IPurchaseDetailsService, PurchaseDetailsService>();
