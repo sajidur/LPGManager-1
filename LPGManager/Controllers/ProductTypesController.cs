@@ -1,4 +1,6 @@
-﻿using LPGManager.Interfaces.UnitOfWorkInterface;
+﻿using LPGManager.Data.Services.SettingsService;
+using LPGManager.Interfaces.SettingsInterface;
+using LPGManager.Interfaces.UnitOfWorkInterface;
 using LPGManager.Models.Settings;
 
 using Microsoft.AspNetCore.Http;
@@ -10,18 +12,18 @@ namespace LPGManager.Controllers
     [ApiController]
     public class ProductTypesController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IProductTypeService _productService;
 
-        public ProductTypesController(IUnitOfWork unitOfWork)
+        public ProductTypesController(IProductTypeService productService)
         {
-            _unitOfWork = unitOfWork;
+            _productService = productService;
         }
 
         // GET: api/<ProductTypesController>
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var allrole = await _unitOfWork.productTypeService.GetAllAsync();
+            var allrole = await _productService.GetAllAsync();
             return Ok(allrole);
         }
 
@@ -30,8 +32,7 @@ namespace LPGManager.Controllers
         {
             try
             {
-                await _unitOfWork.productTypeService.AddAsync(model);
-                await _unitOfWork.SaveAsync();
+                await _productService.AddAsync(model);
             }
             catch (Exception ex)
             {
@@ -47,8 +48,7 @@ namespace LPGManager.Controllers
 
             try
             {
-                await _unitOfWork.productTypeService.AddAsync(model);
-                await _unitOfWork.SaveAsync();
+                await _productService.AddAsync(model);
             }
             catch (Exception ex)
             {
@@ -60,12 +60,11 @@ namespace LPGManager.Controllers
         }
 
         [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(long id)
         {
             try
             {
-                await _unitOfWork.productTypeService.DeleteAsync(id);
-                await _unitOfWork.SaveAsync();
+                await _productService.DeleteAsync(id);
             }
             catch (Exception ex)
             {

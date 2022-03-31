@@ -18,7 +18,6 @@ namespace LPGManager.Interfaces.UnitOfWorkInterface
         IInventoryService inventoryService { get; }
         IRoleService roleService { get; }
         IExchangeService exchangeService { get; }
-        IProductTypeService productTypeService { get; }
         Task<bool> SaveAsync();
     }
 }

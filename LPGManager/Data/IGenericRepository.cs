@@ -5,7 +5,7 @@ namespace LPGManager.Data
     public interface IGenericRepository<T> where T : class
     {
         Task<IEnumerable<T>> GetAll();
-        void Delete(object entity);
+        void Delete(long entity);
         void Update(T entity);
         Task<T> GetById(long id);
         T Insert(T obj);

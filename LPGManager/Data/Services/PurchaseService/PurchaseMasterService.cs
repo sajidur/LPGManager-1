@@ -77,14 +77,15 @@ namespace LPGManager.Data.Services.PurchaseService
 
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(long id)
         {
-            //var existing = await _dbContext.pur.FirstOrDefaultAsync(c => c.Id == id);
+            var existing = await _purchaseMasterRepository.GetById(id);
 
-            //if (existing == null)
-            //    throw new ArgumentException("Purchase is not exist");
+            if (existing == null)
+                throw new ArgumentException("Purchase is not exist");
 
-            //_dbContext.PurchaseMasters.Remove(existing);
+            _purchaseMasterRepository.Delete(id);
+            _purchaseMasterRepository.Save();
         }
 
         public async Task<IEnumerable<PurchaseMaster>> GetAllAsync()
@@ -97,7 +98,7 @@ namespace LPGManager.Data.Services.PurchaseService
             return (data.Result);
         }
 
-        public async Task<PurchaseMaster> GetAsync(int id)
+        public async Task<PurchaseMaster> GetAsync(long id)
         {
             //var data = await _dbContext.PurchaseMasters
             //           .Include(c => c.PurchasesDetails)

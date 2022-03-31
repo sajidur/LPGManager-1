@@ -42,14 +42,16 @@ namespace LPGManager.Data.Services.SettingsService
 
             return model;
         }
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(long id)
         {
             var existing = await _genericRepository.GetById(id);
 
             if (existing == null)
                 throw new ArgumentException("Warehouse is not exist");
 
-            _genericRepository.Delete(existing);
+            _genericRepository.Delete(id);
+            _genericRepository.Save();
+
         }
     }
 }

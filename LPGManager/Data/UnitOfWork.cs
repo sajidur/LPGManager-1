@@ -36,7 +36,6 @@ namespace LPGManager.Data
         public IInventoryService inventoryService => new InventoryService(_dbContext);
         public IRoleService roleService => new RoleService(_dbContext);
         public IExchangeService exchangeService => new ExchangeService(_dbContext);
-        public IProductTypeService productTypeService => new ProductTypeService(_dbContext);
         public async Task<bool> SaveAsync()
         {
             return await _dbContext.SaveChangesAsync() > 0;

@@ -7,6 +7,6 @@ namespace LPGManager.Interfaces.SettingsInterface
         Task<IEnumerable<Warehouse>> GetAllAsync();
         Task<Warehouse> AddAsync(Warehouse warehouse);
         Task<Warehouse> UpdateAsync(Warehouse model);
-        Task DeleteAsync(int id);
+        Task DeleteAsync(long id);
     }
 }

@@ -75,7 +75,7 @@ namespace LPGManager.Data.Services.SellService
 
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(long id)
         {
             //var existing = await _dbContext.pur.FirstOrDefaultAsync(c => c.Id == id);
 
@@ -95,7 +95,7 @@ namespace LPGManager.Data.Services.SellService
             return (data.Result);
         }
 
-        public async Task<SellMaster> GetAsync(int id)
+        public async Task<SellMaster> GetAsync(long id)
         {
             //var data = await _dbContext.PurchaseMasters
             //           .Include(c => c.PurchasesDetails)

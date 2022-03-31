@@ -7,56 +7,57 @@ namespace LPGManager.Data.Services.SettingsService
 {
     public class ProductTypeService: IProductTypeService
     {
-        private readonly AppsDbContext _dbContext;
+        private IGenericRepository<ProductType> _genericRepository;
 
-        public ProductTypeService(AppsDbContext dbContext)
+        public ProductTypeService(IGenericRepository<ProductType> genericRepository)
         {
-            _dbContext = dbContext;
+            _genericRepository = genericRepository;
         }
         public async Task<ProductType> AddAsync(ProductType product)
         {
-            var existing = await _dbContext.ProductTypes.FirstOrDefaultAsync(c => c.Id == product.Id);
+            var existing = _genericRepository.FindBy(a => a.Name == product.Name).FirstOrDefault();
             if (string.IsNullOrWhiteSpace(product.Name))
                 throw new ArgumentException("Write productType name");
             if (existing != null)
                 throw new ArgumentException("Already exist");
 
-            _dbContext.ProductTypes.Add(product);
-
+            _genericRepository.Insert(product);
+            _genericRepository.Save();
             return product;
         }
         public async Task<IEnumerable<ProductType>> GetAllAsync()
         {
-            var data = await _dbContext.ProductTypes.ToListAsync();
+            var data = await _genericRepository.GetAll();
             return (data);
         }
-        public async Task<ProductType> GetAsync(int id)
+        public async Task<ProductType> GetAsync(long id)
         {
-            var data = await _dbContext.ProductTypes.FirstOrDefaultAsync(i => i.Id == id);
+            var data = await _genericRepository.GetById(id);
             if (data == null)
                 throw new ArgumentException("ProductType is not exist");
             return (data);
         }
         public async Task<ProductType> UpdateAsync(ProductType model)
         {
-            var existing = await _dbContext.ProductTypes.FirstOrDefaultAsync(c => c.Id == model.Id);
+            var existing = await _genericRepository.GetById(model.Id);
             if (string.IsNullOrWhiteSpace(model.Name))
-                throw new ArgumentException("ProductType not found");
+                throw new ArgumentException("Products name not found");
             if (existing == null)
-                throw new ArgumentException("ProductType is not exist");
+                throw new ArgumentException("Products is not exist");
 
-            _dbContext.Entry(existing).CurrentValues.SetValues(model);
+            _genericRepository.Update(existing);
 
             return model;
         }
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(long id)
         {
-            var existing = await _dbContext.ProductTypes.FirstOrDefaultAsync(c => c.Id == id);
+            var existing = await _genericRepository.GetById(id);
 
             if (existing == null)
-                throw new ArgumentException("ProductType is not exist");
+                throw new ArgumentException("Product is not exist");
 
-            _dbContext.ProductTypes.Remove(existing);
+            _genericRepository.Delete(id);
+            _genericRepository.Save();
         }
     }
 }

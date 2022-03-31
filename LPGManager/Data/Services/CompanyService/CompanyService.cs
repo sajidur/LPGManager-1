@@ -30,7 +30,7 @@ namespace LPGManager.Data.Services.CompanyService
             var data = await _genericRepository.GetAll();
             return (data);
         }
-        public async Task<Company> GetAsync(int id)
+        public async Task<Company> GetAsync(long id)
         {
             var data = _genericRepository.GetById(id);
             if (data == null)
@@ -50,14 +50,14 @@ namespace LPGManager.Data.Services.CompanyService
             //return model;
             return null;
         }
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(long id)
         {
             var existing = _genericRepository.GetById(id);
 
             if (existing == null)
                 throw new ArgumentException("Company is not exist");
 
-            _genericRepository.Delete(existing);
+            _genericRepository.Delete(id);
             _genericRepository.Save();
         }
     }

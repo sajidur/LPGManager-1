@@ -7,9 +7,9 @@ namespace LPGManager.Interfaces.SellsInterface
     {
      
         Task<IEnumerable<SellMaster>> GetAllAsync();
-        Task<SellMaster> GetAsync(int id);
+        Task<SellMaster> GetAsync(long id);
         SellMaster AddAsync(SellMasterDtos model);
         Task<SellMaster> UpdateAsync(SellMasterDtos model);
-        Task DeleteAsync(int id);
+        Task DeleteAsync(long id);
     }
 }

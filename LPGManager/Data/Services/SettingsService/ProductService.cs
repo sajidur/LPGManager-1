@@ -31,7 +31,7 @@ namespace LPGManager.Data.Services.SettingsService
             var data = await _genericRepository.GetAll();
             return (data);
         }
-        public async Task<Product> GetAsync(int id)
+        public async Task<Product> GetAsync(long id)
         {
             var existing = await _genericRepository.GetById(id);
             if (existing == null)
@@ -50,14 +50,15 @@ namespace LPGManager.Data.Services.SettingsService
 
             return model;
         }
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(long id)
         {
             var existing = await _genericRepository.GetById(id);
 
             if (existing == null)
                 throw new ArgumentException("Product is not exist");
 
-            _genericRepository.Delete(existing);
+            _genericRepository.Delete(id);
+            _genericRepository.Save();
         }
     }
 }

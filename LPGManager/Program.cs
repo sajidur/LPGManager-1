@@ -50,6 +50,7 @@ builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IWarehouseService, WarehouseService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ISizeService, SizeService>();
+builder.Services.AddScoped<IProductTypeService, ProductTypeService>();
 
 //builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
