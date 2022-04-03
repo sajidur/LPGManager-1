@@ -7,56 +7,58 @@ namespace LPGManager.Data.Services.SupplierService
 {
     public class SupplierService : ISupplierService
     {
-        private readonly AppsDbContext _dbContext;
+        private IGenericRepository<Supplier> _genericRepository;
 
-        public SupplierService(AppsDbContext dbContext)
+        public SupplierService(IGenericRepository<Supplier> genericRepository)
         {
-            _dbContext = dbContext;
+            _genericRepository = genericRepository;
         }
-        public async Task<Supplier> AddAsync(Supplier supplier)
+        public async Task<Supplier> AddAsync(Supplier product)
         {
-            var existing = await _dbContext.Suppliers.FirstOrDefaultAsync(c => c.SupplierName == supplier.SupplierName);
-            if (string.IsNullOrWhiteSpace(supplier.SupplierName))
-                throw new ArgumentException("write supplier name");            
+            var existing = await _genericRepository.GetById(product.Id);
+            if (string.IsNullOrWhiteSpace(product.SupplierName))
+                throw new ArgumentException("Write SupplierName");
             if (existing != null)
                 throw new ArgumentException("Already exist");
-            _dbContext.Suppliers.Add(supplier);
 
-            return supplier;
-        }       
+            _genericRepository.Insert(product);
+            _genericRepository.Save();
+
+            return product;
+        }
         public async Task<IEnumerable<Supplier>> GetAllAsync()
         {
-            var data = await _dbContext.Suppliers.ToListAsync();
+            var data = await _genericRepository.GetAll();
             return (data);
         }
-        public async Task<Supplier> GetAsync(int id)
+        public async Task<Supplier> GetAsync(long id)
         {
-            var data = await _dbContext.Suppliers.FirstOrDefaultAsync(i => i.Id == id);
-            if (data == null)
-                throw new ArgumentException("Suppliers is not exist");
-            return (data);
+            var existing = await _genericRepository.GetById(id);
+            if (existing == null)
+                throw new ArgumentException("Product is not exist");
+            return (existing);
         }
         public async Task<Supplier> UpdateAsync(Supplier model)
         {
-            var existing = await _dbContext.Suppliers.FirstOrDefaultAsync(c => c.Id == model.Id);
+            var existing = await _genericRepository.GetById(model.Id);
             if (string.IsNullOrWhiteSpace(model.SupplierName))
-                throw new ArgumentException("Supplier name not found");
+                throw new ArgumentException("SupplierName name not found");
             if (existing == null)
-                throw new ArgumentException("Supplier is not exist");
+                throw new ArgumentException("SupplierName is not exist");
 
-            model.CreatedOn = DateTime.UtcNow;
-            _dbContext.Entry(existing).CurrentValues.SetValues(model);
+            _genericRepository.Update(existing);
 
             return model;
         }
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(long id)
         {
-            var existing = await _dbContext.Suppliers.FirstOrDefaultAsync(c => c.Id == id);
+            var existing = await _genericRepository.GetById(id);
 
             if (existing == null)
-                throw new ArgumentException("Supplier is not exist");
+                throw new ArgumentException("SupplierName is not exist");
 
-            _dbContext.Suppliers.Remove(existing);
+            _genericRepository.Delete(id);
+            _genericRepository.Save();
         }
     }
 }

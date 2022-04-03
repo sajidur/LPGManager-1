@@ -32,6 +32,7 @@ namespace LPGManager.Controllers
             SellMaster result;
             try
             {
+                //validation
                 result = _sellService.AddAsync(model);
             }
             catch (Exception ex)

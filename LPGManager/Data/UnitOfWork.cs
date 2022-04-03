@@ -28,7 +28,6 @@ namespace LPGManager.Data
         public IPurchaseDetailsService purchaseDetailsService => new PurchaseDetailsService(_dbContext);
      //   public IPurchaseMasterService purchaseMasterService => new PurchaseMasterService(_dbContext);
 
-        public ISupplierService supplierService => new SupplierService(_dbContext);
 
         public ISellDetailsService sellDetailsService => new SellDetailsService(_dbContext);
 
