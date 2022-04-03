@@ -13,6 +13,7 @@ namespace LPGManager.Dtos
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please provide valid ProductType")]
         public string ProductType { get; set; }
         public decimal Price { get; set; }
+        public decimal Discount { get; set; }
         public decimal Quantity { get; set; }
         public decimal OpeningQuantity { get; set; }
         public decimal ReceivingQuantity { get; set; }
