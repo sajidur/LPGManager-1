@@ -20,6 +20,8 @@ namespace LPGManager.Models
         public decimal DamageQuantity { get; set; }        
         public long SellMasterId { get; set; }
         [JsonIgnore]
+        public Company Company { get; set; }
+        [JsonIgnore]
         public SellMaster SellMaster { get; set; }
     }
 }

@@ -15,13 +15,15 @@ namespace LPGManager.Data.Services.PurchaseService
         private IGenericRepository<PurchaseMaster> _purchaseMasterRepository;
         private IGenericRepository<PurchaseDetails> _purchaseDetailsRepository;
         private IGenericRepository<Inventory> _inventoryRepository;
+        private IGenericRepository<Company> _companyRepository;
 
-        public PurchaseMasterService(IMapper mapper, IGenericRepository<PurchaseMaster> purchaseMasterRepository, IGenericRepository<PurchaseDetails> purchaseDetailsRepository, IGenericRepository<Inventory> inventoryRepository)
+        public PurchaseMasterService(IMapper mapper, IGenericRepository<PurchaseMaster> purchaseMasterRepository, IGenericRepository<PurchaseDetails> purchaseDetailsRepository, IGenericRepository<Inventory> inventoryRepository, IGenericRepository<Company> companyRepository)
         {
             _purchaseMasterRepository=purchaseMasterRepository;
             _purchaseDetailsRepository = purchaseDetailsRepository;
             _inventoryRepository=inventoryRepository;
-            _mapper=mapper;
+            _companyRepository = companyRepository;
+            _mapper = mapper;
 
         }
         public PurchaseMaster AddAsync(PurchaseMasterDtos model)
@@ -32,6 +34,7 @@ namespace LPGManager.Data.Services.PurchaseService
                 var purchase = _mapper.Map<PurchaseMaster>(model);
                 if (model.PurchaseDetails != null)
                 {
+                    purchase.InvoiceNo = GenerateInvoice();
                     var res = _purchaseMasterRepository.Insert(purchase);
                     _purchaseMasterRepository.Save();
                     foreach (var item in model.PurchaseDetails)
@@ -77,6 +80,10 @@ namespace LPGManager.Data.Services.PurchaseService
 
         }
 
+        private string GenerateInvoice()
+        {
+            return DateTime.Now.Year.ToString()+ DateTime.Now.Month.ToString("d2")+ DateTime.Now.Day.ToString("d2")+_purchaseMasterRepository.GetLastId();
+        }
         public async Task DeleteAsync(long id)
         {
             var existing = await _purchaseMasterRepository.GetById(id);
@@ -88,14 +95,18 @@ namespace LPGManager.Data.Services.PurchaseService
             _purchaseMasterRepository.Save();
         }
 
-        public async Task<IEnumerable<PurchaseMaster>> GetAllAsync()
+        public List<PurchaseMasterDtos> GetAllAsync()
         {
             var data = _purchaseMasterRepository.GetAll();
             foreach (var item in data.Result)
             {
-                item.PurchasesDetails = _purchaseDetailsRepository.FindBy(a => a.PurchaseMasterId == item.Id).ToList();
+                item.PurchaseDetails = _purchaseDetailsRepository.FindBy(a => a.PurchaseMasterId == item.Id).ToList();
+                foreach (var details in item.PurchaseDetails)
+                {
+                    details.Company = _companyRepository.GetById(details.CompanyId).Result;
+                }
             }
-            return (data.Result);
+            return _mapper.Map<List<PurchaseMasterDtos>>(data.Result);
         }
 
         public async Task<PurchaseMaster> GetAsync(long id)

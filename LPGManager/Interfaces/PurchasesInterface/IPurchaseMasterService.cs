@@ -5,7 +5,7 @@ namespace LPGManager.Interfaces.PurchasesInterface
 {
     public interface IPurchaseMasterService
     {
-        Task<IEnumerable<PurchaseMaster>> GetAllAsync();        
+        List<PurchaseMasterDtos> GetAllAsync();
         Task<PurchaseMaster> GetAsync(long id);
         PurchaseMaster AddAsync(PurchaseMasterDtos model);
         Task<PurchaseMaster> UpdateAsync(PurchaseMaster model);

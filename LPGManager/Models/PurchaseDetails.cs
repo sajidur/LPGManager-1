@@ -17,6 +17,8 @@ namespace LPGManager.Models
         public decimal DamageQuantity { get; set; }        
         public decimal SaleQuantity { get; set; }
         public long PurchaseMasterId { get; set; }
+        [JsonIgnore]
+        public Company Company { get; set; }
 
         [JsonIgnore]
         public PurchaseMaster PurchaseMaster { get; set; }

@@ -4,6 +4,7 @@ namespace LPGManager.Dtos
 {
     public class SellMasterDtos:BaseDtos
     {
+        public string InvoiceNo { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please provide valid Customer Id")]
         public long CustomerId { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please provide TotalPrice")]

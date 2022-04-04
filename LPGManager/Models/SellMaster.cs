@@ -2,6 +2,7 @@
 {
     public class SellMaster : BaseEntity
     {
+        public string InvoiceNo { get; set; }
         public long CustomerId { get; set; }
         public decimal TotalPrice { get; set; }
         public decimal Discount { get; set; }

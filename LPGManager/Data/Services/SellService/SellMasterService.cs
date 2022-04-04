@@ -13,12 +13,14 @@ namespace LPGManager.Data.Services.SellService
         private IGenericRepository<SellMaster> _sellMasterRepository;
         private IGenericRepository<SellDetails> _sellDetailsRepository;
         private IGenericRepository<Inventory> _inventoryRepository;
+        private IGenericRepository<Company> _companyRepository;
 
-        public SellMasterService(IMapper mapper, IGenericRepository<SellMaster> sellMasterRepository, IGenericRepository<SellDetails> sellsDetailRepository, IGenericRepository<Inventory> inventoryRepository)
+        public SellMasterService(IMapper mapper, IGenericRepository<SellMaster> sellMasterRepository, IGenericRepository<SellDetails> sellsDetailRepository, IGenericRepository<Inventory> inventoryRepository, IGenericRepository<Company> companyRepository)
         {
             _sellMasterRepository = sellMasterRepository;
             _sellDetailsRepository = sellsDetailRepository;
             _inventoryRepository = inventoryRepository;
+            _companyRepository = companyRepository;
             _mapper = mapper;
 
         }
@@ -30,6 +32,7 @@ namespace LPGManager.Data.Services.SellService
                 var sell = _mapper.Map<SellMaster>(model);
                 if (model.SellsDetails != null)
                 {
+                    sell.InvoiceNo = GenerateInvoice();
                     var res = _sellMasterRepository.Insert(sell);
                     _sellMasterRepository.Save();
                     foreach (var item in model.SellsDetails)
@@ -75,6 +78,11 @@ namespace LPGManager.Data.Services.SellService
 
         }
 
+        private string GenerateInvoice()
+        {
+            return DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString("d2") + DateTime.Now.Day.ToString("d2") + _sellMasterRepository.GetLastId();
+        }
+
         public async Task DeleteAsync(long id)
         {
             //var existing = await _dbContext.pur.FirstOrDefaultAsync(c => c.Id == id);
@@ -85,14 +93,18 @@ namespace LPGManager.Data.Services.SellService
             //_dbContext.PurchaseMasters.Remove(existing);
         }
 
-        public async Task<IEnumerable<SellMaster>> GetAllAsync()
+        public List<SellMasterDtos> GetAllAsync()
         {
             var data = _sellMasterRepository.GetAll();
             foreach (var item in data.Result)
             {
                 item.SellsDetails = _sellDetailsRepository.FindBy(a => a.SellMasterId == item.Id).ToList();
+                foreach (var details in item.SellsDetails)
+                {
+                    details.Company = _companyRepository.GetById(details.CompanyId).Result;
+                }
             }
-            return (data.Result);
+            return _mapper.Map<List<SellMasterDtos>>(data.Result);
         }
 
         public async Task<SellMaster> GetAsync(long id)

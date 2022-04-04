@@ -4,6 +4,7 @@ namespace LPGManager.Dtos
 {
     public class PurchaseMasterDtos:BaseDtos
     {
+        public string? InvoiceNo { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please provide valid SupplierId")]
         public int SupplierId { get; set; }
         public decimal TotalPrice { get; set; }
@@ -13,5 +14,6 @@ namespace LPGManager.Dtos
         public string PaymentType { get; set; }
         public string? Notes { get; set; }
         public List<PurchaseDetailsDtos> PurchaseDetails { get; set; }
+
     }
 }

@@ -55,5 +55,10 @@ namespace LPGManager.Data
         {
             _context.SaveChanges();
         }
+
+        public long GetLastId()
+        {
+            return _context.PurchaseMasters.OrderBy(a=>a.Id).LastOrDefault().Id;
+        }
     }
 }

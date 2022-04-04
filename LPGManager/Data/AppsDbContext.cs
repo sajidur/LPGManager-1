@@ -30,7 +30,7 @@ namespace LPGManager.Data
         {
             modelBuilder.Entity<PurchaseDetails>()
                 .HasOne(p => p.PurchaseMaster)
-                .WithMany(b => b.PurchasesDetails)
+                .WithMany(b => b.PurchaseDetails)
                 .HasForeignKey(p => p.PurchaseMasterId);
 
             modelBuilder.Entity<SellDetails>()

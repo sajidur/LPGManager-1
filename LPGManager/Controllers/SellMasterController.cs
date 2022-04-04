@@ -22,7 +22,7 @@ namespace LPGManager.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var data = await _sellService.GetAllAsync();
+            var data = _sellService.GetAllAsync();
             return Ok(data);
         }
 

@@ -13,6 +13,7 @@ namespace LPGManager.Common
             CreateMap<CustomerEntity, CustomerDto>().ReverseMap();
             CreateMap<SellMasterDtos, SellMaster>().ReverseMap();
             CreateMap<SellDetailsDtos, SellDetails>().ReverseMap();
+            CreateMap<Company, CompanyDtos>().ReverseMap();
 
         }
     }
