@@ -11,9 +11,8 @@ namespace LPGManager.Dtos
         public decimal Discount { get; set; }
         public decimal DueAdvance { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please provide valid PaymentType")]
-        public int PaymentType { get; set; }
+        public string PaymentType { get; set; }
         public string Notes { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Please provide valid SellsDetails")]
         public List<SellDetailsDtos> SellsDetails { get; set; }
 
 

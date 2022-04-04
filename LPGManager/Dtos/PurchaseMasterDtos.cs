@@ -12,7 +12,6 @@ namespace LPGManager.Dtos
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please provide valid PaymentType")]
         public string PaymentType { get; set; }
         public string? Notes { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Please provide valid PurchaseDetails")]
         public List<PurchaseDetailsDtos> PurchaseDetails { get; set; }
     }
 }

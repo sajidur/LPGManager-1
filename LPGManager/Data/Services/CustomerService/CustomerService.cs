@@ -12,7 +12,7 @@ namespace LPGManager.Data.Services.CustomerService
 
         public Task<IEnumerable<CustomerEntity>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return _customerRepository.GetAll();
         }
 
         public void Save(CustomerEntity customerEntity)
