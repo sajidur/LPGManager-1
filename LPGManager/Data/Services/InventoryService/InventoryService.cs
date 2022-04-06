@@ -49,12 +49,13 @@ namespace LPGManager.Data.Services.InventoryService
 
         public async Task DeleteAsync(long id)
         {
-            //var existing = await _dbContext.pur.FirstOrDefaultAsync(c => c.Id == id);
+            var existing = _inventoryRepository.GetById(id);
 
-            //if (existing == null)
-            //    throw new ArgumentException("Purchase is not exist");
+            if (existing == null)
+                throw new ArgumentException("Inventory is not exist");
 
-            //_dbContext.PurchaseMasters.Remove(existing);
+            _inventoryRepository.Delete(id);
+            _inventoryRepository.Save();
         }
 
         public List<InventoryDtos> GetAllAsync()
