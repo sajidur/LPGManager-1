@@ -1,4 +1,7 @@
-﻿namespace LPGManager.Dtos
+﻿using LPGManager.Models;
+using LPGManager.Models.Settings;
+
+namespace LPGManager.Dtos
 {
     public class InventoryDtos:BaseDtos
     {
@@ -14,5 +17,7 @@
         public decimal SaleQuantity { get; set; }
         public int CompanyId { get; set; }
         public int WarehouseId { get; set; }
+        public CompanyDtos? Company { get; set; }
+        public WarehouseDtos? Warehouse { get; set; }
     }
 }

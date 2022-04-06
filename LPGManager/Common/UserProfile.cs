@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LPGManager.Dtos;
 using LPGManager.Models;
+using LPGManager.Models.Settings;
 
 namespace LPGManager.Common
 {
@@ -14,6 +15,8 @@ namespace LPGManager.Common
             CreateMap<SellMasterDtos, SellMaster>().ReverseMap();
             CreateMap<SellDetailsDtos, SellDetails>().ReverseMap();
             CreateMap<Company, CompanyDtos>().ReverseMap();
+            CreateMap<Warehouse, WarehouseDtos>().ReverseMap();
+            CreateMap<Inventory, InventoryDtos>().ReverseMap();
 
         }
     }

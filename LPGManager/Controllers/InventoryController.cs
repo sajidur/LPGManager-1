@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 
 using LPGManager.Dtos;
+using LPGManager.Interfaces.InventoryInterface;
 using LPGManager.Interfaces.UnitOfWorkInterface;
 using LPGManager.Models;
 
@@ -13,18 +14,17 @@ namespace LPGManager.Controllers
     [ApiController]
     public class InventoryController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+        private readonly IInventoryService  _inventoryService;
 
-        public InventoryController(IUnitOfWork unitOfWork)
+        public InventoryController(IInventoryService inventoryService)
         {
-            _unitOfWork = unitOfWork;
+            _inventoryService = inventoryService;
         }
         // GET: api/<InventoryController>      
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var data = await _unitOfWork.inventoryService.GetAllAsync();
+            var data = _inventoryService.GetAllAsync();
             return Ok(data);
         }
 
@@ -34,24 +34,7 @@ namespace LPGManager.Controllers
             Inventory result;
             try
             {
-                var inventory = new Inventory
-                {
-                    ProductName = model.ProductName,
-                    Size = model.Size,
-                    ProductType = model.ProductType,
-                    Price = model.Price,
-                    Quantity = model.Quantity,
-                    OpeningQuantity = model.OpeningQuantity,
-                    ReceivingQuantity = model.ReceivingQuantity,
-                    ReturnQuantity = model.ReturnQuantity,
-                    DamageQuantity = model.DamageQuantity,
-                    SaleQuantity = model.SaleQuantity,
-                    WarehouseId = model.WarehouseId,
-                    CompanyId = model.CompanyId,
-
-                };
-                result = await _unitOfWork.inventoryService.AddAsync(inventory);
-                await _unitOfWork.SaveAsync();
+                result = _inventoryService.AddAsync(model);
             }
             catch (Exception ex)
             {
@@ -67,24 +50,7 @@ namespace LPGManager.Controllers
             Inventory result;
             try
             {
-                var inventory = new Inventory
-                {
-                    ProductName = model.ProductName,
-                    Size = model.Size,
-                    ProductType = model.ProductType,
-                    Price = model.Price,
-                    Quantity = model.Quantity,
-                    OpeningQuantity = model.OpeningQuantity,
-                    ReceivingQuantity = model.ReceivingQuantity,
-                    ReturnQuantity = model.ReturnQuantity,
-                    DamageQuantity = model.DamageQuantity,
-                    SaleQuantity = model.SaleQuantity,
-                    WarehouseId = model.WarehouseId,
-                    CompanyId = model.CompanyId,
-
-                };
-                result = await _unitOfWork.inventoryService.AddAsync(inventory);
-                await _unitOfWork.SaveAsync();
+                result = _inventoryService.AddAsync(model);
             }
             catch (Exception ex)
             {
@@ -99,8 +65,7 @@ namespace LPGManager.Controllers
         {
             try
             {
-                await _unitOfWork.inventoryService.DeleteAsync(id);
-                await _unitOfWork.SaveAsync();
+                await _inventoryService.DeleteAsync(id);
             }
             catch (Exception ex)
             {

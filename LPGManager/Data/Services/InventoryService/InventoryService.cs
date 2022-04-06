@@ -1,78 +1,99 @@
-﻿using LPGManager.Interfaces.InventoryInterface;
+﻿using AutoMapper;
+using LPGManager.Dtos;
+using LPGManager.Interfaces.InventoryInterface;
 using LPGManager.Models;
-
+using LPGManager.Models.Settings;
 using Microsoft.EntityFrameworkCore;
 
 namespace LPGManager.Data.Services.InventoryService
 {
     public class InventoryService : IInventoryService
     {
-        private readonly AppsDbContext _dbContext;
+        private IGenericRepository<Inventory> _inventoryRepository;
+        private IGenericRepository<Company> _companyRepository;
+        private IGenericRepository<Warehouse> _wareRepository;
 
-        public InventoryService(AppsDbContext dbContext)
+        IMapper _mapper;
+        public InventoryService(IGenericRepository<Warehouse> wareRepository,IMapper mapper,IGenericRepository<Inventory> inventoryRepository, IGenericRepository<Company> companyRepository)
         {
-            _dbContext = dbContext;
+            _inventoryRepository = inventoryRepository;
+            _companyRepository = companyRepository;
+            _wareRepository = wareRepository;
+            _mapper= mapper;
         }
-        public async Task<Inventory> AddAsync(Inventory inventory)
+        public Inventory AddAsync(InventoryDtos model)
         {
-            var existing = await _dbContext.Warehouses.FirstOrDefaultAsync(c => c.Id == inventory.WarehouseId);
-            if (existing == null)
-                throw new ArgumentException("Warehouse Id is not exist");
-            var existingSupplierId = await _dbContext.Companies.FirstOrDefaultAsync(c => c.Id == inventory.CompanyId);
-            if (existingSupplierId == null)
-                throw new ArgumentException("Supplier Id is not exist");
+            SellMaster result;
+            try
+            {
+                var item = _mapper.Map<Inventory>(model);
+                    var inv = _inventoryRepository.FindBy(a => a.ProductName == item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId == 1).FirstOrDefault();
+                    if (inv != null)
+                    {
+                        inv.Quantity -= item.Quantity;
+                        inv.SaleQuantity += item.Quantity;
+                        _inventoryRepository.Update(inv);
+                    }
+                    _inventoryRepository.Insert(item);
+                
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(
+                  $"{ex}.");
+            }
 
-            _dbContext.Inventories.Add(inventory);
-            return inventory;
         }
 
-        public async Task DeleteAsync(int id)
+
+        public async Task DeleteAsync(long id)
         {
-            var existing = await _dbContext.Inventories.FirstOrDefaultAsync(c => c.Id == id);
+            //var existing = await _dbContext.pur.FirstOrDefaultAsync(c => c.Id == id);
 
-            if (existing == null)
-                throw new ArgumentException("Inventories is not exist");
+            //if (existing == null)
+            //    throw new ArgumentException("Purchase is not exist");
 
-            _dbContext.Inventories.Remove(existing);
+            //_dbContext.PurchaseMasters.Remove(existing);
         }
 
-        public  Inventory GetInventory(string productName,string sizeName, int companyId,string productType, int warehouse)
+        public List<InventoryDtos> GetAllAsync()
         {
-            var data = _dbContext.Inventories.Where(a=>a.WarehouseId==warehouse&&a.ProductName==productName&&a.Size==sizeName&&a.ProductType==productType).FirstOrDefault();
+            var res = _inventoryRepository.GetAll().Result;
+            var data =_mapper.Map<List<InventoryDtos>>(res);
+            foreach (var item in data)
+            {
+                item.Company = _mapper.Map<CompanyDtos>(_companyRepository.GetById(item.CompanyId).Result);
+                item.Warehouse = _mapper.Map<WarehouseDtos>(_wareRepository.GetById(item.WarehouseId).Result);
+            }
             return data;
         }
-        public async Task<IEnumerable<Inventory>> GetAllAsync()
+
+        public async Task<Inventory> GetAsync(long id)
         {
-            var data = await _dbContext.Inventories.ToListAsync();
-            return (data);
+            //var data = await _dbContext.PurchaseMasters
+            //           .Include(c => c.PurchasesDetails)
+            //           .Include(c => c.SupplierId).FirstOrDefaultAsync(i => i.Id == id);
+            //if (data == null)
+            //    throw new ArgumentException("Purchase Details is not exist");
+            //return (data);
+            return null;
         }
 
-        public async Task<Inventory> GetAsync(int id)
+        public async Task<Inventory> UpdateAsync(InventoryDtos model)
         {
-            var data = await _dbContext.Inventories
-                           .Include(c => c.WarehouseId)
-                           .Include(c => c.CompanyId).FirstOrDefaultAsync(i => i.Id == id);
-            if (data == null)
-                throw new ArgumentException("Inventories is not exist");
-            return (data);
-        }
+            //var existing = await _dbContext.PurchaseMasters.FirstOrDefaultAsync(c => c.Id == model.Id);
+            //if (existing == null)
+            //    throw new ArgumentException("Purchase Master is not exist");
 
-        public async Task<Inventory> UpdateAsync(Inventory model)
-        {
-            var existing = await _dbContext.Inventories.FirstOrDefaultAsync(c => c.Id == model.Id);
-            if (existing == null)
-                throw new ArgumentException("Inventories is not exist");
-            var existingOfMasterId = await _dbContext.Warehouses.FirstOrDefaultAsync(c => c.Id == model.WarehouseId);
-            if (existingOfMasterId == null)
-                throw new ArgumentException("Warehouse Id is not exist");
-            var existingSupplierId = await _dbContext.Companies.FirstOrDefaultAsync(c => c.Id == model.CompanyId);
-            if (existingSupplierId == null)
-                throw new ArgumentException("Supplier Id is not exist");
+            //var existingSupplierId = await _dbContext.Suppliers.FirstOrDefaultAsync(c => c.Id == model.SupplierId);
+            //if (existingSupplierId == null)
+            //    throw new ArgumentException("Supplier Id is not exist");
 
+            //_dbContext.Entry(existing).CurrentValues.SetValues(model);
 
-            _dbContext.Entry(existing).CurrentValues.SetValues(model);
-
-            return model;
+            //return model;
+            return null;
         }
     }
 }

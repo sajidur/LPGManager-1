@@ -67,7 +67,6 @@ namespace LPGManager.Controllers
 
                 };
                 result = await _unitOfWork.purchaseDetailsService.AddAsync(purchaseDetails);
-                await _unitOfWork.inventoryService.AddAsync(inventory);   
                 await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)

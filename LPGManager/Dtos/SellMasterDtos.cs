@@ -15,7 +15,7 @@ namespace LPGManager.Dtos
         public string PaymentType { get; set; }
         public string? Notes { get; set; }
         public List<SellDetailsDtos> SellsDetails { get; set; }
-        public CustomerDto Customer { get; set; }
+        public CustomerDto? Customer { get; set; }
 
     }
 }
