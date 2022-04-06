@@ -9,6 +9,7 @@
         public decimal DueAdvance { get; set; }
         public string PaymentType { get; set; }
         public string? Notes { get; set; }
+        public CustomerEntity Customer { get; set; }
         public List<SellDetails> SellsDetails { get; set; }
     }
 }

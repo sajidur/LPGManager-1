@@ -14,13 +14,15 @@ namespace LPGManager.Data.Services.SellService
         private IGenericRepository<SellDetails> _sellDetailsRepository;
         private IGenericRepository<Inventory> _inventoryRepository;
         private IGenericRepository<Company> _companyRepository;
+        private IGenericRepository<CustomerEntity> _customerRepository;
 
-        public SellMasterService(IMapper mapper, IGenericRepository<SellMaster> sellMasterRepository, IGenericRepository<SellDetails> sellsDetailRepository, IGenericRepository<Inventory> inventoryRepository, IGenericRepository<Company> companyRepository)
+        public SellMasterService(IMapper mapper, IGenericRepository<SellMaster> sellMasterRepository, IGenericRepository<SellDetails> sellsDetailRepository, IGenericRepository<Inventory> inventoryRepository, IGenericRepository<Company> companyRepository, IGenericRepository<CustomerEntity> customerRepository)
         {
             _sellMasterRepository = sellMasterRepository;
             _sellDetailsRepository = sellsDetailRepository;
             _inventoryRepository = inventoryRepository;
             _companyRepository = companyRepository;
+            _customerRepository = customerRepository;
             _mapper = mapper;
 
         }
@@ -103,7 +105,8 @@ namespace LPGManager.Data.Services.SellService
                 {
                     details.Company = _companyRepository.GetById(details.CompanyId).Result;
                 }
-            }
+                item.Customer = _customerRepository.GetById(item.CustomerId).Result;
+            }           
             return _mapper.Map<List<SellMasterDtos>>(data.Result);
         }
 
