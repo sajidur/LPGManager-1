@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LPGManager.Migrations
 {
     [DbContext(typeof(AppsDbContext))]
-    [Migration("20220330174152_sellfixupj")]
-    partial class sellfixupj
+    [Migration("20220407114311_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -84,10 +84,6 @@ namespace LPGManager.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("CompanyName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
@@ -102,6 +98,10 @@ namespace LPGManager.Migrations
 
                     b.Property<int>("IsActive")
                         .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Phone")
                         .IsRequired()
@@ -325,6 +325,8 @@ namespace LPGManager.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CompanyId");
+
                     b.HasIndex("PurchaseMasterId");
 
                     b.ToTable("PurchasesDetails");
@@ -346,6 +348,10 @@ namespace LPGManager.Migrations
 
                     b.Property<decimal>("DueAdvance")
                         .HasColumnType("numeric");
+
+                    b.Property<string>("InvoiceNo")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("IsActive")
                         .HasColumnType("integer");
@@ -429,6 +435,9 @@ namespace LPGManager.Migrations
                     b.Property<decimal>("DamageQuantity")
                         .HasColumnType("numeric");
 
+                    b.Property<decimal>("Discount")
+                        .HasColumnType("numeric");
+
                     b.Property<int>("IsActive")
                         .HasColumnType("integer");
 
@@ -469,6 +478,8 @@ namespace LPGManager.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CompanyId");
+
                     b.HasIndex("SellMasterId");
 
                     b.ToTable("SellsDetails");
@@ -497,14 +508,19 @@ namespace LPGManager.Migrations
                     b.Property<decimal>("DueAdvance")
                         .HasColumnType("numeric");
 
+                    b.Property<string>("InvoiceNo")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<int>("IsActive")
                         .HasColumnType("integer");
 
                     b.Property<string>("Notes")
                         .HasColumnType("text");
 
-                    b.Property<decimal>("PaymentType")
-                        .HasColumnType("numeric");
+                    b.Property<string>("PaymentType")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("numeric");
@@ -516,6 +532,8 @@ namespace LPGManager.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("SellMasters");
                 });
@@ -733,29 +751,56 @@ namespace LPGManager.Migrations
 
             modelBuilder.Entity("LPGManager.Models.PurchaseDetails", b =>
                 {
+                    b.HasOne("LPGManager.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("LPGManager.Models.PurchaseMaster", "PurchaseMaster")
-                        .WithMany("PurchasesDetails")
+                        .WithMany("PurchaseDetails")
                         .HasForeignKey("PurchaseMasterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Company");
 
                     b.Navigation("PurchaseMaster");
                 });
 
             modelBuilder.Entity("LPGManager.Models.SellDetails", b =>
                 {
+                    b.HasOne("LPGManager.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("LPGManager.Models.SellMaster", "SellMaster")
                         .WithMany("SellsDetails")
                         .HasForeignKey("SellMasterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Company");
+
                     b.Navigation("SellMaster");
+                });
+
+            modelBuilder.Entity("LPGManager.Models.SellMaster", b =>
+                {
+                    b.HasOne("LPGManager.Models.CustomerEntity", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("LPGManager.Models.PurchaseMaster", b =>
                 {
-                    b.Navigation("PurchasesDetails");
+                    b.Navigation("PurchaseDetails");
                 });
 
             modelBuilder.Entity("LPGManager.Models.SellMaster", b =>

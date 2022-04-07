@@ -8,6 +8,7 @@ namespace LPGManager.Data
         void Delete(long entity);
         void Update(T entity);
         Task<T> GetById(long id);
+        Task<long> GetLastId(string table);
         long GetLastId();
         T Insert(T obj);
         void Save();

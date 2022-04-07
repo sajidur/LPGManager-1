@@ -20,6 +20,8 @@ namespace LPGManager.Data
         public DbSet<Company> Companies { get; set; }
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<User> Users { get; set; }
+
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<Size> Sizes { get; set; }

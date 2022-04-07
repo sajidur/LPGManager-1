@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,10 +56,22 @@ namespace LPGManager.Data
         {
             _context.SaveChanges();
         }
-
         public long GetLastId()
         {
-            return _context.PurchaseMasters.OrderBy(a=>a.Id).LastOrDefault().Id;
+           return 1;
+        }
+        public async Task<long> GetLastId(string table)
+        {
+            var connection = _context.Database.GetDbConnection();
+            connection.Open();
+            using (var command = connection.CreateCommand())
+            {
+                command.CommandText = "SELECT MAX(\"Id\") FROM public.\"" + table + "\";";
+                var result = command.ExecuteScalar();
+                connection.Close();
+                return (long)result;
+            }
+
         }
     }
 }

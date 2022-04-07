@@ -14,7 +14,6 @@ namespace LPGManager.Interfaces.UnitOfWorkInterface
         IPurchaseDetailsService purchaseDetailsService { get; }
       //  IPurchaseMasterService purchaseMasterService { get; }
         ISellDetailsService sellDetailsService { get; }
-        IRoleService roleService { get; }
         IExchangeService exchangeService { get; }
         Task<bool> SaveAsync();
     }

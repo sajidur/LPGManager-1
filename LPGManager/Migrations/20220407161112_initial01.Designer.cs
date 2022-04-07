@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LPGManager.Migrations
 {
     [DbContext(typeof(AppsDbContext))]
-    [Migration("20220405114556_customer")]
-    partial class customer
+    [Migration("20220407161112_initial01")]
+    partial class initial01
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -410,7 +410,12 @@ namespace LPGManager.Migrations
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<long?>("UserId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Roles");
                 });
@@ -532,6 +537,8 @@ namespace LPGManager.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("SellMasters");
                 });
@@ -711,6 +718,57 @@ namespace LPGManager.Migrations
                     b.ToTable("Suppliers");
                 });
 
+            modelBuilder.Entity("LPGManager.Models.User", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("IsActive")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserType")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("LPGManager.Models.Exchange", b =>
                 {
                     b.HasOne("LPGManager.Models.Company", null)
@@ -766,6 +824,13 @@ namespace LPGManager.Migrations
                     b.Navigation("PurchaseMaster");
                 });
 
+            modelBuilder.Entity("LPGManager.Models.Role", b =>
+                {
+                    b.HasOne("LPGManager.Models.User", null)
+                        .WithMany("Roles")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("LPGManager.Models.SellDetails", b =>
                 {
                     b.HasOne("LPGManager.Models.Company", "Company")
@@ -785,6 +850,17 @@ namespace LPGManager.Migrations
                     b.Navigation("SellMaster");
                 });
 
+            modelBuilder.Entity("LPGManager.Models.SellMaster", b =>
+                {
+                    b.HasOne("LPGManager.Models.CustomerEntity", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
             modelBuilder.Entity("LPGManager.Models.PurchaseMaster", b =>
                 {
                     b.Navigation("PurchaseDetails");
@@ -793,6 +869,11 @@ namespace LPGManager.Migrations
             modelBuilder.Entity("LPGManager.Models.SellMaster", b =>
                 {
                     b.Navigation("SellsDetails");
+                });
+
+            modelBuilder.Entity("LPGManager.Models.User", b =>
+                {
+                    b.Navigation("Roles");
                 });
 #pragma warning restore 612, 618
         }

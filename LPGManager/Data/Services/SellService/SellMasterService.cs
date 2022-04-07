@@ -39,9 +39,9 @@ namespace LPGManager.Data.Services.SellService
                     _sellMasterRepository.Save();
                     foreach (var item in model.SellsDetails)
                     {
-                        var selldetails = _mapper.Map<SellDetails>(item);
-                        selldetails.SellMasterId = res.Id;
-                        _sellDetailsRepository.Insert(selldetails);
+                      //  var selldetails = _mapper.Map<SellDetails>(item);
+                      //  selldetails.SellMasterId = res.Id;
+                     //   _sellDetailsRepository.Insert(selldetails);
                         _inventoryRepository.Save();
                         var inv = _inventoryRepository.FindBy(a => a.ProductName == item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId == 1).FirstOrDefault();
                         if (inv != null)
@@ -82,7 +82,7 @@ namespace LPGManager.Data.Services.SellService
 
         private string GenerateInvoice()
         {
-            return DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString("d2") + DateTime.Now.Day.ToString("d2") + _sellMasterRepository.GetLastId();
+            return DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString("d2") + DateTime.Now.Day.ToString("d2") + _sellMasterRepository.GetLastId("SellMasters").Result.ToString("d3");
         }
 
         public async Task DeleteAsync(long id)

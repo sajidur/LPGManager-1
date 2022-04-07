@@ -34,15 +34,15 @@ namespace LPGManager.Data.Services.PurchaseService
                 var purchase = _mapper.Map<PurchaseMaster>(model);
                 if (model.PurchaseDetails != null)
                 {
-                    purchase.InvoiceNo = GenerateInvoice();
+                    purchase.InvoiceNo = GenerateInvoice().Result;
                     var res = _purchaseMasterRepository.Insert(purchase);
                     _purchaseMasterRepository.Save();
                     foreach (var item in model.PurchaseDetails)
                     {
-                        var purchasedetails = _mapper.Map<PurchaseDetails>(item);
-                        purchasedetails.PurchaseMasterId = res.Id;
-                        _purchaseDetailsRepository.Insert(purchasedetails);
-                        _inventoryRepository.Save();
+                        //var purchasedetails = _mapper.Map<PurchaseDetails>(item);
+                        //purchasedetails.PurchaseMasterId = res.Id;
+                        //_purchaseDetailsRepository.Insert(purchasedetails);
+                      //  _inventoryRepository.Save();
                         var inv = _inventoryRepository.FindBy(a=>a.ProductName==item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId== 1).FirstOrDefault();
                         if (inv != null)
                         {
@@ -80,10 +80,12 @@ namespace LPGManager.Data.Services.PurchaseService
 
         }
 
-        private string GenerateInvoice()
+        private async Task<string> GenerateInvoice()
         {
-            return DateTime.Now.Year.ToString()+ DateTime.Now.Month.ToString("d2")+ DateTime.Now.Day.ToString("d2")+_purchaseMasterRepository.GetLastId();
+            var id = _purchaseMasterRepository.GetLastId("PurchaseMasters").Result;
+            return DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString("d2") + DateTime.Now.Day.ToString("d2") +id.ToString("d3") ;
         }
+ 
         public async Task DeleteAsync(long id)
         {
             var existing = await _purchaseMasterRepository.GetById(id);

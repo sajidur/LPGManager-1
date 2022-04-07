@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
+using LPGManager.Data.Services;
 using LPGManager.Dtos;
-using LPGManager.Interfaces.RoleInterface;
-using LPGManager.Interfaces.UnitOfWorkInterface;
 using LPGManager.Models;
-
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,30 +9,30 @@ namespace LPGManager.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RoleController : ControllerBase
+    public class UserController : ControllerBase
     {
-        private readonly IRoleService _roleService;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        public RoleController(IMapper mapper, IRoleService roleService)
+        public UserController(IMapper mapper, IUserService userService)
         {
-            _roleService = roleService;
+            _userService = userService;
             _mapper = mapper;
         }
         // GET: api/<PurchaseController>      
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
-            var data = await _roleService.GetAllAsync();
+            var data = await _userService.GetAllAsync();
             return Ok(data);
         }
         [HttpPost("Save")]
-        public async Task<IActionResult> Save(RoleDtos roleDto)
+        public async Task<IActionResult> Save(UserDtos userDto)
         {
-            Role result;
+            User result;
             try
             {
-                var role=_mapper.Map<Role>(roleDto);
-                result = await _roleService.AddAsync(role);
+                var role = _mapper.Map<User>(userDto);
+                result = await _userService.AddAsync(role);
             }
             catch (Exception ex)
             {

@@ -1,42 +1,48 @@
-﻿using LPGManager.Interfaces.RoleInterface;
-using LPGManager.Models;
-
+﻿using LPGManager.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace LPGManager.Data.Services.RoleService
+namespace LPGManager.Data.Services
 {
-    public class RoleService :IRoleService
+    public interface IUserService
     {
-        private IGenericRepository<Role> _genericRepository;
+        Task<IEnumerable<User>> GetAllAsync();
+        Task<User> GetAsync(long id);
+        Task<User> AddAsync(User role);
+        Task<User> UpdateAsync(User model);
+        Task DeleteAsync(long id);
+    }
+    public class UserService:IUserService
+    {
+        private IGenericRepository<User> _genericRepository;
 
-        public RoleService(IGenericRepository<Role> genericRepository)
+        public UserService(IGenericRepository<User> genericRepository)
         {
             _genericRepository = genericRepository;
         }
-        public async Task<Role> AddAsync(Role role)
+        public async Task<User> AddAsync(User user)
         {
-            var existing = await _genericRepository.FindBy(c => c.Name == role.Name).FirstOrDefaultAsync();
-            if (string.IsNullOrWhiteSpace(role.Name))
-                throw new ArgumentException("write role name");
+            var existing = await _genericRepository.FindBy(c => c.UserId == user.UserId).FirstOrDefaultAsync();
+            if (string.IsNullOrWhiteSpace(user.UserId))
+                throw new ArgumentException("write user name");
             if (existing != null)
                 throw new ArgumentException("Already exist");
-            _genericRepository.Insert(role);
+            _genericRepository.Insert(user);
             _genericRepository.Save();
-            return role;
+            return user;
         }
-        public async Task<IEnumerable<Role>> GetAllAsync()
+        public async Task<IEnumerable<User>> GetAllAsync()
         {
             var data = await _genericRepository.GetAll();
             return (data);
         }
-        public async Task<Role> GetAsync(long id)
+        public async Task<User> GetAsync(long id)
         {
             var data = _genericRepository.GetById(id);
             if (data == null)
-                throw new ArgumentException("Role is not exist");
+                throw new ArgumentException("User is not exist");
             return (data.Result);
         }
-        public async Task<Role> UpdateAsync(Role model)
+        public async Task<User> UpdateAsync(User model)
         {
             //var existing = await _dbContext.Companies.FirstOrDefaultAsync(c => c.Id == model.Id);
             //if (string.IsNullOrWhiteSpace(model.CompanyName))
@@ -54,7 +60,7 @@ namespace LPGManager.Data.Services.RoleService
             var existing = _genericRepository.GetById(id);
 
             if (existing == null)
-                throw new ArgumentException("Role is not exist");
+                throw new ArgumentException("User is not exist");
 
             _genericRepository.Delete(id);
             _genericRepository.Save();
