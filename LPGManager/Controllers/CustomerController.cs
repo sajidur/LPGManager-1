@@ -32,5 +32,38 @@ namespace LPGManager.Controllers
             _customerService.Save(customer);
             return Ok();
         }
+        [HttpPost("edit/{id:int}")]
+        public async Task<IActionResult> Update(CustomerDto model)
+        {
+            CustomerEntity result;
+            try
+            {
+                var customer = _mapper.Map<CustomerEntity>(model);
+                _customerService.UpdateAsync(customer);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(
+                  $"{ex}.");
+            }
+
+            return Ok(new { data = result });
+        }
+
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                await _customerService.DeleteAsync(id);
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(
+                    $"{ex}.");
+            }
+            return Ok();
+        }
     }
 }
