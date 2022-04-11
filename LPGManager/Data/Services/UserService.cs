@@ -8,6 +8,7 @@ namespace LPGManager.Data.Services
         Task<IEnumerable<User>> GetAllAsync();
         Task<User> GetAsync(long id);
         Task<User> AddAsync(User role);
+        Task<IEnumerable<User>> Login(string userId, string password);
         Task<User> UpdateAsync(User model);
         Task DeleteAsync(long id);
     }
@@ -33,6 +34,11 @@ namespace LPGManager.Data.Services
         public async Task<IEnumerable<User>> GetAllAsync()
         {
             var data = await _genericRepository.GetAll();
+            return (data);
+        }
+        public async Task<IEnumerable<User>> Login(string userId,string password)
+        {
+            var data = _genericRepository.FindBy(a=>a.UserId== userId&&a.Password==password);
             return (data);
         }
         public async Task<User> GetAsync(long id)

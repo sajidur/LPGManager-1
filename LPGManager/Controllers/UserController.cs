@@ -41,5 +41,23 @@ namespace LPGManager.Controllers
             }
             return Ok(new { data = result });
         }
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(string userId,string password)
+        {
+            User result;
+            try
+            {
+                result = _userService.Login(userId, password).Result.FirstOrDefault();
+                return Ok(new { data = result });
+            
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(
+                  $"{ex}.");
+            }
+            return Ok(new { data = result });
+        }
+
     }
 }
