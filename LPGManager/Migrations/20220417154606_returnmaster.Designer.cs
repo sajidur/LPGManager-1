@@ -3,6 +3,7 @@ using System;
 using LPGManager.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LPGManager.Migrations
 {
     [DbContext(typeof(AppsDbContext))]
-    partial class AppsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220417154606_returnmaster")]
+    partial class returnmaster
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -347,9 +349,6 @@ namespace LPGManager.Migrations
                     b.Property<decimal>("DueAdvance")
                         .HasColumnType("numeric");
 
-                    b.Property<long>("InvoiceDate")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("InvoiceNo")
                         .IsRequired()
                         .HasColumnType("text");
@@ -643,9 +642,6 @@ namespace LPGManager.Migrations
 
                     b.Property<decimal>("DueAdvance")
                         .HasColumnType("numeric");
-
-                    b.Property<long>("InvoiceDate")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("InvoiceNo")
                         .IsRequired()

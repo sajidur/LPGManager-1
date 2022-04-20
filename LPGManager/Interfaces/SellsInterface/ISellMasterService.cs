@@ -7,7 +7,8 @@ namespace LPGManager.Interfaces.SellsInterface
     {
      
         List<SellMasterDtos> GetAllAsync();
-        Task<SellMaster> GetAsync(long id);
+        List<SellMasterDtos> GetAllAsync(long startDate, long endDate);
+        SellMasterDtos GetAsync(long id);
         SellMaster AddAsync(SellMasterDtos model);
         Task<SellMaster> UpdateAsync(SellMasterDtos model);
         Task DeleteAsync(long id);

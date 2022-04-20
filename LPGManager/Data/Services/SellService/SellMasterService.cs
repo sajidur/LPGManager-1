@@ -15,8 +15,16 @@ namespace LPGManager.Data.Services.SellService
         private IGenericRepository<Inventory> _inventoryRepository;
         private IGenericRepository<Company> _companyRepository;
         private IGenericRepository<CustomerEntity> _customerRepository;
-
-        public SellMasterService(IMapper mapper, IGenericRepository<SellMaster> sellMasterRepository, IGenericRepository<SellDetails> sellsDetailRepository, IGenericRepository<Inventory> inventoryRepository, IGenericRepository<Company> companyRepository, IGenericRepository<CustomerEntity> customerRepository)
+        private IGenericRepository<ReturnMaster> _returnMaster;
+        private IGenericRepository<ReturnDetails> _returnDetails;
+        public SellMasterService(IMapper mapper, 
+            IGenericRepository<SellMaster> sellMasterRepository, 
+            IGenericRepository<SellDetails> sellsDetailRepository, 
+            IGenericRepository<Inventory> inventoryRepository, 
+            IGenericRepository<Company> companyRepository, 
+            IGenericRepository<CustomerEntity> customerRepository,
+            IGenericRepository<ReturnMaster> retrunMaster,
+            IGenericRepository<ReturnDetails> returnDetails)
         {
             _sellMasterRepository = sellMasterRepository;
             _sellDetailsRepository = sellsDetailRepository;
@@ -24,6 +32,9 @@ namespace LPGManager.Data.Services.SellService
             _companyRepository = companyRepository;
             _customerRepository = customerRepository;
             _mapper = mapper;
+            _returnMaster = retrunMaster;
+            _returnDetails = returnDetails;
+              
 
         }
         public SellMaster AddAsync(SellMasterDtos model)
@@ -82,7 +93,8 @@ namespace LPGManager.Data.Services.SellService
 
         private string GenerateInvoice()
         {
-            return DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString("d2") + DateTime.Now.Day.ToString("d2") + _sellMasterRepository.GetLastId("SellMasters").Result.ToString("d3");
+            var lastId = _sellMasterRepository.GetLastId("SellMasters").Result;
+            return DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString("d2") + DateTime.Now.Day.ToString("d2") + lastId.ToString("d3");
         }
 
         public async Task DeleteAsync(long id)
@@ -110,15 +122,40 @@ namespace LPGManager.Data.Services.SellService
             return _mapper.Map<List<SellMasterDtos>>(data.Result);
         }
 
-        public async Task<SellMaster> GetAsync(long id)
+        public List<SellMasterDtos> GetAllAsync(long startDate,long endDate)
         {
-            //var data = await _dbContext.PurchaseMasters
-            //           .Include(c => c.PurchasesDetails)
-            //           .Include(c => c.SupplierId).FirstOrDefaultAsync(i => i.Id == id);
-            //if (data == null)
-            //    throw new ArgumentException("Purchase Details is not exist");
-            //return (data);
-            return null;
+            var data = _sellMasterRepository.FindBy(a=>a.InvoiceDate>=endDate&&a.InvoiceDate<=startDate).ToListAsync();
+            foreach (var item in data.Result)
+            {
+                item.SellsDetails = _sellDetailsRepository.FindBy(a => a.SellMasterId == item.Id).ToList();
+                foreach (var details in item.SellsDetails)
+                {
+                    details.Company = _companyRepository.GetById(details.CompanyId).Result;
+                }
+                item.Customer = _customerRepository.GetById(item.CustomerId).Result;
+            }
+            return _mapper.Map<List<SellMasterDtos>>(data.Result);
+        }
+
+        public SellMasterDtos GetAsync(long id)
+        {
+            var data = _sellMasterRepository.GetById(id).Result;
+            data.SellsDetails = _sellDetailsRepository.FindBy(a => a.SellMasterId == id).ToList();
+            foreach (var details in data.SellsDetails)
+            {
+                details.Company = _companyRepository.GetById(details.CompanyId).Result;
+            }
+            data.Customer = _customerRepository.GetById(data.CustomerId).Result;
+            var dataDto= _mapper.Map<SellMasterDtos>(data);
+            var returnMaster=_returnMaster.FindBy(a=>a.SellMasterId==id).FirstOrDefault();
+            if (returnMaster != null)
+            {
+                var details=_returnDetails.FindBy(a=>a.ReturnMasterId.Equals(returnMaster.Id)).ToList();
+                returnMaster.ReturnDetails = details;
+            }
+            var returnMasterDto = _mapper.Map<ReturnMasterDtos>(returnMaster);
+            dataDto.ReturnMaster = returnMasterDto;
+            return dataDto;
         }
 
         public async Task<SellMaster> UpdateAsync(SellMasterDtos model)

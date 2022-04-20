@@ -19,6 +19,7 @@ namespace LPGManager.Models
         public decimal ReturnQuantity { get; set; }
         public decimal DamageQuantity { get; set; }        
         public long SellMasterId { get; set; }
+        public int IsReturn { get; set; } //1 for sell 2 for return
         [JsonIgnore]
         public Company Company { get; set; }
         [JsonIgnore]

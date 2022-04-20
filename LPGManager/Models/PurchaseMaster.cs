@@ -6,6 +6,7 @@
         {
             PurchaseDetails = new List<PurchaseDetails>();
         }
+        public long InvoiceDate { get; set; }
         public string InvoiceNo { get; set; }
         public long SupplierId { get; set; }
         public decimal TotalPrice { get; set; }

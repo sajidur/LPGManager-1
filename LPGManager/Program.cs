@@ -1,4 +1,5 @@
 global using LPGManager.Data;
+using LPGManager;
 using LPGManager.Data.Services;
 using LPGManager.Data.Services.CompanyService;
 using LPGManager.Data.Services.CustomerService;
@@ -53,6 +54,10 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ISizeService, SizeService>();
 builder.Services.AddScoped<IProductTypeService, ProductTypeService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITokenGeneratorService, TokenGeneratorService>();
+builder.Services.AddScoped<IReturnMasterService, ReturnMasterService>();
+
+// Adding Jwt Bearer
 
 //builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

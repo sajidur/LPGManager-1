@@ -3,6 +3,7 @@ using System;
 using LPGManager.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LPGManager.Migrations
 {
     [DbContext(typeof(AppsDbContext))]
-    partial class AppsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220417140608_return")]
+    partial class @return
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -347,9 +349,6 @@ namespace LPGManager.Migrations
                     b.Property<decimal>("DueAdvance")
                         .HasColumnType("numeric");
 
-                    b.Property<long>("InvoiceDate")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("InvoiceNo")
                         .IsRequired()
                         .HasColumnType("text");
@@ -382,133 +381,6 @@ namespace LPGManager.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PurchaseMasters");
-                });
-
-            modelBuilder.Entity("LPGManager.Models.ReturnDetails", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("CompanyId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("CreatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<decimal>("DamageQuantity")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("Discount")
-                        .HasColumnType("numeric");
-
-                    b.Property<int>("IsActive")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal>("OpeningQuantity")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric");
-
-                    b.Property<string>("ProductName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ProductType")
-                        .HasColumnType("text");
-
-                    b.Property<decimal>("Quantity")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("ReceivingQuantity")
-                        .HasColumnType("numeric");
-
-                    b.Property<long>("ReturnMasterId")
-                        .HasColumnType("bigint");
-
-                    b.Property<decimal>("ReturnQuantity")
-                        .HasColumnType("numeric");
-
-                    b.Property<long>("SellMasterId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Size")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<long>("UpdatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CompanyId");
-
-                    b.HasIndex("ReturnMasterId");
-
-                    b.ToTable("ReturnDetails");
-                });
-
-            modelBuilder.Entity("LPGManager.Models.ReturnMaster", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("CreatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<long>("CustomerId")
-                        .HasColumnType("bigint");
-
-                    b.Property<decimal>("Discount")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("DueAdvance")
-                        .HasColumnType("numeric");
-
-                    b.Property<string>("InvoiceNo")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("IsActive")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Notes")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PaymentType")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<long>("SellMasterId")
-                        .HasColumnType("bigint");
-
-                    b.Property<decimal>("TotalReturnAmount")
-                        .HasColumnType("numeric");
-
-                    b.Property<long>("UpdatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ReturnMasters");
                 });
 
             modelBuilder.Entity("LPGManager.Models.Role", b =>
@@ -643,9 +515,6 @@ namespace LPGManager.Migrations
 
                     b.Property<decimal>("DueAdvance")
                         .HasColumnType("numeric");
-
-                    b.Property<long>("InvoiceDate")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("InvoiceNo")
                         .IsRequired()
@@ -958,25 +827,6 @@ namespace LPGManager.Migrations
                     b.Navigation("PurchaseMaster");
                 });
 
-            modelBuilder.Entity("LPGManager.Models.ReturnDetails", b =>
-                {
-                    b.HasOne("LPGManager.Models.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("LPGManager.Models.ReturnMaster", "ReturnMaster")
-                        .WithMany("ReturnDetails")
-                        .HasForeignKey("ReturnMasterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Company");
-
-                    b.Navigation("ReturnMaster");
-                });
-
             modelBuilder.Entity("LPGManager.Models.Role", b =>
                 {
                     b.HasOne("LPGManager.Models.User", null)
@@ -1017,11 +867,6 @@ namespace LPGManager.Migrations
             modelBuilder.Entity("LPGManager.Models.PurchaseMaster", b =>
                 {
                     b.Navigation("PurchaseDetails");
-                });
-
-            modelBuilder.Entity("LPGManager.Models.ReturnMaster", b =>
-                {
-                    b.Navigation("ReturnDetails");
                 });
 
             modelBuilder.Entity("LPGManager.Models.SellMaster", b =>

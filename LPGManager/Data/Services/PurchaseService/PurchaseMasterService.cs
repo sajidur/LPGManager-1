@@ -88,11 +88,11 @@ namespace LPGManager.Data.Services.PurchaseService
  
         public async Task DeleteAsync(long id)
         {
-            var existing = await _purchaseMasterRepository.GetById(id);
-
+            var existing = GetAsync(id).Result;
+           
             if (existing == null)
                 throw new ArgumentException("Purchase is not exist");
-
+            var deleteDetails = DeletePurchaseDetails(existing);
             _purchaseMasterRepository.Delete(id);
             _purchaseMasterRepository.Save();
         }
@@ -110,32 +110,103 @@ namespace LPGManager.Data.Services.PurchaseService
             }
             return _mapper.Map<List<PurchaseMasterDtos>>(data.Result);
         }
+        public List<PurchaseMasterDtos> GetAllAsync(long startDate, long endDate)
+        {
+            var data = _purchaseMasterRepository.FindBy(a => a.InvoiceDate >= endDate && a.InvoiceDate <= startDate).ToListAsync();
+            foreach (var item in data.Result)
+            {
+                item.PurchaseDetails = _purchaseDetailsRepository.FindBy(a => a.PurchaseMasterId == item.Id).ToList();
+                foreach (var details in item.PurchaseDetails)
+                {
+                    details.Company = _companyRepository.GetById(details.CompanyId).Result;
+                }
+            }
+            return _mapper.Map<List<PurchaseMasterDtos>>(data.Result);
+        }
 
         public async Task<PurchaseMaster> GetAsync(long id)
         {
-            //var data = await _dbContext.PurchaseMasters
-            //           .Include(c => c.PurchasesDetails)
-            //           .Include(c => c.SupplierId).FirstOrDefaultAsync(i => i.Id == id);
-            //if (data == null)
-            //    throw new ArgumentException("Purchase Details is not exist");
-            //return (data);
-            return null;
+            var existingMaster = await _purchaseMasterRepository.GetById(id);
+            var existingDetails = await _purchaseDetailsRepository.FindBy(a => a.PurchaseMasterId == id).ToListAsync();
+            existingMaster.PurchaseDetails = existingDetails;
+            return existingMaster;
         }
 
-        public async Task<PurchaseMaster> UpdateAsync(PurchaseMaster model)
+        private async Task<bool> DeletePurchaseDetails(PurchaseMaster existingDetails)
         {
-            //var existing = await _dbContext.PurchaseMasters.FirstOrDefaultAsync(c => c.Id == model.Id);
-            //if (existing == null)
-            //    throw new ArgumentException("Purchase Master is not exist");
+            try
+            {
 
-            //var existingSupplierId = await _dbContext.Suppliers.FirstOrDefaultAsync(c => c.Id == model.SupplierId);
-            //if (existingSupplierId == null)
-            //    throw new ArgumentException("Supplier Id is not exist");
+                foreach (var item in existingDetails.PurchaseDetails)
+                {
+                    _purchaseDetailsRepository.Delete(item.Id);
+                    var inv = _inventoryRepository.FindBy(a => a.ProductName == item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId == 1).FirstOrDefault();
+                    if (inv != null)
+                    {
+                        inv.Quantity -= item.Quantity;
+                        inv.ReceivingQuantity -= item.Quantity;
+                        _inventoryRepository.Update(inv);
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
 
-            //_dbContext.Entry(existing).CurrentValues.SetValues(model);
+                throw ex;
+            }
 
-            //return model;
-            return null;
+        }
+        public async Task<PurchaseMaster> UpdateAsync(PurchaseMasterDtos model)
+        {
+            PurchaseMaster result;
+            try
+            {
+
+                var existingMaster= GetAsync(model.Id).Result;
+                var isDeleted=DeletePurchaseDetails(existingMaster).Result;
+                existingMaster.DueAdvance = model.DueAdvance;
+                existingMaster.PaymentType = model.PaymentType;
+                existingMaster.TotalCommission = model.TotalCommission;
+
+                foreach (var item in model.PurchaseDetails)
+                {
+                    var details=_mapper.Map<PurchaseDetails>(item);
+                    details.Company = null;
+                    _purchaseDetailsRepository.Insert(details);
+                    var inv = _inventoryRepository.FindBy(a => a.ProductName == item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId == 1).FirstOrDefault();
+                    if (inv != null)
+                    {
+                        inv.Quantity += item.Quantity;
+                        inv.ReceivingQuantity += item.Quantity;
+                        _inventoryRepository.Update(inv);
+                    }
+                    else
+                    {
+                        inv = new Inventory();
+                        inv.WarehouseId = 1;
+                        inv.CompanyId = item.CompanyId;
+                        inv.DamageQuantity = 0;
+                        inv.ReceivingQuantity = item.Quantity;
+                        inv.OpeningQuantity = 0;
+                        inv.Price = item.Price;
+                        inv.Quantity = item.Quantity;
+                        inv.SaleQuantity = 0;
+                        inv.ReturnQuantity = 0;
+                        inv.ProductType = item.ProductType;
+                        inv.ProductName = item.ProductName;
+                        inv.Size = item.Size;
+                        _inventoryRepository.Insert(inv);
+                    }
+                    _inventoryRepository.Save();
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(
+                  $"{ex}.");
+            }
         }
 
   

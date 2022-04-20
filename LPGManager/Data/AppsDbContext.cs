@@ -28,6 +28,8 @@ namespace LPGManager.Data
         public DbSet<Warehouse> Warehouses { get; set; }
         public DbSet<Exchange> Exchanges { get; set; }
         public DbSet<CustomerEntity> Customers { get; set; }
+        public DbSet<ReturnMaster> ReturnMasters { get; set; }
+        public DbSet<ReturnDetails> ReturnDetails { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<PurchaseDetails>()
@@ -39,6 +41,11 @@ namespace LPGManager.Data
                 .HasOne(p => p.SellMaster)
                 .WithMany(b => b.SellsDetails)
                 .HasForeignKey(p => p.SellMasterId);
+
+            modelBuilder.Entity<ReturnDetails>()
+                .HasOne(p => p.ReturnMaster)
+                .WithMany(b => b.ReturnDetails)
+                .HasForeignKey(p => p.ReturnMasterId);
             modelBuilder.Entity<Exchange>()
                 .HasOne<Company>()
                 .WithMany()

@@ -69,7 +69,10 @@ namespace LPGManager.Data
                 command.CommandText = "SELECT MAX(\"Id\") FROM public.\"" + table + "\";";
                 var result = command.ExecuteScalar();
                 connection.Close();
-                return (long)result;
+                long s = 0;
+                return (result == DBNull.Value) ? 1 : (long)result;
+                //long.TryParse(result.Equals(DBNull.Value), out s);
+                return s;
             }
 
         }

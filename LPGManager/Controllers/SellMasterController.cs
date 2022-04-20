@@ -1,4 +1,5 @@
-﻿using LPGManager.Dtos;
+﻿using LPGManager.Data.Services.SellService;
+using LPGManager.Dtos;
 using LPGManager.Interfaces.SellsInterface;
 using LPGManager.Interfaces.UnitOfWorkInterface;
 using LPGManager.Models;
@@ -13,16 +14,30 @@ namespace LPGManager.Controllers
     public class SellMasterController : ControllerBase
     {
         private readonly ISellMasterService _sellService;
+        private readonly IReturnMasterService _returnMaster;
 
-        public SellMasterController(ISellMasterService sellService)
+        public SellMasterController(ISellMasterService sellService, IReturnMasterService returnMaster)
         {
             _sellService = sellService;
+            _returnMaster = returnMaster;
         }
         // GET: api/<PurchaseMasterController(>        
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var data = _sellService.GetAllAsync();
+            return Ok(data);
+        }
+        [HttpGet("GetByDate")]
+        public async Task<IActionResult> GetAll(long startDate, long endDate)
+        {
+            var data = _sellService.GetAllAsync(startDate, endDate);
+            return Ok(data);
+        }
+        [HttpGet("GetById")]
+        public async Task<IActionResult> GetById(long id)
+        {
+            var data = _sellService.GetAsync(id);
             return Ok(data);
         }
 
@@ -34,6 +49,23 @@ namespace LPGManager.Controllers
             {
                 //validation
                 result = _sellService.AddAsync(model);
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(
+                  $"{ex}.");
+            }
+
+            return Ok(new { data = result });
+        }
+        [HttpPost("return")]
+        public async Task<IActionResult> Return(ReturnMasterDtos model)
+        {
+            ReturnMaster result;
+            try
+            {
+                //validation
+                result = _returnMaster.AddAsync(model);
             }
             catch (Exception ex)
             {

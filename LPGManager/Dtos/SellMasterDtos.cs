@@ -1,10 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using LPGManager.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace LPGManager.Dtos
 {
-    public class SellMasterDtos:BaseDtos
+    public class SellMasterDtos : BaseDtos
     {
         public string? InvoiceNo { get; set; }
+        public long InvoiceDate { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please provide valid Customer Id")]
         public long CustomerId { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please provide TotalPrice")]
@@ -16,6 +18,7 @@ namespace LPGManager.Dtos
         public string? Notes { get; set; }
         public List<SellDetailsDtos> SellsDetails { get; set; }
         public CustomerDto? Customer { get; set; }
+        public ReturnMasterDtos? ReturnMaster {get;set;}
 
     }
 }
