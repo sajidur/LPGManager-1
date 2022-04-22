@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LPGManager.Common;
 using LPGManager.Dtos;
 using LPGManager.Interfaces.SellsInterface;
 using LPGManager.Models;
@@ -46,6 +47,7 @@ namespace LPGManager.Data.Services.SellService
                 if (model.SellsDetails != null)
                 {
                     sell.InvoiceNo = GenerateInvoice();
+                    sell.InvoiceDate = Helper.ToEpoch(DateTime.Now);
                     var res = _sellMasterRepository.Insert(sell);
                     _sellMasterRepository.Save();
                     foreach (var item in model.SellsDetails)
@@ -99,14 +101,40 @@ namespace LPGManager.Data.Services.SellService
 
         public async Task DeleteAsync(long id)
         {
-            //var existing = await _dbContext.pur.FirstOrDefaultAsync(c => c.Id == id);
-
-            //if (existing == null)
-            //    throw new ArgumentException("Purchase is not exist");
-
-            //_dbContext.PurchaseMasters.Remove(existing);
+            var data = _sellMasterRepository.GetById(id).Result;
+            if (data == null)
+                throw new ArgumentException("Sell is not exist");
+            data.SellsDetails = _sellDetailsRepository.FindBy(a => a.SellMasterId == id).ToList();
+            var deleteDetails = DeleteSellDetails(data);
+            _sellMasterRepository.Delete(id);
+            _sellMasterRepository.Save();
         }
 
+        private async Task<bool> DeleteSellDetails(SellMaster existingDetails)
+        {
+            try
+            {
+
+                foreach (var item in existingDetails.SellsDetails)
+                {
+                    _sellDetailsRepository.Delete(item.Id);
+                    var inv = _inventoryRepository.FindBy(a => a.ProductName == item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId == 1).FirstOrDefault();
+                    if (inv != null)
+                    {
+                        inv.Quantity += item.Quantity;
+                        inv.SaleQuantity -= item.Quantity;
+                        _inventoryRepository.Update(inv);
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+        }
         public List<SellMasterDtos> GetAllAsync()
         {
             var data = _sellMasterRepository.GetAll();
@@ -124,7 +152,7 @@ namespace LPGManager.Data.Services.SellService
 
         public List<SellMasterDtos> GetAllAsync(long startDate,long endDate)
         {
-            var data = _sellMasterRepository.FindBy(a=>a.InvoiceDate>=endDate&&a.InvoiceDate<=startDate).ToListAsync();
+            var data = _sellMasterRepository.FindBy(a=>a.InvoiceDate<=endDate&&a.InvoiceDate>=startDate).ToListAsync();
             foreach (var item in data.Result)
             {
                 item.SellsDetails = _sellDetailsRepository.FindBy(a => a.SellMasterId == item.Id).ToList();

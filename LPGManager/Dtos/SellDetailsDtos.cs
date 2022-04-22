@@ -19,6 +19,8 @@ namespace LPGManager.Dtos
         public decimal ReceivingQuantity { get; set; }
         public decimal ReturnQuantity { get; set; }
         public decimal DamageQuantity { get; set; }
+        public decimal SupportQty { get; set; }
+
         public long SellMasterId { get; set; }
         public CompanyDtos? Company { get; set; }
     }

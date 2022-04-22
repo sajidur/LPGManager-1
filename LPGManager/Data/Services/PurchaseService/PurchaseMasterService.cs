@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LPGManager.Common;
 using LPGManager.Dtos;
 using LPGManager.Interfaces.PurchasesInterface;
 using LPGManager.Interfaces.UnitOfWorkInterface;
@@ -35,6 +36,7 @@ namespace LPGManager.Data.Services.PurchaseService
                 if (model.PurchaseDetails != null)
                 {
                     purchase.InvoiceNo = GenerateInvoice().Result;
+                    purchase.InvoiceDate = Helper.ToEpoch(DateTime.Now);
                     var res = _purchaseMasterRepository.Insert(purchase);
                     _purchaseMasterRepository.Save();
                     foreach (var item in model.PurchaseDetails)
@@ -112,7 +114,7 @@ namespace LPGManager.Data.Services.PurchaseService
         }
         public List<PurchaseMasterDtos> GetAllAsync(long startDate, long endDate)
         {
-            var data = _purchaseMasterRepository.FindBy(a => a.InvoiceDate >= endDate && a.InvoiceDate <= startDate).ToListAsync();
+            var data = _purchaseMasterRepository.FindBy(a => a.InvoiceDate <= endDate && a.InvoiceDate >= startDate).ToListAsync();
             foreach (var item in data.Result)
             {
                 item.PurchaseDetails = _purchaseDetailsRepository.FindBy(a => a.PurchaseMasterId == item.Id).ToList();
