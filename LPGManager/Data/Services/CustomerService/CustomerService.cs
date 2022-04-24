@@ -24,9 +24,7 @@ namespace LPGManager.Data.Services.CustomerService
         {
             var existing = _customerRepository.GetById(model.Id).Result;
             if (existing == null)
-                throw new ArgumentException("Company is not exist");
-            if (existing.Phone == model.Phone)
-                throw new ArgumentException("Customer already exists");
+                throw new ArgumentException("customer is not exist");
             existing.UpdatedDate = DateTime.UtcNow;
             existing.Name = model.Name;
             existing.Phone = model.Phone;

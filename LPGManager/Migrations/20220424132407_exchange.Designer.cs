@@ -3,6 +3,7 @@ using System;
 using LPGManager.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LPGManager.Migrations
 {
     [DbContext(typeof(AppsDbContext))]
-    partial class AppsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220424132407_exchange")]
+    partial class exchange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,13 +118,19 @@ namespace LPGManager.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("LPGManager.Models.ExchangeDetails", b =>
+            modelBuilder.Entity("LPGManager.Models.Exchange", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<decimal>("AdjustmentAmount")
+                        .HasColumnType("numeric");
+
+                    b.Property<long>("ComapnyId")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("CompanyId")
                         .HasColumnType("bigint");
@@ -133,31 +141,35 @@ namespace LPGManager.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<long>("ExchangeMasterId")
-                        .HasColumnType("bigint");
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("ExchangeType")
-                        .HasColumnType("integer");
+                    b.Property<decimal>("DamageQuantity")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("DueAdvance")
+                        .HasColumnType("numeric");
 
                     b.Property<int>("IsActive")
                         .HasColumnType("integer");
 
-                    b.Property<decimal>("PaidAmount")
+                    b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
                     b.Property<string>("ProductName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("ProductType")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<decimal>("Quantity")
                         .HasColumnType("numeric");
 
+                    b.Property<decimal>("ReceivingQuantity")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("ReturnQuantity")
+                        .HasColumnType("numeric");
+
                     b.Property<string>("Size")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<long>("UpdatedBy")
@@ -167,61 +179,12 @@ namespace LPGManager.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ComapnyId");
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("ExchangeDetails");
-                });
-
-            modelBuilder.Entity("LPGManager.Models.ExchangeMaster", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("CreatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<long>("InvoiceDate")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("InvoiceNo")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("IsActive")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Notes")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PaymentType")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<long>("SupplierId")
-                        .HasColumnType("bigint");
-
-                    b.Property<decimal>("TotalPricePaid")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("TotalPriceReceive")
-                        .HasColumnType("numeric");
-
-                    b.Property<long>("UpdatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ExchangeMasters");
+                    b.ToTable("Exchanges");
                 });
 
             modelBuilder.Entity("LPGManager.Models.Inventory", b =>
@@ -954,8 +917,14 @@ namespace LPGManager.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("LPGManager.Models.ExchangeDetails", b =>
+            modelBuilder.Entity("LPGManager.Models.Exchange", b =>
                 {
+                    b.HasOne("LPGManager.Models.Company", null)
+                        .WithMany()
+                        .HasForeignKey("ComapnyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("LPGManager.Models.Company", "Company")
                         .WithMany()
                         .HasForeignKey("CompanyId")

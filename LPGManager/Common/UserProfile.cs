@@ -21,6 +21,8 @@ namespace LPGManager.Common
             CreateMap<Role, RoleDtos>().ReverseMap();
             CreateMap<ReturnMaster, ReturnMasterDtos>().ReverseMap();
             CreateMap<ReturnDetails, ReturnDetailsDto>().ReverseMap();
+            CreateMap<ExchangeMaster, ExchangeMasterDtos>().ReverseMap();
+            CreateMap<ExchangeDetails, ExchangeDetailsDto>().ReverseMap();
 
         }
     }

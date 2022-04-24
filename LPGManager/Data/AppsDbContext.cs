@@ -26,7 +26,9 @@ namespace LPGManager.Data
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<Size> Sizes { get; set; }
         public DbSet<Warehouse> Warehouses { get; set; }
-        public DbSet<Exchange> Exchanges { get; set; }
+        public DbSet<ExchangeDetails>  ExchangeDetails { get; set; }
+        public DbSet<ExchangeMaster> ExchangeMasters { get; set; }
+
         public DbSet<CustomerEntity> Customers { get; set; }
         public DbSet<ReturnMaster> ReturnMasters { get; set; }
         public DbSet<ReturnDetails> ReturnDetails { get; set; }
@@ -46,11 +48,6 @@ namespace LPGManager.Data
                 .HasOne(p => p.ReturnMaster)
                 .WithMany(b => b.ReturnDetails)
                 .HasForeignKey(p => p.ReturnMasterId);
-            modelBuilder.Entity<Exchange>()
-                .HasOne<Company>()
-                .WithMany()
-                .HasForeignKey(p => p.ComapnyId);
-
         }
         
     }

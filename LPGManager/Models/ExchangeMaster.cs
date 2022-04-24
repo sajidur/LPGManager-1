@@ -1,8 +1,9 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
-namespace LPGManager.Dtos
+namespace LPGManager.Models
 {
-    public class ExchangeMasterDtos:BaseDtos
+    public class ExchangeMaster:BaseEntity
     {
         public long InvoiceDate { get; set; }
         public string InvoiceNo { get; set; }
@@ -11,10 +12,13 @@ namespace LPGManager.Dtos
         public decimal TotalPriceReceive { get; set; }
         public string PaymentType { get; set; }
         public string? Notes { get; set; }
-        public List<ExchangeDetailsDto> MyProductDetails { get; set; }
-        public List<ExchangeDetailsDto> ReceiveProductDetails { get; set; }
+        [NotMapped]
+        public List<ExchangeDetails> MyProductDetails { get; set; }
+        [NotMapped]
+        public List<ExchangeDetails> ReceiveProductDetails { get; set; }
+
     }
-    public class ExchangeDetailsDto : BaseDtos
+    public class ExchangeDetails : BaseEntity
     {
         public long CompanyId { get; set; }
         public string ProductName { get; set; }
@@ -24,10 +28,11 @@ namespace LPGManager.Dtos
         public decimal Quantity { get; set; }
         public long ExchangeMasterId { get; set; }
         public int ExchangeType { get; set; }//1 for my product 2 for receive product
-        [JsonIgnore]
-        public CompanyDtos? Company { get; set; }
 
         [JsonIgnore]
-        public ExchangeMasterDtos? ExchangeMaster { get; set; }
+        public Company Company { get; set; }
+
+        [NotMapped]
+        public ExchangeMaster ExchangeMaster { get; set; }
     }
 }

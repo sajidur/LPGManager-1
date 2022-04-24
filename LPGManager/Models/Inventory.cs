@@ -10,6 +10,7 @@ namespace LPGManager.Models
         public decimal Price { get; set; }
         public decimal Quantity { get; set; }
         public decimal OpeningQuantity { get; set; }
+        public decimal PurchaseReturn { get; set; }
         public decimal ReceivingQuantity { get; set; }
         public decimal ReturnQuantity { get; set; }
         public decimal DamageQuantity { get; set; }

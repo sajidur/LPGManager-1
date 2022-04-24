@@ -1,4 +1,5 @@
 ﻿using LPGManager.Dtos;
+using LPGManager.Interfaces.ExchangeInterface;
 using LPGManager.Interfaces.UnitOfWorkInterface;
 using LPGManager.Models;
 
@@ -11,35 +12,21 @@ namespace LPGManager.Controllers
     [ApiController]
     public class ExchangeController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IExchangeService _exchangeService;
 
-        public ExchangeController(IUnitOfWork unitOfWork)
+        public ExchangeController(IExchangeService exchangeService)
         {
-            _unitOfWork = unitOfWork;
+            _exchangeService = exchangeService;
         }
 
 
         [HttpPost("add")]
-        public async Task<IActionResult> Create(ExchangeDtos model)
+        public async Task<IActionResult> Create(ExchangeMasterDtos model)
         {
-            Exchange result;
+            ExchangeMaster result;
             try
             {
-                var exchange = new Exchange
-                {
-                    ProductName = model.ProductName,                   
-                    Size = model.Size,
-                    Price = model.Quantity,
-                    AdjustmentAmount = model.AdjustmentAmount,
-                    DueAdvance = model.DueAdvance,
-                    ReceivingQuantity = model.ReceivingQuantity,
-                    ReturnQuantity = model.ReturnQuantity,
-                    DamageQuantity = model.DamageQuantity,
-                    ComapnyId = model.ComapnyId,
-
-                };
-                result = await _unitOfWork.exchangeService.AddAsync(exchange);
-                await _unitOfWork.SaveAsync();
+                result = _exchangeService.AddAsync(model);
             }
             catch (Exception ex)
             {
@@ -49,28 +36,25 @@ namespace LPGManager.Controllers
 
             return Ok(new { data = result });
         }
-        [HttpPost("edit/{id:int}")]
-        public async Task<IActionResult> Update(ExchangeDtos model)
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
         {
-            Exchange result;
+            var data = _exchangeService.GetAllAsync();
+            return Ok(data);
+        }
+        [HttpGet("GetByDate")]
+        public async Task<IActionResult> GetAll(long startDate, long endDate)
+        {
+            var data = _exchangeService.GetAllAsync(startDate, endDate);
+            return Ok(data);
+        }
+        [HttpPost("edit/{id:int}")]
+        public async Task<IActionResult> Update(ExchangeMaster model)
+        {
+            ExchangeMaster result;
             try
             {
-                var exchange = new Exchange
-                {
-                    Id = model.Id,
-                    ProductName = model.ProductName,
-                    Size = model.Size,
-                    Price = model.Quantity,
-                    AdjustmentAmount = model.AdjustmentAmount,
-                    DueAdvance = model.DueAdvance,
-                    ReceivingQuantity = model.ReceivingQuantity,
-                    ReturnQuantity = model.ReturnQuantity,
-                    DamageQuantity = model.DamageQuantity,
-                    ComapnyId = model.ComapnyId,
-
-                };
-                result = await _unitOfWork.exchangeService.AddAsync(exchange);
-                await _unitOfWork.SaveAsync();
+                result = await _exchangeService.UpdateAsync(model);
             }
             catch (Exception ex)
             {
@@ -86,8 +70,7 @@ namespace LPGManager.Controllers
         {
             try
             {
-                await _unitOfWork.exchangeService.DeleteAsync(id);
-                await _unitOfWork.SaveAsync();
+                await _exchangeService.DeleteAsync(id);
             }
             catch (Exception ex)
             {

@@ -32,7 +32,6 @@ namespace LPGManager.Data
         public ISellDetailsService sellDetailsService => new SellDetailsService(_dbContext);
 
       //  public ICompanyService companyService => new CompanyService(_dbContext);
-        public IExchangeService exchangeService => new ExchangeService(_dbContext);
         public async Task<bool> SaveAsync()
         {
             return await _dbContext.SaveChangesAsync() > 0;
