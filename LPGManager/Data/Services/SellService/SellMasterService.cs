@@ -63,23 +63,6 @@ namespace LPGManager.Data.Services.SellService
                             inv.SaleQuantity += item.Quantity;
                             _inventoryRepository.Update(inv);
                         }
-                        else
-                        {
-                            inv = new Inventory();
-                            inv.WarehouseId = 1;
-                            inv.CompanyId = item.CompanyId;
-                            inv.DamageQuantity = 0;
-                            inv.ReceivingQuantity = 0;
-                            inv.OpeningQuantity = 0;
-                            inv.Price = item.Price;
-                            inv.Quantity = item.Quantity;
-                            inv.SaleQuantity = item.Quantity;
-                            inv.ReturnQuantity = 0;
-                            inv.ProductType = item.ProductType;
-                            inv.ProductName = item.ProductName;
-                            inv.Size = item.Size;
-                            _inventoryRepository.Insert(inv);
-                        }
                         _inventoryRepository.Save();
                     }
                 }
@@ -105,12 +88,13 @@ namespace LPGManager.Data.Services.SellService
             if (data == null)
                 throw new ArgumentException("Sell is not exist");
             data.SellsDetails = _sellDetailsRepository.FindBy(a => a.SellMasterId == id).ToList();
-            var deleteDetails = DeleteSellDetails(data);
+            var mapData=_mapper.Map<SellMasterDtos>(data);
+            var deleteDetails = DeleteSellDetails(mapData);
             _sellMasterRepository.Delete(id);
             _sellMasterRepository.Save();
         }
 
-        private async Task<bool> DeleteSellDetails(SellMaster existingDetails)
+        private async Task<bool> DeleteSellDetails(SellMasterDtos existingDetails)
         {
             try
             {
@@ -188,17 +172,37 @@ namespace LPGManager.Data.Services.SellService
 
         public async Task<SellMaster> UpdateAsync(SellMasterDtos model)
         {
-            //var existing = await _dbContext.PurchaseMasters.FirstOrDefaultAsync(c => c.Id == model.Id);
-            //if (existing == null)
-            //    throw new ArgumentException("Purchase Master is not exist");
+            SellMaster result;
+            try
+            {
 
-            //var existingSupplierId = await _dbContext.Suppliers.FirstOrDefaultAsync(c => c.Id == model.SupplierId);
-            //if (existingSupplierId == null)
-            //    throw new ArgumentException("Supplier Id is not exist");
+                var existingMaster = GetAsync(model.Id);
+                var isDeleted = DeleteSellDetails(existingMaster).Result;
+                existingMaster.DueAdvance = model.DueAdvance;
+                existingMaster.PaymentType = model.PaymentType;
+                existingMaster.TotalPrice = model.TotalPrice;
 
-            //_dbContext.Entry(existing).CurrentValues.SetValues(model);
-
-            //return model;
+                foreach (var item in model.SellsDetails)
+                {
+                    var details = _mapper.Map<SellDetails>(item);
+                    details.Company = null;
+                    _sellDetailsRepository.Insert(details);
+                    var inv = _inventoryRepository.FindBy(a => a.ProductName == item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId == 1).FirstOrDefault();
+                    if (inv != null)
+                    {
+                        inv.Quantity += item.Quantity;
+                        inv.ReceivingQuantity += item.Quantity;
+                        _inventoryRepository.Update(inv);
+                    }
+                    _inventoryRepository.Save();
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(
+                  $"{ex}.");
+            }
             return null;
         }
     }

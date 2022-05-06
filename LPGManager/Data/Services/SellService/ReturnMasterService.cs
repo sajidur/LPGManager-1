@@ -40,14 +40,37 @@ namespace LPGManager.Data.Services.SellService
                 {
                     var res = _returnMaster.Insert(sell);
                     _returnMaster.Save();
+                    var salesDetails = _sellDetailsRepository.FindBy(a => a.SellMasterId == model.SellMasterId);
                     foreach (var item in model.ReturnDetails)
                     {
                         var inv = _inventoryRepository.FindBy(a => a.ProductName == item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId == 1).FirstOrDefault();
+                        var salesdetail = salesDetails.Where(a => a.ProductName == item.ProductName && a.Size == item.Size && a.ProductType == item.ProductType).FirstOrDefault();
                         if (inv != null)
                         {
-                            inv.Quantity += item.Quantity;
+                            if(salesdetail!=null)
+                            {
+                                inv.SupportQty += salesdetail.Quantity - item.Quantity;
+                            }
+                            inv.Quantity += item.Quantity+(salesdetail.Quantity - item.Quantity);
                             inv.ReturnQuantity += item.Quantity;
                             _inventoryRepository.Update(inv);
+                        }
+                        else
+                        {
+                            inv = new Inventory();
+                            inv.WarehouseId = 1;
+                            inv.CompanyId = item.CompanyId;
+                            inv.DamageQuantity = 0;
+                            inv.ReceivingQuantity = item.Quantity;
+                            inv.OpeningQuantity = 0;
+                            inv.Price = item.Price;
+                            inv.Quantity = item.Quantity;
+                            inv.SaleQuantity = 0;
+                            inv.ReturnQuantity = 0;
+                            inv.ProductType = item.ProductType;
+                            inv.ProductName = item.ProductName;
+                            inv.Size = item.Size;
+                            _inventoryRepository.Insert(inv);
                         }
                         _inventoryRepository.Save();
                     }

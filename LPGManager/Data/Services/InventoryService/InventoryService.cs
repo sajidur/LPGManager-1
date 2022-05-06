@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LPGManager.Common;
 using LPGManager.Dtos;
 using LPGManager.Interfaces.InventoryInterface;
 using LPGManager.Models;
@@ -61,12 +62,60 @@ namespace LPGManager.Data.Services.InventoryService
         public List<InventoryDtos> GetAllAsync()
         {
             var res = _inventoryRepository.GetAll().Result;
+            var companies = _companyRepository.GetAll().Result;
+            var warehouses = _wareRepository.GetAll().Result;
             var data =_mapper.Map<List<InventoryDtos>>(res);
-            foreach (var item in data)
+            var finalResult=new List<InventoryDtos>();
+            //bottle
+            var bottle = data.Where(a => a.ProductName == ProductTypeEnum.Bottle.ToString());
+            foreach (var item in bottle)
+            {
+                if (item.ProductName == ProductTypeEnum.Bottle.ToString())
+                {
+                    var refilSales = res.Where(a => a.ProductType == item.ProductType && a.Size == item.Size && a.CompanyId == item.CompanyId).FirstOrDefault();
+                    item.EmptyBottle = item.Quantity - refilSales.SaleQuantity - item.SupportQty;
+                }
+                item.Company = _mapper.Map<CompanyDtos>(_companyRepository.GetById(item.CompanyId).Result);
+                item.Warehouse = _mapper.Map<WarehouseDtos>(_wareRepository.GetById(item.WarehouseId).Result);
+                finalResult.Add(item);
+            }
+            //riffle
+            var riffle = data.Where(a => a.ProductName == ProductTypeEnum.Riffile.ToString());
+            foreach (var item in bottle)
             {
                 item.Company = _mapper.Map<CompanyDtos>(_companyRepository.GetById(item.CompanyId).Result);
                 item.Warehouse = _mapper.Map<WarehouseDtos>(_wareRepository.GetById(item.WarehouseId).Result);
+                finalResult.Add(item);
             }
+            //others
+
+            var others = data.Where(a => a.ProductName != ProductTypeEnum.Riffile.ToString() || a.ProductName != ProductTypeEnum.Bottle.ToString());
+            foreach (var item in others)
+            {
+                item.Company = _mapper.Map<CompanyDtos>(_companyRepository.GetById(item.CompanyId).Result);
+                item.Warehouse = _mapper.Map<WarehouseDtos>(_wareRepository.GetById(item.WarehouseId).Result);
+                finalResult.Add(item);
+            }
+            //summary total
+            var total = from p in data
+                       // group p by p.ProductName into g
+                        select new { Total= "Total",TotalSales= data.Sum(a => a.SaleQuantity), EmptyBottle = data.Sum(a => a.EmptyBottle??0),TotalSupport=data.Sum(a=>a.SupportQty) };
+
+            var totalRow = new InventoryDtos()
+            {
+                IsActive = 1,
+                CompanyId=0,
+                Company=new CompanyDtos() { CompanyName="N/A",Id=0},
+                Warehouse=new WarehouseDtos() { Name="N/A",Id=0},
+                WarehouseId=0,
+                ProductName="Total",
+                Size="",
+                ProductType="",
+                SaleQuantity=total.FirstOrDefault().TotalSales,
+                EmptyBottle= total.FirstOrDefault().EmptyBottle,
+                SupportQty= total.FirstOrDefault().TotalSupport
+            };
+            finalResult.Add(totalRow);
             return data;
         }
 

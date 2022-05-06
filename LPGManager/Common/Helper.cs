@@ -13,4 +13,9 @@
             return Epoch;
         }
     }
+    public enum ProductTypeEnum
+    {
+        Bottle=1,
+        Riffile=2,
+    }
 }
