@@ -116,7 +116,7 @@ namespace LPGManager.Data.Services.InventoryService
                 SupportQty= total.FirstOrDefault().TotalSupport
             };
             finalResult.Add(totalRow);
-            return data;
+            return finalResult;
         }
 
         public async Task<Inventory> GetAsync(long id)
