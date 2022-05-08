@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LPGManager.Common;
 using LPGManager.Dtos;
 using LPGManager.Models;
 
@@ -19,7 +20,8 @@ namespace LPGManager.Data.Services.SellService
             IGenericRepository<Company> companyRepository,
             IGenericRepository<CustomerEntity> customerRepository,
             IGenericRepository<ReturnMaster> retrunMaster,
-            IGenericRepository<ReturnDetails> returnDetails)
+            IGenericRepository<ReturnDetails> returnDetails,
+            IGenericRepository<SellDetails> sellDetailsRepository)
         {
             _inventoryRepository = inventoryRepository;
             _companyRepository = companyRepository;
@@ -27,7 +29,7 @@ namespace LPGManager.Data.Services.SellService
             _mapper = mapper;
             _returnMaster = retrunMaster;
             _returnDetails = returnDetails;
-
+            _sellDetailsRepository=sellDetailsRepository;
 
         }
         public ReturnMaster AddAsync(ReturnMasterDtos model)
@@ -43,34 +45,31 @@ namespace LPGManager.Data.Services.SellService
                     var salesDetails = _sellDetailsRepository.FindBy(a => a.SellMasterId == model.SellMasterId);
                     foreach (var item in model.ReturnDetails)
                     {
-                        var inv = _inventoryRepository.FindBy(a => a.ProductName == item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId == 1).FirstOrDefault();
-                        var salesdetail = salesDetails.Where(a => a.ProductName == item.ProductName && a.Size == item.Size && a.ProductType == item.ProductType).FirstOrDefault();
-                        if (inv != null)
+                        if (item.ProductName == ProductNameEnum.Bottle.ToString())
                         {
-                            if(salesdetail!=null)
+                            var inv = _inventoryRepository.FindBy(a => a.ProductType == item.ProductType && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductName == ProductNameEnum.Refill.ToString() && a.WarehouseId == 1).FirstOrDefault();
+                            if (inv != null)
                             {
-                                inv.SupportQty += salesdetail.Quantity - item.Quantity;
+                                inv.SupportQty -= item.Quantity;
+                                _inventoryRepository.Update(inv);
                             }
-                            inv.Quantity += item.Quantity+(salesdetail.Quantity - item.Quantity);
-                            inv.ReturnQuantity += item.Quantity;
-                            _inventoryRepository.Update(inv);
-                        }
-                        else
-                        {
-                            inv = new Inventory();
-                            inv.WarehouseId = 1;
-                            inv.CompanyId = item.CompanyId;
-                            inv.DamageQuantity = 0;
-                            inv.ReceivingQuantity = item.Quantity;
-                            inv.OpeningQuantity = 0;
-                            inv.Price = item.Price;
-                            inv.Quantity = item.Quantity;
-                            inv.SaleQuantity = 0;
-                            inv.ReturnQuantity = 0;
-                            inv.ProductType = item.ProductType;
-                            inv.ProductName = item.ProductName;
-                            inv.Size = item.Size;
-                            _inventoryRepository.Insert(inv);
+                            else
+                            {
+                                inv = new Inventory();
+                                inv.WarehouseId = 1;
+                                inv.CompanyId = item.CompanyId;
+                                inv.DamageQuantity = 0;
+                                inv.ReceivingQuantity = item.Quantity;
+                                inv.OpeningQuantity = 0;
+                                inv.Price = item.Price;
+                                inv.Quantity = item.Quantity;
+                                inv.SaleQuantity = 0;
+                                inv.ReturnQuantity = 0;
+                                inv.ProductType = item.ProductType;
+                                inv.ProductName = item.ProductName;
+                                inv.Size = item.Size;
+                                _inventoryRepository.Insert(inv);
+                            }
                         }
                         _inventoryRepository.Save();
                     }

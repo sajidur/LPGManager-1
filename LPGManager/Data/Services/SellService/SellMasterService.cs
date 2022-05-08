@@ -55,10 +55,17 @@ namespace LPGManager.Data.Services.SellService
                       //  var selldetails = _mapper.Map<SellDetails>(item);
                       //  selldetails.SellMasterId = res.Id;
                      //   _sellDetailsRepository.Insert(selldetails);
-                        _inventoryRepository.Save();
                         var inv = _inventoryRepository.FindBy(a => a.ProductName == item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId == 1).FirstOrDefault();
                         if (inv != null)
                         {
+                            if (item.ProductName == ProductNameEnum.Refill.ToString())
+                            {
+                                //var bottleInv = _inventoryRepository.FindBy(a => a.ProductName == ProductNameEnum.Bottle.ToString() && a.Size == item.Size && a.CompanyId == item.CompanyId &&a.ProductType==item.ProductType).FirstOrDefault();
+                                //bottleInv.SupportQty += item.Quantity;
+                                //bottleInv.Quantity-=item.Quantity;
+                                //_inventoryRepository.Update(bottleInv);
+                                inv.SupportQty += item.Quantity;
+                            }
                             inv.Quantity -= item.Quantity;
                             inv.SaleQuantity += item.Quantity;
                             _inventoryRepository.Update(inv);
