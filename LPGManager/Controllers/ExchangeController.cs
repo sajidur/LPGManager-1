@@ -1,4 +1,5 @@
-﻿using LPGManager.Dtos;
+﻿using LPGManager.Common;
+using LPGManager.Dtos;
 using LPGManager.Interfaces.ExchangeInterface;
 using LPGManager.Interfaces.UnitOfWorkInterface;
 using LPGManager.Models;
@@ -26,6 +27,9 @@ namespace LPGManager.Controllers
             ExchangeMaster result;
             try
             {
+                var tenant = Helper.GetTenant(HttpContext);
+                model.TenantId = tenant.TenantId;
+                model.CreatedBy = tenant.Id;
                 result = _exchangeService.AddAsync(model);
             }
             catch (Exception ex)

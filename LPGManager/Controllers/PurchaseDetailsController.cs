@@ -49,6 +49,7 @@ namespace LPGManager.Controllers
                     CompanyId = model.CompanyId,
 
                 };
+
                 Inventory inventory = new Inventory
                 {
                     ProductName = purchaseDetails.ProductName,

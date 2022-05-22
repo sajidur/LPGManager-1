@@ -17,6 +17,7 @@ namespace LPGManager.Dtos
         public decimal SaleQuantity { get; set; }
         public decimal? EmptyBottle { get; set; }
         public decimal SupportQty { get; set; }
+        public decimal ExchangeQty { get; set; }
         public int CompanyId { get; set; }
         public int WarehouseId { get; set; }
         public CompanyDtos? Company { get; set; }

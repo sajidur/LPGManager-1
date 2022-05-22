@@ -5,7 +5,7 @@ namespace LPGManager.Data.Services
 {
     public interface IUserService
     {
-        Task<IEnumerable<User>> GetAllAsync();
+        Task<IEnumerable<User>> GetAllAsync(long tenant);
         Task<User> GetAsync(long id);
         Task<User> AddAsync(User role);
         Task<IEnumerable<User>> Login(string userId, string password);
@@ -31,9 +31,9 @@ namespace LPGManager.Data.Services
             _genericRepository.Save();
             return user;
         }
-        public async Task<IEnumerable<User>> GetAllAsync()
+        public async Task<IEnumerable<User>> GetAllAsync(long tenant)
         {
-            var data = await _genericRepository.GetAll();
+            var data = await _genericRepository.FindBy(a=>a.TenantId==tenant).ToListAsync();
             return (data);
         }
         public async Task<IEnumerable<User>> Login(string userId,string password)

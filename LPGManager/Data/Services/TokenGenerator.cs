@@ -22,15 +22,17 @@ namespace LPGManager.Data.Services
         {
             var authClaims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, user.UserId),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new Claim(ClaimTypes.Actor, user.TenantId.ToString()),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new Claim(ClaimTypes.Name,user.UserId),
+                    new Claim(JwtRegisteredClaimNames.Exp, DateTime.Now.AddDays(1).ToString())
                 };
 
             //foreach (var userRole in user.Roles)
             //{
             //    authClaims.Add(new Claim(ClaimTypes.Role, userRole.Name));
             //}
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
 
             var token = new JwtSecurityToken(
                 expires: DateTime.Now.AddHours(3),

@@ -8,6 +8,7 @@
         public string Phone { get; set; }
         public int UserType { get; set; } //1=for retailer 2=consumer 3=dealer  4=company
         public string Password { get; set; }
-        public List<RoleDtos> Roles { get; set; }
+        public long TenantId { get; set; }
+        public List<RoleDtos>? Roles { get; set; }
     }
 }

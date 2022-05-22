@@ -45,7 +45,7 @@ namespace LPGManager.Data.Services.ExchangeService
                     {
                           var details = _mapper.Map<ExchangeDetails>(item);
                           details.ExchangeMasterId = res.Id;
-                           _exchangeDetailsRepository.Insert(details);
+                        _exchangeDetailsRepository.Insert(details);
                         _exchangeDetailsRepository.Save();
                         var inv = _inventoryRepository.FindBy(a => a.ProductName == item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId == 1).FirstOrDefault();
                         if (inv != null)

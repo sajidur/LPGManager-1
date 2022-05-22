@@ -1,4 +1,5 @@
-﻿using LPGManager.Interfaces.SettingsInterface;
+﻿using LPGManager.Common;
+using LPGManager.Interfaces.SettingsInterface;
 using LPGManager.Interfaces.UnitOfWorkInterface;
 using LPGManager.Models.Settings;
 
@@ -30,6 +31,9 @@ namespace LPGManager.Controllers
         {
             try
             {
+                var tenant = Helper.GetTenant(HttpContext);
+                model.TenantId = tenant.TenantId;
+                model.CreatedBy = tenant.Id;
                 await _sizeService.AddAsync(model);
             }
             catch (Exception ex)

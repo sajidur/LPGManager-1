@@ -14,5 +14,6 @@
         public long CreatedBy { get; set; }
         public long UpdatedBy { get; set; }
         public int IsActive { get; set; }
+        public long TenantId { get; set; }
     }
 }

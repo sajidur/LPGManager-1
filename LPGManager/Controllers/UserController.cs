@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LPGManager.Common;
 using LPGManager.Data.Services;
 using LPGManager.Dtos;
 using LPGManager.Models;
@@ -25,7 +26,8 @@ namespace LPGManager.Controllers
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
-            var data = await _userService.GetAllAsync();
+            var tenant = Helper.GetTenant(HttpContext);
+            var data = await _userService.GetAllAsync(tenant.TenantId);
             return Ok(data);
         }
         [HttpPost("Save")]

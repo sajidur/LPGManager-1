@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LPGManager.Common;
 using LPGManager.Dtos;
 using LPGManager.Interfaces.RoleInterface;
 using LPGManager.Interfaces.UnitOfWorkInterface;
@@ -34,6 +35,9 @@ namespace LPGManager.Controllers
             try
             {
                 var role=_mapper.Map<Role>(roleDto);
+                var tenant = Helper.GetTenant(HttpContext);
+                role.TenantId = tenant.TenantId;
+                role.CreatedBy = tenant.Id;
                 result = await _roleService.AddAsync(role);
             }
             catch (Exception ex)

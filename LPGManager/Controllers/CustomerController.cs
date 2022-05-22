@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LPGManager.Common;
 using LPGManager.Data.Services.CustomerService;
 using LPGManager.Dtos;
 using LPGManager.Interfaces.UnitOfWorkInterface;
@@ -22,13 +23,17 @@ namespace LPGManager.Controllers
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
+            var tenant = Helper.GetTenant(HttpContext);
             var data = await _customerService.GetAllAsync();
             return Ok(data);
         }
         [HttpPost("Save")]
         public async Task<IActionResult> Save(CustomerDto customerDto)
         {
-            var customer=_mapper.Map<CustomerEntity>(customerDto);
+            var customer =_mapper.Map<CustomerEntity>(customerDto);
+            var tenant = Helper.GetTenant(HttpContext);
+            customer.TenantId = tenant.TenantId;
+            customer.CreatedBy = tenant.Id;
             _customerService.Save(customer);
             return Ok();
         }

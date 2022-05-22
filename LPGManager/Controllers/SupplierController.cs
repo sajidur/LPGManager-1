@@ -1,4 +1,6 @@
-﻿using LPGManager.Dtos;
+﻿using LPGManager.Common;
+using LPGManager.Data.Services;
+using LPGManager.Dtos;
 using LPGManager.Interfaces.SupplierInterface;
 using LPGManager.Interfaces.UnitOfWorkInterface;
 using LPGManager.Models;
@@ -13,10 +15,12 @@ namespace LPGManager.Controllers
     public class SupplierController : ControllerBase
     {
         private readonly ISupplierService _supplierService;
+        private readonly ITenantService _tenantService;
 
-        public SupplierController(ISupplierService supplierService)
+        public SupplierController(ISupplierService supplierService, ITenantService tenantService)
         {
             _supplierService = supplierService;
+            _tenantService = tenantService;
         }
 
         // GET: api/<SupplierController>
@@ -30,7 +34,20 @@ namespace LPGManager.Controllers
         [HttpPost("add")]
         public async Task<IActionResult> Create(SupplierDtos model)
         {
+            
             Supplier result;
+            Tenant tenant = new Tenant()
+            {
+                TenantName = model.Name,
+                Image = model.Image,
+                Address = model.Address,
+                Phone = model.Phone,
+                Tenanttype =(int) TenantType.Supplier,
+                IsActive=1,
+                CreatedBy=0,
+                CreatedDate=DateTime.Now            
+            };
+            var tenResult=_tenantService.AddAsync(tenant);
             try
             {
                 var supplier = new Supplier
@@ -40,7 +57,7 @@ namespace LPGManager.Controllers
                     Address = model.Address,
                     Phone = model.Phone,
                     Companytype = model.Companytype,                  
-
+                    TenantId= tenResult.Result.Id
                 };
                 result = await _supplierService.AddAsync(supplier);
             }

@@ -1,4 +1,5 @@
-﻿using LPGManager.Data.Services.SellService;
+﻿using LPGManager.Common;
+using LPGManager.Data.Services.SellService;
 using LPGManager.Dtos;
 using LPGManager.Interfaces.SellsInterface;
 using LPGManager.Interfaces.UnitOfWorkInterface;
@@ -48,6 +49,9 @@ namespace LPGManager.Controllers
             try
             {
                 //validation
+                var tenant = Helper.GetTenant(HttpContext);
+                model.TenantId = tenant.TenantId;
+                model.CreatedBy = tenant.Id;
                 result = _sellService.AddAsync(model);
             }
             catch (Exception ex)
@@ -65,6 +69,9 @@ namespace LPGManager.Controllers
             try
             {
                 //validation
+                var tenant = Helper.GetTenant(HttpContext);
+                sell.TenantId = tenant.TenantId;
+                sell.CreatedBy = tenant.Id;
                 result = _returnMaster.AddAsync(model);
             }
             catch (Exception ex)
@@ -81,6 +88,9 @@ namespace LPGManager.Controllers
             SellMaster result;
             try
             {
+                var tenant = Helper.GetTenant(HttpContext);
+                sell.TenantId = tenant.TenantId;
+                sell.CreatedBy = tenant.Id;
                 result = await _sellService.UpdateAsync(model);
             }
             catch (Exception ex)

@@ -73,8 +73,11 @@ namespace LPGManager.Data.Services.InventoryService
                 if (item.ProductName == ProductNameEnum.Bottle.ToString())
                 {
                     var refilSales = res.Where(a => a.ProductType == item.ProductType && a.Size == item.Size && a.CompanyId == item.CompanyId &&a.ProductName==ProductNameEnum.Refill.ToString()).FirstOrDefault();
-                    item.EmptyBottle = item.Quantity-refilSales.Quantity-refilSales.SupportQty;
-                    item.SupportQty = refilSales.SupportQty;
+                    if (refilSales!=null)
+                    {
+                        item.EmptyBottle = item.Quantity - refilSales.Quantity - refilSales.SupportQty;
+                        item.SupportQty = refilSales.SupportQty;
+                    }
                 }
                 item.Company = _mapper.Map<CompanyDtos>(_companyRepository.GetById(item.CompanyId).Result);
                 item.Warehouse = _mapper.Map<WarehouseDtos>(_wareRepository.GetById(item.WarehouseId).Result);
@@ -99,26 +102,26 @@ namespace LPGManager.Data.Services.InventoryService
                 finalResult.Add(item);
             }
             //summary total
-            var total = from p in data
-                       // group p by p.ProductName into g
-                        select new {Qty=data.Sum(a=>a.Quantity), Total= "Total",TotalSales= data.Sum(a => a.SaleQuantity), EmptyBottle = data.Sum(a => a.EmptyBottle??0),TotalSupport=data.Sum(a=>a.SupportQty) };
+            //var total = from p in data
+            //           // group p by p.ProductName into g
+            //            select new {Qty=data.Sum(a=>a.Quantity), Total= "Total",TotalSales= data.Sum(a => a.SaleQuantity), EmptyBottle = data.Sum(a => a.EmptyBottle??0),TotalSupport=data.Sum(a=>a.SupportQty) };
 
-            var totalRow = new InventoryDtos()
-            {
-                IsActive = 1,
-                CompanyId=0,
-                Company=new CompanyDtos() { CompanyName="N/A",Id=0},
-                Warehouse=new WarehouseDtos() { Name="N/A",Id=0},
-                WarehouseId=0,
-                ProductName="Total",
-                Size="",
-                ProductType="",
-                Quantity=total.FirstOrDefault().Qty,
-                SaleQuantity=total.FirstOrDefault().TotalSales,
-                EmptyBottle= total.FirstOrDefault().EmptyBottle,
-                SupportQty= total.FirstOrDefault().TotalSupport
-            };
-            finalResult.Add(totalRow);
+            //var totalRow = new InventoryDtos()
+            //{
+            //    IsActive = 1,
+            //    CompanyId=0,
+            //    Company=new CompanyDtos() { CompanyName="N/A",Id=0},
+            //    Warehouse=new WarehouseDtos() { Name="N/A",Id=0},
+            //    WarehouseId=0,
+            //    ProductName="Total",
+            //    Size="",
+            //    ProductType="",
+            //    Quantity=total.FirstOrDefault().Qty,
+            //    SaleQuantity=total.FirstOrDefault().TotalSales,
+            //    EmptyBottle= total.FirstOrDefault().EmptyBottle,
+            //    SupportQty= total.FirstOrDefault().TotalSupport
+            //};
+           // finalResult.Add(totalRow);
             return finalResult;
         }
 

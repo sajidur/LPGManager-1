@@ -1,25 +1,23 @@
-﻿using LPGManager.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace LPGManager.Models
+﻿namespace LPGManager.Models
 {
-    public class BaseEntity
+    public class Tenant
     {
-        public BaseEntity()
+        public Tenant()
         {
             CreatedDate = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
             UpdatedDate = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
             IsActive = 1;
         }
+        public string TenantName { get; set; }
+        public string? Image { get; set; }
+        public string? Address { get; set; }
+        public string? Phone { get; set; }
+        public int Tenanttype { get; set; }
         public long Id { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public long CreatedBy { get; set; }
         public long UpdatedBy { get; set; }
         public int IsActive { get; set; }
-        public long TenantId { get; set; }
     }
 }

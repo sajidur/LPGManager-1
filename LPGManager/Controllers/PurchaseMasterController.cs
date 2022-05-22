@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LPGManager.Common;
 using LPGManager.Dtos;
 using LPGManager.Interfaces.PurchasesInterface;
 using LPGManager.Interfaces.UnitOfWorkInterface;
@@ -79,6 +80,9 @@ namespace LPGManager.Controllers
             //    throw new ArgumentException(
             //      $"{ex}.");
             //}
+            var tenant = Helper.GetTenant(HttpContext);
+            model.TenantId = tenant.TenantId;
+            model.CreatedBy = tenant.Id;
             var result = _masterService.AddAsync(model);
             return Ok(new { data = result });
         }

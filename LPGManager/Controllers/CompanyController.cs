@@ -1,14 +1,16 @@
-﻿using LPGManager.Data.Services.CompanyService;
+﻿using LPGManager.Common;
+using LPGManager.Data.Services.CompanyService;
 using LPGManager.Dtos;
 using LPGManager.Interfaces.CompanyInterface;
 using LPGManager.Interfaces.UnitOfWorkInterface;
 using LPGManager.Models;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LPGManager.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CompanyController : ControllerBase
@@ -24,7 +26,8 @@ namespace LPGManager.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var allSupplier = await _companyService.GetAllAsync();
+            var tenant = Helper.GetTenant(HttpContext);
+            var allSupplier = await _companyService.GetAllAsync(tenant.TenantId);
             return Ok(allSupplier);
         }
 

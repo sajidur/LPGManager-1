@@ -32,6 +32,8 @@ namespace LPGManager.Data
         public DbSet<CustomerEntity> Customers { get; set; }
         public DbSet<ReturnMaster> ReturnMasters { get; set; }
         public DbSet<ReturnDetails> ReturnDetails { get; set; }
+        public DbSet<Tenant> Tenants { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<PurchaseDetails>()

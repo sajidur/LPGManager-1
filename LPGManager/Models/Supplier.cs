@@ -7,7 +7,5 @@
         public string? Address { get; set; }
         public  string? Phone { get; set; }
         public int Companytype { get; set; }
-        public DateTime CreatedOn { get; set; }
-
     }
 }

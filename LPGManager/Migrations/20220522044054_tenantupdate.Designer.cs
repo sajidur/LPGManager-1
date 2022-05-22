@@ -3,6 +3,7 @@ using System;
 using LPGManager.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LPGManager.Migrations
 {
     [DbContext(typeof(AppsDbContext))]
-    partial class AppsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220522044054_tenantupdate")]
+    partial class tenantupdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -949,50 +951,6 @@ namespace LPGManager.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Suppliers");
-                });
-
-            modelBuilder.Entity("LPGManager.Models.Tenant", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("Address")
-                        .HasColumnType("text");
-
-                    b.Property<long>("CreatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Image")
-                        .HasColumnType("text");
-
-                    b.Property<int>("IsActive")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Phone")
-                        .HasColumnType("text");
-
-                    b.Property<string>("TenantName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("Tenanttype")
-                        .HasColumnType("integer");
-
-                    b.Property<long>("UpdatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tenants");
                 });
 
             modelBuilder.Entity("LPGManager.Models.User", b =>

@@ -63,6 +63,7 @@ namespace LPGManager.Data.Services.SellService
                                 inv.OpeningQuantity = 0;
                                 inv.Price = item.Price;
                                 inv.Quantity = item.Quantity;
+                                inv.ExchangeQty = item.Quantity;
                                 inv.SaleQuantity = 0;
                                 inv.ReturnQuantity = 0;
                                 inv.ProductType = item.ProductType;

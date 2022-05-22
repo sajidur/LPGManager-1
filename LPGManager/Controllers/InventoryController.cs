@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-
+using LPGManager.Common;
 using LPGManager.Dtos;
 using LPGManager.Interfaces.InventoryInterface;
 using LPGManager.Interfaces.UnitOfWorkInterface;
@@ -34,6 +34,9 @@ namespace LPGManager.Controllers
             Inventory result;
             try
             {
+                var tenant = Helper.GetTenant(HttpContext);
+                model.TenantId = tenant.TenantId;
+                model.CreatedBy = tenant.Id;
                 result = _inventoryService.AddAsync(model);
             }
             catch (Exception ex)

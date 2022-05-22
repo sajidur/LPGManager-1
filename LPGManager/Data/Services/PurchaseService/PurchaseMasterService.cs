@@ -45,7 +45,7 @@ namespace LPGManager.Data.Services.PurchaseService
                         //purchasedetails.PurchaseMasterId = res.Id;
                         //_purchaseDetailsRepository.Insert(purchasedetails);
                       //  _inventoryRepository.Save();
-                        var inv = _inventoryRepository.FindBy(a=>a.ProductName==item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId== 1).FirstOrDefault();
+                        var inv = _inventoryRepository.FindBy(a=>a.ProductName==item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId== 1 && a.TenantId == item.TenantId).FirstOrDefault();
                         if (inv != null)
                         {
                             inv.Quantity += item.Quantity;
@@ -67,6 +67,8 @@ namespace LPGManager.Data.Services.PurchaseService
                             inv.ProductType = item.ProductType;
                             inv.ProductName = item.ProductName;
                             inv.Size = item.Size;
+                            inv.TenantId = item.TenantId;
+                            inv.CreatedBy = item.CreatedBy;
                             _inventoryRepository.Insert(inv);
                         }
                         _inventoryRepository.Save();
@@ -142,7 +144,7 @@ namespace LPGManager.Data.Services.PurchaseService
                 foreach (var item in existingDetails.PurchaseDetails)
                 {
                     _purchaseDetailsRepository.Delete(item.Id);
-                    var inv = _inventoryRepository.FindBy(a => a.ProductName == item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId == 1).FirstOrDefault();
+                    var inv = _inventoryRepository.FindBy(a => a.ProductName == item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId == 1 && a.TenantId==item.TenantId).FirstOrDefault();
                     if (inv != null)
                     {
                         inv.Quantity -= item.Quantity;
@@ -198,6 +200,7 @@ namespace LPGManager.Data.Services.PurchaseService
                         inv.ProductType = item.ProductType;
                         inv.ProductName = item.ProductName;
                         inv.Size = item.Size;
+                        inv.TenantId = item.TenantId;
                         _inventoryRepository.Insert(inv);
                     }
                     _inventoryRepository.Save();
