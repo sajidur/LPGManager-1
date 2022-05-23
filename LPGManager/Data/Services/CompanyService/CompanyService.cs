@@ -25,9 +25,9 @@ namespace LPGManager.Data.Services.CompanyService
             _genericRepository.Save();
             return company;
         }
-        public async Task<IEnumerable<Company>> GetAllAsync(long tenant)
+        public async Task<IEnumerable<Company>> GetAllAsync()
         {
-            var data = await _genericRepository.FindBy(a=>a.TenantId==tenant).ToListAsync();
+            var data = await _genericRepository.GetAll();
             return (data);
         }
         public async Task<Company> GetAsync(long id)

@@ -70,8 +70,8 @@ namespace LPGManager.Controllers
             {
                 //validation
                 var tenant = Helper.GetTenant(HttpContext);
-                sell.TenantId = tenant.TenantId;
-                sell.CreatedBy = tenant.Id;
+                model.TenantId = tenant.TenantId;
+                model.CreatedBy = tenant.Id;
                 result = _returnMaster.AddAsync(model);
             }
             catch (Exception ex)
@@ -89,8 +89,8 @@ namespace LPGManager.Controllers
             try
             {
                 var tenant = Helper.GetTenant(HttpContext);
-                sell.TenantId = tenant.TenantId;
-                sell.CreatedBy = tenant.Id;
+                model.TenantId = tenant.TenantId;
+                model.CreatedBy = tenant.Id;
                 result = await _sellService.UpdateAsync(model);
             }
             catch (Exception ex)

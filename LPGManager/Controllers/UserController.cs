@@ -56,7 +56,7 @@ namespace LPGManager.Controllers
                 var token=_tokenGeneratorService.GetToken(result);
                 return Ok(new
                 {
-                    token = new JwtSecurityTokenHandler().WriteToken(token),
+                    token = "Bearer "+ new JwtSecurityTokenHandler().WriteToken(token),
                     id=result.Id,
                     Name=result.Name,
                     UserId=result.UserId,

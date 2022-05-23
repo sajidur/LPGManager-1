@@ -26,8 +26,7 @@ namespace LPGManager.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var tenant = Helper.GetTenant(HttpContext);
-            var allSupplier = await _companyService.GetAllAsync(tenant.TenantId);
+            var allSupplier = await _companyService.GetAllAsync();
             return Ok(allSupplier);
         }
 
