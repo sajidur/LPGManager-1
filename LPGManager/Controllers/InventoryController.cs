@@ -24,7 +24,8 @@ namespace LPGManager.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var data = _inventoryService.GetAllAsync();
+            var tenant = Helper.GetTenant(HttpContext);
+            var data = _inventoryService.GetAllAsync(tenant.TenantId);
             return Ok(data);
         }
 

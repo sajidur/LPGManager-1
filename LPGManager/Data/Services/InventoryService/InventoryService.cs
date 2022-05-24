@@ -59,9 +59,9 @@ namespace LPGManager.Data.Services.InventoryService
             _inventoryRepository.Save();
         }
 
-        public List<InventoryDtos> GetAllAsync()
+        public List<InventoryDtos> GetAllAsync(long tenantId)
         {
-            var res = _inventoryRepository.GetAll().Result;
+            var res = _inventoryRepository.FindBy(a=>a.TenantId==tenantId);
             var companies = _companyRepository.GetAll().Result;
             var warehouses = _wareRepository.GetAll().Result;
             var data =_mapper.Map<List<InventoryDtos>>(res);
@@ -75,8 +75,9 @@ namespace LPGManager.Data.Services.InventoryService
                     var refilSales = res.Where(a => a.ProductType == item.ProductType && a.Size == item.Size && a.CompanyId == item.CompanyId &&a.ProductName==ProductNameEnum.Refill.ToString()).FirstOrDefault();
                     if (refilSales!=null)
                     {
-                        item.EmptyBottle = item.Quantity - refilSales.Quantity - refilSales.SupportQty;
+                        item.EmptyBottle = item.Quantity - refilSales.Quantity - refilSales.SupportQty+refilSales.ExchangeQty;
                         item.SupportQty = refilSales.SupportQty;
+                        item.ExchangeQty=refilSales.ExchangeQty;
                     }
                 }
                 item.Company = _mapper.Map<CompanyDtos>(_companyRepository.GetById(item.CompanyId).Result);
@@ -88,6 +89,7 @@ namespace LPGManager.Data.Services.InventoryService
             foreach (var item in riffle)
             {
                 item.SupportQty = 0;
+                item.ExchangeQty = 0;
                 item.Company = _mapper.Map<CompanyDtos>(_companyRepository.GetById(item.CompanyId).Result);
                 item.Warehouse = _mapper.Map<WarehouseDtos>(_wareRepository.GetById(item.WarehouseId).Result);
                 finalResult.Add(item);

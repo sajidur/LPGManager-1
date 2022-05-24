@@ -25,7 +25,7 @@ namespace LPGManager.Data.Services
                     new Claim(ClaimTypes.Actor, user.TenantId.ToString()),
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Name,user.UserId),
-                    new Claim(JwtRegisteredClaimNames.Exp, DateTime.Now.AddDays(1).ToString())
+                    new Claim(JwtRegisteredClaimNames.Exp, DateTime.Now.AddDays(3).ToString())
                 };
 
             //foreach (var userRole in user.Roles)
@@ -35,7 +35,7 @@ namespace LPGManager.Data.Services
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
 
             var token = new JwtSecurityToken(
-                expires: DateTime.Now.AddHours(3),
+                expires: DateTime.Now.AddDays(3),
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                 );

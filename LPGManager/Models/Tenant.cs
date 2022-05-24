@@ -12,7 +12,7 @@
         public string? Image { get; set; }
         public string? Address { get; set; }
         public string? Phone { get; set; }
-        public int Tenanttype { get; set; }
+        public int Tenanttype { get; set; } //1 for supplier/dealer
         public long Id { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }

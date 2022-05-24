@@ -126,10 +126,10 @@ namespace LPGManager.Data.Services.SellService
             }
 
         }
-        public List<SellMasterDtos> GetAllAsync()
+        public List<SellMasterDtos> GetAllAsync(long tenantId)
         {
-            var data = _sellMasterRepository.GetAll();
-            foreach (var item in data.Result)
+            var data = _sellMasterRepository.FindBy(a=>a.TenantId==tenantId);
+            foreach (var item in data)
             {
                 item.SellsDetails = _sellDetailsRepository.FindBy(a => a.SellMasterId == item.Id).ToList();
                 foreach (var details in item.SellsDetails)
@@ -138,12 +138,12 @@ namespace LPGManager.Data.Services.SellService
                 }
                 item.Customer = _customerRepository.GetById(item.CustomerId).Result;
             }           
-            return _mapper.Map<List<SellMasterDtos>>(data.Result);
+            return _mapper.Map<List<SellMasterDtos>>(data);
         }
 
-        public List<SellMasterDtos> GetAllAsync(long startDate,long endDate)
+        public List<SellMasterDtos> GetAllAsync(long startDate,long endDate,long tenantId)
         {
-            var data = _sellMasterRepository.FindBy(a=>a.InvoiceDate<=endDate&&a.InvoiceDate>=startDate).ToListAsync();
+            var data = _sellMasterRepository.FindBy(a=>a.InvoiceDate<=endDate&&a.InvoiceDate>=startDate && a.TenantId==tenantId).ToListAsync();
             foreach (var item in data.Result)
             {
                 item.SellsDetails = _sellDetailsRepository.FindBy(a => a.SellMasterId == item.Id).ToList();

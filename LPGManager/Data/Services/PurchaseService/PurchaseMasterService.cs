@@ -37,6 +37,7 @@ namespace LPGManager.Data.Services.PurchaseService
                 {
                     purchase.InvoiceNo = GenerateInvoice().Result;
                     purchase.InvoiceDate = Helper.ToEpoch(DateTime.Now);
+                    purchase.TotalPrice = model.PurchaseDetails.Sum(a => a.Quantity * a.Price);                  
                     var res = _purchaseMasterRepository.Insert(purchase);
                     _purchaseMasterRepository.Save();
                     foreach (var item in model.PurchaseDetails)
@@ -54,21 +55,26 @@ namespace LPGManager.Data.Services.PurchaseService
                         }
                         else
                         {
-                            inv = new Inventory();
-                            inv.WarehouseId = 1;
-                            inv.CompanyId = item.CompanyId;
-                            inv.DamageQuantity = 0;
-                            inv.ReceivingQuantity = item.Quantity;
-                            inv.OpeningQuantity = 0;
-                            inv.Price = item.Price;
-                            inv.Quantity = item.Quantity;
-                            inv.SaleQuantity = 0;
-                            inv.ReturnQuantity = 0;
-                            inv.ProductType = item.ProductType;
-                            inv.ProductName = item.ProductName;
-                            inv.Size = item.Size;
-                            inv.TenantId = item.TenantId;
-                            inv.CreatedBy = item.CreatedBy;
+                            inv = new Inventory()
+                            {
+                                WarehouseId = 1,
+                                CompanyId = item.CompanyId,
+                                DamageQuantity = 0,
+                                ReceivingQuantity = item.Quantity,
+                                OpeningQuantity = 0,
+                                Price = item.Price,
+                                Quantity = item.Quantity,
+                                SaleQuantity = 0,
+                                SupportQty = 0,
+                                ExchangeQty = 0,
+                                PurchaseReturn = 0,
+                                ReturnQuantity = 0,
+                                ProductType = item.ProductType,
+                                ProductName = item.ProductName,
+                                Size = item.Size,
+                                TenantId = item.TenantId,
+                                CreatedBy = item.CreatedBy
+                            };
                             _inventoryRepository.Insert(inv);
                         }
                         _inventoryRepository.Save();
@@ -114,9 +120,9 @@ namespace LPGManager.Data.Services.PurchaseService
             }
             return _mapper.Map<List<PurchaseMasterDtos>>(data.Result);
         }
-        public List<PurchaseMasterDtos> GetAllAsync(long startDate, long endDate)
+        public List<PurchaseMasterDtos> GetAllAsync(long startDate, long endDate, long tenantId)
         {
-            var data = _purchaseMasterRepository.FindBy(a => a.InvoiceDate <= endDate && a.InvoiceDate >= startDate).ToListAsync();
+            var data = _purchaseMasterRepository.FindBy(a => a.InvoiceDate <= endDate && a.InvoiceDate >= startDate && a.TenantId==tenantId).ToListAsync();
             foreach (var item in data.Result)
             {
                 item.PurchaseDetails = _purchaseDetailsRepository.FindBy(a => a.PurchaseMasterId == item.Id).ToList();
@@ -172,13 +178,13 @@ namespace LPGManager.Data.Services.PurchaseService
                 existingMaster.DueAdvance = model.DueAdvance;
                 existingMaster.PaymentType = model.PaymentType;
                 existingMaster.TotalCommission = model.TotalCommission;
-
+                existingMaster.TotalPrice = model.PurchaseDetails.Sum(a => a.Quantity * a.Price);
                 foreach (var item in model.PurchaseDetails)
                 {
                     var details=_mapper.Map<PurchaseDetails>(item);
                     details.Company = null;
                     _purchaseDetailsRepository.Insert(details);
-                    var inv = _inventoryRepository.FindBy(a => a.ProductName == item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId == 1).FirstOrDefault();
+                    var inv = _inventoryRepository.FindBy(a => a.ProductName == item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId == 1 && a.TenantId == item.TenantId).FirstOrDefault();
                     if (inv != null)
                     {
                         inv.Quantity += item.Quantity;
@@ -187,20 +193,26 @@ namespace LPGManager.Data.Services.PurchaseService
                     }
                     else
                     {
-                        inv = new Inventory();
-                        inv.WarehouseId = 1;
-                        inv.CompanyId = item.CompanyId;
-                        inv.DamageQuantity = 0;
-                        inv.ReceivingQuantity = item.Quantity;
-                        inv.OpeningQuantity = 0;
-                        inv.Price = item.Price;
-                        inv.Quantity = item.Quantity;
-                        inv.SaleQuantity = 0;
-                        inv.ReturnQuantity = 0;
-                        inv.ProductType = item.ProductType;
-                        inv.ProductName = item.ProductName;
-                        inv.Size = item.Size;
-                        inv.TenantId = item.TenantId;
+                        inv = new Inventory()
+                        {
+                            WarehouseId = 1,
+                            CompanyId = item.CompanyId,
+                            DamageQuantity = 0,
+                            ReceivingQuantity = item.Quantity,
+                            OpeningQuantity = 0,
+                            Price = item.Price,
+                            Quantity = item.Quantity,
+                            SaleQuantity = 0,
+                            SupportQty = 0,
+                            ExchangeQty = 0,
+                            PurchaseReturn = 0,
+                            ReturnQuantity = 0,
+                            ProductType = item.ProductType,
+                            ProductName = item.ProductName,
+                            Size = item.Size,
+                            TenantId = item.TenantId,
+                            CreatedBy = item.CreatedBy
+                        };
                         _inventoryRepository.Insert(inv);
                     }
                     _inventoryRepository.Save();

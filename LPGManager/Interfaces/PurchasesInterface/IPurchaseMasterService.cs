@@ -6,7 +6,7 @@ namespace LPGManager.Interfaces.PurchasesInterface
     public interface IPurchaseMasterService
     {
         List<PurchaseMasterDtos> GetAllAsync();
-        List<PurchaseMasterDtos> GetAllAsync(long startDate, long endDate);
+        List<PurchaseMasterDtos> GetAllAsync(long startDate, long endDate,long tenantId);
         Task<PurchaseMaster> GetAsync(long id);
         PurchaseMaster AddAsync(PurchaseMasterDtos model);
         Task<PurchaseMaster> UpdateAsync(PurchaseMasterDtos model);

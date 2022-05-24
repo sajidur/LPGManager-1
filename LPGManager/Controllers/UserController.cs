@@ -16,11 +16,13 @@ namespace LPGManager.Controllers
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private ITokenGeneratorService _tokenGeneratorService;
-        public UserController(ITokenGeneratorService tokenGeneratorService,IMapper mapper, IUserService userService)
+        private ITenantService _tenantService;
+        public UserController(ITenantService _tenantService,ITokenGeneratorService tokenGeneratorService,IMapper mapper, IUserService userService)
         {
             _userService = userService;
             _mapper = mapper;
             _tokenGeneratorService = tokenGeneratorService;
+            this._tenantService = _tenantService;
         }
         // GET: api/<PurchaseController>      
         [HttpGet("GetAll")]
@@ -37,6 +39,24 @@ namespace LPGManager.Controllers
             try
             {
                 var role = _mapper.Map<User>(userDto);
+                //save tenant info when signup
+                if (userDto.TenantId==0&&!string.IsNullOrEmpty(userDto.TenantName))
+                {
+                    var res = _tenantService.AddAsync(new Tenant()
+                    {
+                        TenantName = userDto.TenantName,
+                        Tenanttype = userDto.UserType,
+                        Address = "",
+                        IsActive = 1,
+                        Phone = userDto.Phone
+                    });
+                    role.TenantId = res.Result.Id;
+                }
+                else if(userDto.TenantId == 0 && string.IsNullOrEmpty(userDto.TenantName))
+                {
+                    return BadRequest("Please provide valid Tenant Information");
+                }
+                //end
                 result = await _userService.AddAsync(role);
             }
             catch (Exception ex)

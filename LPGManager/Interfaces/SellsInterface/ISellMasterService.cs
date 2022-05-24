@@ -6,8 +6,8 @@ namespace LPGManager.Interfaces.SellsInterface
     public interface ISellMasterService
     {
      
-        List<SellMasterDtos> GetAllAsync();
-        List<SellMasterDtos> GetAllAsync(long startDate, long endDate);
+        List<SellMasterDtos> GetAllAsync(long tenantId);
+        List<SellMasterDtos> GetAllAsync(long startDate, long endDate, long tenantId);
         SellMasterDtos GetAsync(long id);
         SellMaster AddAsync(SellMasterDtos model);
         Task<SellMaster> UpdateAsync(SellMasterDtos model);

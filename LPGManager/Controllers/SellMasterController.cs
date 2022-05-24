@@ -26,13 +26,17 @@ namespace LPGManager.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var data = _sellService.GetAllAsync();
+            var tenant = Helper.GetTenant(HttpContext);
+
+            var data = _sellService.GetAllAsync(tenant.TenantId);
             return Ok(data);
         }
         [HttpGet("GetByDate")]
         public async Task<IActionResult> GetAll(long startDate, long endDate)
         {
-            var data = _sellService.GetAllAsync(startDate, endDate);
+            var tenant = Helper.GetTenant(HttpContext);
+
+            var data = _sellService.GetAllAsync(startDate, endDate,tenant.TenantId);
             return Ok(data);
         }
         [HttpGet("GetById")]
