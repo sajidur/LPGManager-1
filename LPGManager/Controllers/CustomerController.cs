@@ -48,6 +48,8 @@ namespace LPGManager.Controllers
             var tenant = Helper.GetTenant(HttpContext);
             assign.TenantId = tenant.TenantId;
             assign.CreatedBy = tenant.Id;
+            var customerObj = _customerService.GetByAsync(tenant.TenantId);
+            assign.CustomerId = customerObj.Id;
             _customerService.Assign(assign);
             return Ok();
         }
