@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LPGManager.Common;
+using LPGManager.Data.Services;
 using LPGManager.Data.Services.CustomerService;
 using LPGManager.Dtos;
 using LPGManager.Interfaces.UnitOfWorkInterface;
@@ -15,10 +16,12 @@ namespace LPGManager.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerService _customerService;
+        private readonly ITenantService _tenantService;
         private readonly IMapper _mapper;
-        public CustomerController(IMapper mapper, ICustomerService customerService)
+        public CustomerController(IMapper mapper, ICustomerService customerService, ITenantService tenantService)
         {
             _customerService = customerService;
+            _tenantService = tenantService;
             _mapper = mapper;
         }
         // GET: api/<PurchaseController>      
@@ -26,8 +29,27 @@ namespace LPGManager.Controllers
         public async Task<IActionResult> GetAll()
         {
             var tenant = Helper.GetTenant(HttpContext);
-            var data = await _customerService.GetAllAsync();
+            var customerByTenant = _customerService.GetByAsync(tenant.TenantId);
+            var data = _customerService.CustomerDealerMappingsList(customerByTenant.Id);
             return Ok(data);
+        }
+
+        [HttpGet("Search")]
+        public async Task<IActionResult> Search(string customerName)
+        {
+            var tenant = Helper.GetTenant(HttpContext);
+            var data = _customerService.SearchAsync(customerName);
+            return Ok(data);
+        }
+
+        [HttpPost("Assign")]
+        public async Task<IActionResult> Assign(CustomerDealerMapping assign)
+        {
+            var tenant = Helper.GetTenant(HttpContext);
+            assign.TenantId = tenant.TenantId;
+            assign.CreatedBy = tenant.Id;
+            _customerService.Assign(assign);
+            return Ok();
         }
         [HttpPost("Save")]
         public async Task<IActionResult> Save(CustomerDto customerDto)
@@ -36,7 +58,23 @@ namespace LPGManager.Controllers
             var tenant = Helper.GetTenant(HttpContext);
             customer.TenantId = tenant.TenantId;
             customer.CreatedBy = tenant.Id;
-            _customerService.Save(customer);
+            var customerObj = _customerService.GetByAsync(tenant.TenantId);
+            var res=_tenantService.AddAsync(new Tenant()
+            {
+                Address = customerDto.Address,
+                Phone=customerDto.Phone,
+                TenantName=customerDto.Name,
+                Tenanttype=customerDto.CustomerType,
+                CreatedBy=customer.CreatedBy
+            }).Result;
+            var customerRes=_customerService.Save(customer);
+            _customerService.Assign(new CustomerDealerMapping()
+            {
+                RefCustomerId = customerRes.Id,
+                CustomerId = customerObj.Id,
+                CustomerType = customerDto.CustomerType,
+                TenantId = tenant.Id
+            });
             return Ok();
         }
         [HttpPost("edit/{id:int}")]

@@ -1,24 +1,50 @@
 ﻿using LPGManager.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace LPGManager.Data.Services.CustomerService
 {
     public class CustomerService: ICustomerService
     {
         private IGenericRepository<CustomerEntity> _customerRepository;
-        public CustomerService(IGenericRepository<CustomerEntity> customerRepository)
+        private IGenericRepository<CustomerDealerMapping> _mappingRepository;
+
+        public CustomerService(IGenericRepository<CustomerEntity> customerRepository, IGenericRepository<CustomerDealerMapping> mappingRepository)
         {
             this._customerRepository = customerRepository;
+            this._mappingRepository = mappingRepository;
         }
 
-        public Task<IEnumerable<CustomerEntity>> GetAllAsync()
+        public CustomerEntity GetByAsync(long tenantId)
         {
-            return _customerRepository.GetAll();
+            return _customerRepository.FindBy(a=>a.TenantId==tenantId).FirstOrDefault();
+        }
+        public IEnumerable<CustomerEntity> SearchAsync(string customerName)
+        {
+            return _customerRepository.FindBy(a => a.Name.Contains(customerName));
+        }
+        public CustomerDealerMapping IsMappingAlready(CustomerDealerMapping mapping)
+        {
+            return _mappingRepository.FindBy(a => a.CustomerId==mapping.CustomerId&&a.RefCustomerId==mapping.RefCustomerId).FirstOrDefault();
         }
 
-        public void Save(CustomerEntity customerEntity)
+        public IEnumerable<CustomerEntity> CustomerDealerMappingsList(long customerId)
+        {
+            var list= _mappingRepository.FindBy(a => a.CustomerId == customerId || a.RefCustomerId == customerId).Select(a=>a.CustomerId).ToList();
+            return _customerRepository.FindBy(a => list.Contains(a.Id));
+        }
+        public CustomerEntity Save(CustomerEntity customerEntity)
         {
             _customerRepository.Insert(customerEntity);
             _customerRepository.Save();
+            return customerEntity;
+        }
+        public void Assign(CustomerDealerMapping mapping)
+        {
+            if (IsMappingAlready(mapping)==null)
+            {
+                _mappingRepository.Insert(mapping);
+                _mappingRepository.Save();
+            }
         }
         public void UpdateAsync(CustomerEntity model)
         {
@@ -49,8 +75,12 @@ namespace LPGManager.Data.Services.CustomerService
 
     public interface ICustomerService
     {
-        Task<IEnumerable<CustomerEntity>> GetAllAsync();
-        void Save(CustomerEntity customerEntity);
+        CustomerEntity GetByAsync(long tenantId);
+        IEnumerable<CustomerEntity> SearchAsync(string customerName);
+        CustomerEntity Save(CustomerEntity customerEntity);
+        IEnumerable<CustomerEntity> CustomerDealerMappingsList(long customerId);
+        void Assign(CustomerDealerMapping mapping);
+
         Task DeleteAsync(long id);
         void UpdateAsync(CustomerEntity model);
     }
