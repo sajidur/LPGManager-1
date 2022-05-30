@@ -20,7 +20,7 @@ namespace LPGManager.Data.Services.CustomerService
         }
         public IEnumerable<CustomerEntity> SearchAsync(string customerName)
         {
-            return _customerRepository.FindBy(a => a.Name.Contains(customerName));
+            return _customerRepository.FindBy(a => a.Name.Contains(customerName,StringComparison.OrdinalIgnoreCase)||a.Phone==customerName);
         }
         public CustomerDealerMapping IsMappingAlready(CustomerDealerMapping mapping)
         {
