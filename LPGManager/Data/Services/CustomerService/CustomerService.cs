@@ -20,16 +20,16 @@ namespace LPGManager.Data.Services.CustomerService
         }
         public IEnumerable<CustomerEntity> SearchAsync(string customerName)
         {
-            return _customerRepository.FindBy(a => a.Name.Contains(customerName,StringComparison.OrdinalIgnoreCase)||a.Phone==customerName);
+            return _customerRepository.FindBy(a => a.Name.ToLower().Contains(customerName.ToLower())||a.Phone==customerName);
         }
         public CustomerDealerMapping IsMappingAlready(CustomerDealerMapping mapping)
         {
-            return _mappingRepository.FindBy(a => a.CustomerId==mapping.CustomerId&&a.RefCustomerId==mapping.RefCustomerId).FirstOrDefault();
+            return _mappingRepository.FindBy(a => a.TenantId==mapping.TenantId&&a.RefCustomerId==mapping.RefCustomerId).FirstOrDefault();
         }
 
-        public IEnumerable<CustomerEntity> CustomerDealerMappingsList(long customerId)
+        public IEnumerable<CustomerEntity> CustomerDealerMappingsList(long tenantId)
         {
-            var list= _mappingRepository.FindBy(a => a.CustomerId == customerId || a.RefCustomerId == customerId).Select(a=>a.CustomerId).ToList();
+            var list= _mappingRepository.FindBy(a => a.TenantId == tenantId).Select(a=>a.RefCustomerId).ToList();
             return _customerRepository.FindBy(a => list.Contains(a.Id));
         }
         public CustomerEntity Save(CustomerEntity customerEntity)

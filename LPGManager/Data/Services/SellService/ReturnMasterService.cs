@@ -42,7 +42,7 @@ namespace LPGManager.Data.Services.SellService
                 {
                     var res = _returnMaster.Insert(sell);
                     _returnMaster.Save();
-                    var salesDetails = _sellDetailsRepository.FindBy(a => a.SellMasterId == model.SellMasterId);
+                    var salesDetails = _sellDetailsRepository.FindBy(a => a.SellMasterId == model.SellMasterId).ToList();
                     foreach (var item in model.ReturnDetails)
                     {
                         if (item.ProductName == ProductNameEnum.Bottle.ToString())
@@ -52,7 +52,7 @@ namespace LPGManager.Data.Services.SellService
                             {
                                 foreach (var ret in returndetailsMatchWithReturn)
                                 {
-                                    var invv = _inventoryRepository.FindBy(a => a.ProductType == ret.ProductType && a.Size == ret.Size && a.CompanyId == ret.CompanyId && a.ProductName == ProductNameEnum.Refill.ToString() && a.WarehouseId == 1 && a.TenantId == ret.TenantId).FirstOrDefault();
+                                    var invv = _inventoryRepository.FindBy(a => a.ProductType == ret.ProductType && a.Size == ret.Size && a.CompanyId == ret.CompanyId && a.ProductName == ProductNameEnum.Refill.ToString() && a.WarehouseId == 1 && a.TenantId == model.TenantId).FirstOrDefault();
                                     if (invv != null)
                                     {
                                         invv.SupportQty -= ret.Quantity;
@@ -62,7 +62,7 @@ namespace LPGManager.Data.Services.SellService
                             }
                             else
                             {
-                                var inv = _inventoryRepository.FindBy(a => a.ProductType == item.ProductType && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductName == ProductNameEnum.Refill.ToString() && a.WarehouseId == 1 && a.TenantId == item.TenantId).FirstOrDefault();
+                                var inv = _inventoryRepository.FindBy(a => a.ProductType == item.ProductType && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductName == ProductNameEnum.Refill.ToString() && a.WarehouseId == 1 && a.TenantId == model.TenantId).FirstOrDefault();
                                 if (inv != null)
                                 {
                                     inv.ExchangeQty += item.Quantity;
@@ -87,8 +87,8 @@ namespace LPGManager.Data.Services.SellService
                                         ProductType = item.ProductType,
                                         ProductName = item.ProductName,
                                         Size = item.Size,
-                                        TenantId = item.TenantId,
-                                        CreatedBy = item.CreatedBy
+                                        TenantId = model.TenantId,
+                                        CreatedBy = model.CreatedBy
                                     };
                                     _inventoryRepository.Insert(inv);
                                 }

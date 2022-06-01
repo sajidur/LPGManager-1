@@ -27,7 +27,8 @@ namespace LPGManager.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var allSupplier = await _supplierService.GetAllAsync();
+            var tenant = Helper.GetTenant(HttpContext);
+            var allSupplier = await _supplierService.GetAllAsync(tenant.TenantId);
             return Ok(allSupplier);
         }
 
@@ -36,18 +37,20 @@ namespace LPGManager.Controllers
         {
             
             Supplier result;
-            Tenant tenant = new Tenant()
-            {
-                TenantName = model.Name,
-                Image = model.Image,
-                Address = model.Address,
-                Phone = model.Phone,
-                Tenanttype =(int) TenantType.Supplier,
-                IsActive=1,
-                CreatedBy=0,
-                CreatedDate=DateTime.Now            
-            };
-            var tenResult=_tenantService.AddAsync(tenant);
+            //Tenant tenant = new Tenant()
+            //{
+            //    TenantName = model.Name,
+            //    Image = model.Image,
+            //    Address = model.Address,
+            //    Phone = model.Phone,
+            //    Tenanttype =(int) TenantType.Supplier,
+            //    IsActive=1,
+            //    CreatedBy=0,
+            //    CreatedDate=DateTime.Now            
+            //};
+            //var tenResult=_tenantService.AddAsync(tenant);
+            var tenant = Helper.GetTenant(HttpContext);
+
             try
             {
                 var supplier = new Supplier
@@ -57,7 +60,7 @@ namespace LPGManager.Controllers
                     Address = model.Address,
                     Phone = model.Phone,
                     Companytype = model.Companytype,                  
-                    TenantId= tenResult.Result.Id
+                    TenantId= tenant.TenantId
                 };
                 result = await _supplierService.AddAsync(supplier);
             }

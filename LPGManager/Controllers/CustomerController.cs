@@ -29,8 +29,7 @@ namespace LPGManager.Controllers
         public async Task<IActionResult> GetAll()
         {
             var tenant = Helper.GetTenant(HttpContext);
-            var customerByTenant = _customerService.GetByAsync(tenant.TenantId);
-            var data = _customerService.CustomerDealerMappingsList(customerByTenant.Id);
+            var data = _customerService.CustomerDealerMappingsList(tenant.TenantId);
             return Ok(data);
         }
 
@@ -48,8 +47,6 @@ namespace LPGManager.Controllers
             var tenant = Helper.GetTenant(HttpContext);
             assign.TenantId = tenant.TenantId;
             assign.CreatedBy = tenant.Id;
-            var customerObj = _customerService.GetByAsync(tenant.TenantId);
-            assign.CustomerId = customerObj.Id;
             _customerService.Assign(assign);
             return Ok();
         }
@@ -58,9 +55,7 @@ namespace LPGManager.Controllers
         {
             var customer =_mapper.Map<CustomerEntity>(customerDto);
             var tenant = Helper.GetTenant(HttpContext);
-            customer.TenantId = tenant.TenantId;
             customer.CreatedBy = tenant.Id;
-            var customerObj = _customerService.GetByAsync(tenant.TenantId);
             var res=_tenantService.AddAsync(new Tenant()
             {
                 Address = customerDto.Address,
@@ -69,13 +64,13 @@ namespace LPGManager.Controllers
                 Tenanttype=customerDto.CustomerType,
                 CreatedBy=customer.CreatedBy
             }).Result;
+            customer.TenantId = res.Id;
             var customerRes=_customerService.Save(customer);
             _customerService.Assign(new CustomerDealerMapping()
             {
                 RefCustomerId = customerRes.Id,
-                CustomerId = customerObj.Id,
                 CustomerType = customerDto.CustomerType,
-                TenantId = tenant.Id
+                TenantId = tenant.TenantId
             });
             return Ok();
         }

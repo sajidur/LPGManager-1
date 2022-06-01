@@ -46,7 +46,7 @@ namespace LPGManager.Data.Services.PurchaseService
                         //purchasedetails.PurchaseMasterId = res.Id;
                         //_purchaseDetailsRepository.Insert(purchasedetails);
                       //  _inventoryRepository.Save();
-                        var inv = _inventoryRepository.FindBy(a=>a.ProductName==item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId== 1 && a.TenantId == item.TenantId).FirstOrDefault();
+                        var inv = _inventoryRepository.FindBy(a=>a.ProductName==item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId== 1 && a.TenantId == model.TenantId).FirstOrDefault();
                         if (inv != null)
                         {
                             inv.Quantity += item.Quantity;
@@ -72,8 +72,8 @@ namespace LPGManager.Data.Services.PurchaseService
                                 ProductType = item.ProductType,
                                 ProductName = item.ProductName,
                                 Size = item.Size,
-                                TenantId = item.TenantId,
-                                CreatedBy = item.CreatedBy
+                                TenantId = purchase.TenantId,
+                                CreatedBy = purchase.CreatedBy
                             };
                             _inventoryRepository.Insert(inv);
                         }
@@ -107,10 +107,10 @@ namespace LPGManager.Data.Services.PurchaseService
             _purchaseMasterRepository.Save();
         }
 
-        public List<PurchaseMasterDtos> GetAllAsync()
+        public List<PurchaseMasterDtos> GetAllAsync(long tenantId)
         {
-            var data = _purchaseMasterRepository.GetAll();
-            foreach (var item in data.Result)
+            var data = _purchaseMasterRepository.FindBy(a=>a.TenantId==tenantId).ToList();
+            foreach (var item in data)
             {
                 item.PurchaseDetails = _purchaseDetailsRepository.FindBy(a => a.PurchaseMasterId == item.Id).ToList();
                 foreach (var details in item.PurchaseDetails)
@@ -118,7 +118,7 @@ namespace LPGManager.Data.Services.PurchaseService
                     details.Company = _companyRepository.GetById(details.CompanyId).Result;
                 }
             }
-            return _mapper.Map<List<PurchaseMasterDtos>>(data.Result);
+            return _mapper.Map<List<PurchaseMasterDtos>>(data);
         }
         public List<PurchaseMasterDtos> GetAllAsync(long startDate, long endDate, long tenantId)
         {
@@ -150,7 +150,7 @@ namespace LPGManager.Data.Services.PurchaseService
                 foreach (var item in existingDetails.PurchaseDetails)
                 {
                     _purchaseDetailsRepository.Delete(item.Id);
-                    var inv = _inventoryRepository.FindBy(a => a.ProductName == item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId == 1 && a.TenantId==item.TenantId).FirstOrDefault();
+                    var inv = _inventoryRepository.FindBy(a => a.ProductName == item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId == 1 && a.TenantId== existingDetails.TenantId).FirstOrDefault();
                     if (inv != null)
                     {
                         inv.Quantity -= item.Quantity;
@@ -184,7 +184,7 @@ namespace LPGManager.Data.Services.PurchaseService
                     var details=_mapper.Map<PurchaseDetails>(item);
                     details.Company = null;
                     _purchaseDetailsRepository.Insert(details);
-                    var inv = _inventoryRepository.FindBy(a => a.ProductName == item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId == 1 && a.TenantId == item.TenantId).FirstOrDefault();
+                    var inv = _inventoryRepository.FindBy(a => a.ProductName == item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId == 1 && a.TenantId == model.TenantId).FirstOrDefault();
                     if (inv != null)
                     {
                         inv.Quantity += item.Quantity;
@@ -210,8 +210,8 @@ namespace LPGManager.Data.Services.PurchaseService
                             ProductType = item.ProductType,
                             ProductName = item.ProductName,
                             Size = item.Size,
-                            TenantId = item.TenantId,
-                            CreatedBy = item.CreatedBy
+                            TenantId = model.TenantId,
+                            CreatedBy = model.CreatedBy
                         };
                         _inventoryRepository.Insert(inv);
                     }

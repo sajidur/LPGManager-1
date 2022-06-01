@@ -55,7 +55,7 @@ namespace LPGManager.Data.Services.SellService
                       //  var selldetails = _mapper.Map<SellDetails>(item);
                       //  selldetails.SellMasterId = res.Id;
                      //   _sellDetailsRepository.Insert(selldetails);
-                        var inv = _inventoryRepository.FindBy(a => a.ProductName == item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId == 1 && a.TenantId == item.TenantId).FirstOrDefault();
+                        var inv = _inventoryRepository.FindBy(a => a.ProductName == item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId == 1 && a.TenantId == model.TenantId).FirstOrDefault();
                         if (inv != null)
                         {
                             if (item.ProductName == ProductNameEnum.Refill.ToString())
@@ -109,7 +109,7 @@ namespace LPGManager.Data.Services.SellService
                 foreach (var item in existingDetails.SellsDetails)
                 {
                     _sellDetailsRepository.Delete(item.Id);
-                    var inv = _inventoryRepository.FindBy(a => a.ProductName == item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId == 1 && a.TenantId==item.TenantId).FirstOrDefault();
+                    var inv = _inventoryRepository.FindBy(a => a.ProductName == item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId == 1 && a.TenantId== existingDetails.TenantId).FirstOrDefault();
                     if (inv != null)
                     {
                         inv.Quantity += item.Quantity;
@@ -128,7 +128,7 @@ namespace LPGManager.Data.Services.SellService
         }
         public List<SellMasterDtos> GetAllAsync(long tenantId)
         {
-            var data = _sellMasterRepository.FindBy(a=>a.TenantId==tenantId);
+            var data = _sellMasterRepository.FindBy(a=>a.TenantId==tenantId).ToList();
             foreach (var item in data)
             {
                 item.SellsDetails = _sellDetailsRepository.FindBy(a => a.SellMasterId == item.Id).ToList();
@@ -194,7 +194,7 @@ namespace LPGManager.Data.Services.SellService
                     var details = _mapper.Map<SellDetails>(item);
                     details.Company = null;
                     _sellDetailsRepository.Insert(details);
-                    var inv = _inventoryRepository.FindBy(a => a.ProductName == item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId == 1).FirstOrDefault();
+                    var inv = _inventoryRepository.FindBy(a => a.ProductName == item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId == 1 && item.TenantId==model.TenantId).FirstOrDefault();
                     if (inv != null)
                     {
                         inv.Quantity += item.Quantity;

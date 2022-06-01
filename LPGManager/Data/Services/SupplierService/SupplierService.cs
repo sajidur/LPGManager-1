@@ -26,9 +26,9 @@ namespace LPGManager.Data.Services.SupplierService
 
             return product;
         }
-        public async Task<IEnumerable<Supplier>> GetAllAsync()
+        public async Task<IEnumerable<Supplier>> GetAllAsync(long tenantId)
         {
-            var data = await _genericRepository.GetAll();
+            var data =  _genericRepository.FindBy(a => a.TenantId == tenantId).ToList();
             return (data);
         }
         public async Task<Supplier> GetAsync(long id)

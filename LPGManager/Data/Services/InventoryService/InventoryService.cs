@@ -61,7 +61,7 @@ namespace LPGManager.Data.Services.InventoryService
 
         public List<InventoryDtos> GetAllAsync(long tenantId)
         {
-            var res = _inventoryRepository.FindBy(a=>a.TenantId==tenantId);
+            var res = _inventoryRepository.FindBy(a=>a.TenantId==tenantId).ToList();
             var companies = _companyRepository.GetAll().Result;
             var warehouses = _wareRepository.GetAll().Result;
             var data =_mapper.Map<List<InventoryDtos>>(res);
