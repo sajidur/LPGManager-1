@@ -37,7 +37,9 @@ namespace LPGManager.Data.Services.PurchaseService
                 {
                     purchase.InvoiceNo = GenerateInvoice().Result;
                     purchase.InvoiceDate = Helper.ToEpoch(DateTime.Now);
-                    purchase.TotalPrice = model.PurchaseDetails.Sum(a => a.Quantity * a.Price);                  
+                    purchase.TotalPrice = model.PurchaseDetails.Sum(a => a.Quantity * a.Price);
+                    purchase.TotalCommission = model.PurchaseDetails.Sum(a => a.Commission * a.Quantity);
+
                     var res = _purchaseMasterRepository.Insert(purchase);
                     _purchaseMasterRepository.Save();
                     foreach (var item in model.PurchaseDetails)

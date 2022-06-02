@@ -18,19 +18,21 @@ namespace LPGManager.Data.Services.CustomerService
         {
             return _customerRepository.FindBy(a=>a.TenantId==tenantId).FirstOrDefault();
         }
-        public IEnumerable<CustomerEntity> SearchAsync(string customerName)
+        public IEnumerable<CustomerEntity> SearchAsync(string customerName,User user)
         {
-            return _customerRepository.FindBy(a => a.Name.ToLower().Contains(customerName.ToLower())||a.Phone==customerName);
+            var alreadyAssigned = CustomerDealerMappingsList(user);
+            var searchResult= _customerRepository.FindBy(a => a.Name.ToLower().Contains(customerName.ToLower())||a.Phone==customerName);
+            return searchResult.Except(alreadyAssigned);
         }
         public CustomerDealerMapping IsMappingAlready(CustomerDealerMapping mapping)
         {
             return _mappingRepository.FindBy(a => a.TenantId==mapping.TenantId&&a.RefCustomerId==mapping.RefCustomerId).FirstOrDefault();
         }
 
-        public IEnumerable<CustomerEntity> CustomerDealerMappingsList(long tenantId)
+        public IEnumerable<CustomerEntity> CustomerDealerMappingsList(User tenant)
         {
-            var list= _mappingRepository.FindBy(a => a.TenantId == tenantId).Select(a=>a.RefCustomerId).ToList();
-            return _customerRepository.FindBy(a => list.Contains(a.Id));
+            var list= _mappingRepository.FindBy(a => a.TenantId == tenant.TenantId).Select(a=>a.RefCustomerId).ToList();
+            return _customerRepository.FindBy(a => list.Contains(a.Id)&&a.CustomerType!=tenant.UserType);
         }
         public CustomerEntity Save(CustomerEntity customerEntity)
         {
@@ -76,9 +78,9 @@ namespace LPGManager.Data.Services.CustomerService
     public interface ICustomerService
     {
         CustomerEntity GetByAsync(long tenantId);
-        IEnumerable<CustomerEntity> SearchAsync(string customerName);
+        IEnumerable<CustomerEntity> SearchAsync(string customerName,User user);
         CustomerEntity Save(CustomerEntity customerEntity);
-        IEnumerable<CustomerEntity> CustomerDealerMappingsList(long customerId);
+        IEnumerable<CustomerEntity> CustomerDealerMappingsList(User user);
         void Assign(CustomerDealerMapping mapping);
 
         Task DeleteAsync(long id);

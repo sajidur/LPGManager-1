@@ -55,8 +55,10 @@ namespace LPGManager.Data.Services.SellService
                                     var invv = _inventoryRepository.FindBy(a => a.ProductType == ret.ProductType && a.Size == ret.Size && a.CompanyId == ret.CompanyId && a.ProductName == ProductNameEnum.Refill.ToString() && a.WarehouseId == 1 && a.TenantId == model.TenantId).FirstOrDefault();
                                     if (invv != null)
                                     {
-                                        invv.SupportQty -= ret.Quantity;
+                                        invv.SupportQty -= item.Quantity;
+                                        invv.UpdatedBy = model.CreatedBy;
                                         _inventoryRepository.Update(invv);
+                                        _inventoryRepository.Save();
                                     }
                                 }
                             }
@@ -67,6 +69,7 @@ namespace LPGManager.Data.Services.SellService
                                 {
                                     inv.ExchangeQty += item.Quantity;
                                     _inventoryRepository.Update(inv);
+                                    _inventoryRepository.Save();
                                 }
                                 else
                                 {

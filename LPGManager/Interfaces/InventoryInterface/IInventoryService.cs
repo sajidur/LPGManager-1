@@ -6,6 +6,8 @@ namespace LPGManager.Interfaces.InventoryInterface
     public interface IInventoryService
     {
         List<InventoryDtos> GetAllAsync(long tenantId);
+        List<InventoryDtos> GetAllAsync(long tenantId,long companyId);
+
         Task<Inventory> GetAsync(long id);
         Inventory AddAsync(InventoryDtos model);
         Task<Inventory> UpdateAsync(InventoryDtos model);

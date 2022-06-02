@@ -126,7 +126,44 @@ namespace LPGManager.Data.Services.InventoryService
            // finalResult.Add(totalRow);
             return finalResult;
         }
+        public List<InventoryDtos> GetAllAsync(long tenantId,long companyId)
+        {
+            var res = _inventoryRepository.FindBy(a => a.TenantId == tenantId&&a.CompanyId==companyId).ToList();
+            var data = _mapper.Map<List<InventoryDtos>>(res);
+            var finalResult = new List<InventoryDtos>();
+            //bottle
+            var bottle = data.Where(a => a.ProductName == ProductNameEnum.Bottle.ToString());
+            foreach (var item in bottle)
+            {
+                if (item.ProductName == ProductNameEnum.Bottle.ToString())
+                {
+                    var refilSales = res.Where(a => a.ProductType == item.ProductType && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductName == ProductNameEnum.Refill.ToString()).FirstOrDefault();
+                    if (refilSales != null)
+                    {
+                        item.EmptyBottle = item.Quantity - refilSales.Quantity - refilSales.SupportQty + refilSales.ExchangeQty;
+                        item.SupportQty = refilSales.SupportQty;
+                        item.ExchangeQty = refilSales.ExchangeQty;
+                    }
+                }
+                finalResult.Add(item);
+            }
+            //riffle
+            var riffle = data.Where(a => a.ProductName == ProductNameEnum.Refill.ToString());
+            foreach (var item in riffle)
+            {
+                item.SupportQty = 0;
+                item.ExchangeQty = 0;
+                finalResult.Add(item);
+            }
+            //others
 
+            var others = data.Where(a => a.ProductName != ProductNameEnum.Refill.ToString() && a.ProductName != ProductNameEnum.Bottle.ToString());
+            foreach (var item in others)
+            {
+                finalResult.Add(item);
+            }
+            return finalResult;
+        }
         public async Task<Inventory> GetAsync(long id)
         {
             //var data = await _dbContext.PurchaseMasters

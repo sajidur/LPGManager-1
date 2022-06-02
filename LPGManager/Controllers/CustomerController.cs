@@ -29,7 +29,7 @@ namespace LPGManager.Controllers
         public async Task<IActionResult> GetAll()
         {
             var tenant = Helper.GetTenant(HttpContext);
-            var data = _customerService.CustomerDealerMappingsList(tenant.TenantId);
+            var data = _customerService.CustomerDealerMappingsList(tenant);
             return Ok(data);
         }
 
@@ -37,7 +37,7 @@ namespace LPGManager.Controllers
         public async Task<IActionResult> Search(string customerName)
         {
             var tenant = Helper.GetTenant(HttpContext);
-            var data = _customerService.SearchAsync(customerName);
+            var data = _customerService.SearchAsync(customerName, tenant);
             return Ok(data);
         }
 

@@ -29,6 +29,14 @@ namespace LPGManager.Controllers
             return Ok(data);
         }
 
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAll(long companyId)
+        {
+            var tenant = Helper.GetTenant(HttpContext);
+            var data = _inventoryService.GetAllAsync(tenant.TenantId,companyId);
+            return Ok(data);
+        }
+
         [HttpPost("add")]
         public async Task<IActionResult> Create(InventoryDtos model)
         {

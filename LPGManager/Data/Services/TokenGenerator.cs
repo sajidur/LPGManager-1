@@ -25,6 +25,7 @@ namespace LPGManager.Data.Services
                     new Claim(ClaimTypes.Actor, user.TenantId.ToString()),
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Name,user.UserId),
+                    new Claim(ClaimTypes.Role,user.UserType.ToString()),
                     new Claim(JwtRegisteredClaimNames.Exp, DateTime.Now.AddDays(3).ToString())
                 };
 

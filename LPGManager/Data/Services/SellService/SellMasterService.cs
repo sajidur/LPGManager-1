@@ -48,6 +48,8 @@ namespace LPGManager.Data.Services.SellService
                 {
                     sell.InvoiceNo = GenerateInvoice();
                     sell.InvoiceDate = Helper.ToEpoch(DateTime.Now);
+                    sell.TotalPrice = model.SellsDetails.Sum(a => a.Quantity * a.Price);
+                    sell.Discount = model.SellsDetails.Sum(a => a.Discount * a.Quantity);
                     var res = _sellMasterRepository.Insert(sell);
                     _sellMasterRepository.Save();
                     foreach (var item in model.SellsDetails)
