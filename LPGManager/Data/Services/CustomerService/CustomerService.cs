@@ -48,6 +48,16 @@ namespace LPGManager.Data.Services.CustomerService
                 _mappingRepository.Save();
             }
         }
+        public void DeAssign(CustomerDealerMapping mapping)
+        {
+            var isExists = IsMappingAlready(mapping);
+            if (isExists!=null)
+            {
+                _mappingRepository.Delete(isExists.Id);
+                _mappingRepository.Save();
+            }
+
+        }
         public void UpdateAsync(CustomerEntity model)
         {
             var existing = _customerRepository.GetById(model.Id).Result;
@@ -82,6 +92,7 @@ namespace LPGManager.Data.Services.CustomerService
         CustomerEntity Save(CustomerEntity customerEntity);
         IEnumerable<CustomerEntity> CustomerDealerMappingsList(User user);
         void Assign(CustomerDealerMapping mapping);
+        void DeAssign(CustomerDealerMapping mapping);
 
         Task DeleteAsync(long id);
         void UpdateAsync(CustomerEntity model);

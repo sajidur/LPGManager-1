@@ -50,16 +50,10 @@ namespace LPGManager.Data.Services
         }
         public async Task<User> UpdateAsync(User model)
         {
-            //var existing = await _dbContext.Companies.FirstOrDefaultAsync(c => c.Id == model.Id);
-            //if (string.IsNullOrWhiteSpace(model.CompanyName))
-            //    throw new ArgumentException("Supplier name not found");
-            //if (existing == null)
-            //    throw new ArgumentException("Company is not exist");
-            //model.CreatedOn = DateTime.UtcNow;
-            //_dbContext.Entry(existing).CurrentValues.SetValues(model);
+            _genericRepository.Update(model);
+            _genericRepository.Save();
 
-            //return model;
-            return null;
+            return model;
         }
         public async Task DeleteAsync(long id)
         {

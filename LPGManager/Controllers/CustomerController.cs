@@ -50,6 +50,16 @@ namespace LPGManager.Controllers
             _customerService.Assign(assign);
             return Ok();
         }
+
+        [HttpPost("deAssign")]
+        public async Task<IActionResult> DeAssign(CustomerDealerMapping assign)
+        {
+            var tenant = Helper.GetTenant(HttpContext);
+            assign.TenantId = tenant.TenantId;
+            assign.CreatedBy = tenant.Id;
+            _customerService.DeAssign(assign);
+            return Ok();
+        }
         [HttpPost("Save")]
         public async Task<IActionResult> Save(CustomerDto customerDto)
         {

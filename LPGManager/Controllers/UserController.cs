@@ -3,12 +3,14 @@ using LPGManager.Common;
 using LPGManager.Data.Services;
 using LPGManager.Dtos;
 using LPGManager.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace LPGManager.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -66,6 +68,72 @@ namespace LPGManager.Controllers
             }
             return Ok(new { data = result });
         }
+
+        [HttpPost("updatePassword")]
+        public async Task<IActionResult> updatePassword(string oldPassWord, string newPassword)
+        {
+            User result;
+            try
+            {
+                var tenant = Helper.GetTenant(HttpContext);
+                var user = _userService.GetAsync(tenant.Id).Result;
+                if (user.Password==oldPassWord)
+                {
+                    user.Password = newPassword;
+                }
+                else
+                {
+                    return Ok("Previews password not correct");
+                }
+                result = _userService.UpdateAsync(user ?? null).Result;
+                return Ok(new
+                {
+                    id = result.Id,
+                    Name = result.Name,
+                    UserId = result.UserId,
+                    Address = result.Address,
+                    Phone = result.Phone,
+                    userType = result.UserType
+                });
+
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(
+                  $"{ex}.");
+            }
+            return Ok(new { data = result });
+        }
+
+        [HttpPost("UpdateUser")]
+        public async Task<IActionResult> UpdateUser(UserDtos userDtos)
+        {
+            User result;
+            try
+            {
+                var tenant = Helper.GetTenant(HttpContext);
+                var user = _userService.GetAsync(tenant.Id).Result;
+                user.Address = userDtos.Address;
+                user.Phone = userDtos.Phone;
+                result = _userService.UpdateAsync(user ?? null).Result;
+                return Ok(new
+                {
+                    id = result.Id,
+                    Name = result.Name,
+                    UserId = result.UserId,
+                    Address = result.Address,
+                    Phone = result.Phone,
+                    userType = result.UserType
+                });
+
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(
+                  $"{ex}.");
+            }
+            return Ok(new { data = result });
+        }
         [HttpPost("login")]
         public async Task<IActionResult> Login(string userId,string password)
         {
@@ -80,6 +148,8 @@ namespace LPGManager.Controllers
                     id=result.Id,
                     Name=result.Name,
                     UserId=result.UserId,
+                    Address = result.Address,
+                    Phone = result.Phone,
                     userType=result.UserType,
                     expiration = token.ValidTo
                 });
