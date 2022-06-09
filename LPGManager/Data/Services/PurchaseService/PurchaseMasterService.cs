@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LPGManager.Common;
 using LPGManager.Dtos;
+using LPGManager.Interfaces.InventoryInterface;
 using LPGManager.Interfaces.PurchasesInterface;
 using LPGManager.Interfaces.UnitOfWorkInterface;
 using LPGManager.Models;
@@ -17,14 +18,15 @@ namespace LPGManager.Data.Services.PurchaseService
         private IGenericRepository<PurchaseDetails> _purchaseDetailsRepository;
         private IGenericRepository<Inventory> _inventoryRepository;
         private IGenericRepository<Company> _companyRepository;
-
-        public PurchaseMasterService(IMapper mapper, IGenericRepository<PurchaseMaster> purchaseMasterRepository, IGenericRepository<PurchaseDetails> purchaseDetailsRepository, IGenericRepository<Inventory> inventoryRepository, IGenericRepository<Company> companyRepository)
+        private IInventoryService _inventoryService;
+        public PurchaseMasterService(IInventoryService inventoryService,IMapper mapper, IGenericRepository<PurchaseMaster> purchaseMasterRepository, IGenericRepository<PurchaseDetails> purchaseDetailsRepository, IGenericRepository<Inventory> inventoryRepository, IGenericRepository<Company> companyRepository)
         {
             _purchaseMasterRepository=purchaseMasterRepository;
             _purchaseDetailsRepository = purchaseDetailsRepository;
             _inventoryRepository=inventoryRepository;
             _companyRepository = companyRepository;
             _mapper = mapper;
+            _inventoryService = inventoryService;
 
         }
         public PurchaseMaster AddAsync(PurchaseMasterDtos model)
@@ -39,16 +41,23 @@ namespace LPGManager.Data.Services.PurchaseService
                     purchase.InvoiceDate = Helper.ToEpoch(DateTime.Now);
                     purchase.TotalPrice = model.PurchaseDetails.Sum(a => a.Quantity * a.Price);
                     purchase.TotalCommission = model.PurchaseDetails.Sum(a => a.Commission * a.Quantity);
-
-                    var res = _purchaseMasterRepository.Insert(purchase);
-                    _purchaseMasterRepository.Save();
+                    // if empty bottle not available then return
+                    foreach (var item in model.PurchaseDetails.Where(a => a.ProductName==ProductNameEnum.Refill.ToString()))
+                    {
+                        var isBottlePurchasing = model.PurchaseDetails.Where(a => a.ProductName == ProductNameEnum.Bottle.ToString() && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType);
+                        if (isBottlePurchasing!=null && isBottlePurchasing.Sum(a=>a.Quantity)>=item.Quantity)
+                        {
+                            continue;
+                        }
+                        var data=_inventoryService.Get(model.TenantId, item.CompanyId, item.ProductType, item.Size);
+                        if (data==null || data.EmptyBottle<item.Quantity)
+                        {
+                            throw new Exception("Empty bottle qty is not enough to store riffle");
+                        }
+                    }
                     foreach (var item in model.PurchaseDetails)
                     {
-                        //var purchasedetails = _mapper.Map<PurchaseDetails>(item);
-                        //purchasedetails.PurchaseMasterId = res.Id;
-                        //_purchaseDetailsRepository.Insert(purchasedetails);
-                      //  _inventoryRepository.Save();
-                        var inv = _inventoryRepository.FindBy(a=>a.ProductName==item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId== 1 && a.TenantId == model.TenantId).FirstOrDefault();
+                        var inv = _inventoryRepository.FindBy(a => a.ProductName == item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId == 1 && a.TenantId == model.TenantId).FirstOrDefault();
                         if (inv != null)
                         {
                             inv.Quantity += item.Quantity;
@@ -81,6 +90,9 @@ namespace LPGManager.Data.Services.PurchaseService
                         }
                         _inventoryRepository.Save();
                     }
+
+                    var res = _purchaseMasterRepository.Insert(purchase);
+                    _purchaseMasterRepository.Save();
                 }
                 return null;
             }

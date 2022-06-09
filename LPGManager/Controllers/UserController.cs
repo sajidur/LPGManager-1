@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LPGManager.Common;
 using LPGManager.Data.Services;
+using LPGManager.Data.Services.CustomerService;
 using LPGManager.Dtos;
 using LPGManager.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -19,12 +20,14 @@ namespace LPGManager.Controllers
         private readonly IMapper _mapper;
         private ITokenGeneratorService _tokenGeneratorService;
         private ITenantService _tenantService;
-        public UserController(ITenantService _tenantService,ITokenGeneratorService tokenGeneratorService,IMapper mapper, IUserService userService)
+        private ICustomerService _customerService;
+        public UserController(ICustomerService customerService,ITenantService _tenantService,ITokenGeneratorService tokenGeneratorService,IMapper mapper, IUserService userService)
         {
             _userService = userService;
             _mapper = mapper;
             _tokenGeneratorService = tokenGeneratorService;
             this._tenantService = _tenantService;
+            _customerService = customerService;
         }
         // GET: api/<PurchaseController>      
         [HttpGet("GetAll")]
@@ -34,6 +37,8 @@ namespace LPGManager.Controllers
             var data = await _userService.GetAllAsync(tenant.TenantId);
             return Ok(data);
         }
+
+        [AllowAnonymous]
         [HttpPost("Save")]
         public async Task<IActionResult> Save(UserDtos userDto)
         {
@@ -70,16 +75,16 @@ namespace LPGManager.Controllers
         }
 
         [HttpPost("updatePassword")]
-        public async Task<IActionResult> updatePassword(string oldPassWord, string newPassword)
+        public async Task<IActionResult> updatePassword(PasswordUpdateDtos model)
         {
             User result;
             try
             {
                 var tenant = Helper.GetTenant(HttpContext);
                 var user = _userService.GetAsync(tenant.Id).Result;
-                if (user.Password==oldPassWord)
+                if (user.Password== model.oldPassWord)
                 {
-                    user.Password = newPassword;
+                    user.Password = model.newPassword;
                 }
                 else
                 {
@@ -115,6 +120,7 @@ namespace LPGManager.Controllers
                 var user = _userService.GetAsync(tenant.Id).Result;
                 user.Address = userDtos.Address;
                 user.Phone = userDtos.Phone;
+                user.Name = userDtos.Name;
                 result = _userService.UpdateAsync(user ?? null).Result;
                 return Ok(new
                 {
@@ -134,6 +140,7 @@ namespace LPGManager.Controllers
             }
             return Ok(new { data = result });
         }
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login(string userId,string password)
         {
@@ -141,6 +148,10 @@ namespace LPGManager.Controllers
             try
             {
                 result = _userService.Login(userId, password).Result.FirstOrDefault();
+                if (result==null)
+                {
+                    return Ok (new { data = "Password not match" });
+                }
                 var token=_tokenGeneratorService.GetToken(result);
                 return Ok(new
                 {

@@ -7,11 +7,12 @@ namespace LPGManager.Data.Services.CustomerService
     {
         private IGenericRepository<CustomerEntity> _customerRepository;
         private IGenericRepository<CustomerDealerMapping> _mappingRepository;
-
-        public CustomerService(IGenericRepository<CustomerEntity> customerRepository, IGenericRepository<CustomerDealerMapping> mappingRepository)
+        private IGenericRepository<Tenant> _tenantService;
+        public CustomerService(IGenericRepository<Tenant> tenantService,IGenericRepository<CustomerEntity> customerRepository, IGenericRepository<CustomerDealerMapping> mappingRepository)
         {
             this._customerRepository = customerRepository;
             this._mappingRepository = mappingRepository;
+            _tenantService = tenantService;
         }
 
         public CustomerEntity GetByAsync(long tenantId)

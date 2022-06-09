@@ -6,6 +6,7 @@ namespace LPGManager.Data.Services
     {
 
         Task<IEnumerable<Tenant>> GetAllAsync();
+        IEnumerable<Tenant> GetByAsync(List<long> tenantIds, User user);
         Task<Tenant> GetAsync(long id);
         Task<Tenant> AddAsync(Tenant supplier);
         Task<Tenant> UpdateAsync(Tenant model);
@@ -31,6 +32,11 @@ namespace LPGManager.Data.Services
             _genericRepository.Save();
 
             return tenant;
+        }
+        public IEnumerable<Tenant> GetByAsync(List<long> tenantIds, User user)
+        {
+            var searchResult = _genericRepository.FindBy(a => tenantIds.Contains(a.Id));
+            return searchResult;
         }
         public async Task<IEnumerable<Tenant>> GetAllAsync()
         {

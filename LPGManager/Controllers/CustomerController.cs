@@ -3,6 +3,7 @@ using LPGManager.Common;
 using LPGManager.Data.Services;
 using LPGManager.Data.Services.CustomerService;
 using LPGManager.Dtos;
+using LPGManager.Interfaces.InventoryInterface;
 using LPGManager.Interfaces.UnitOfWorkInterface;
 using LPGManager.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -16,12 +17,14 @@ namespace LPGManager.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerService _customerService;
+        private readonly IInventoryService _inventoryService;
         private readonly ITenantService _tenantService;
         private readonly IMapper _mapper;
-        public CustomerController(IMapper mapper, ICustomerService customerService, ITenantService tenantService)
+        public CustomerController(IMapper mapper, ICustomerService customerService, ITenantService tenantService, IInventoryService inventoryService)
         {
             _customerService = customerService;
             _tenantService = tenantService;
+            _inventoryService = inventoryService;
             _mapper = mapper;
         }
         // GET: api/<PurchaseController>      
@@ -39,6 +42,18 @@ namespace LPGManager.Controllers
             var tenant = Helper.GetTenant(HttpContext);
             var data = _customerService.SearchAsync(customerName, tenant);
             return Ok(data);
+        }
+
+        [HttpGet("RetailerSearch")]
+        public async Task<IActionResult> RetailerSearch(int companyId=0,string? type="", string? size="")
+        {
+            var tenant = Helper.GetTenant(HttpContext);
+            var inventory = _inventoryService.GetInventory(companyId, type, size);
+            if (inventory.Count>0)
+            {
+                return Ok(_tenantService.GetByAsync(inventory.Select(a=>a.TenantId).ToList(),tenant));
+            }
+            return Ok(null);
         }
 
         [HttpPost("Assign")]

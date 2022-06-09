@@ -59,6 +59,24 @@ namespace LPGManager.Data.Services.InventoryService
             _inventoryRepository.Save();
         }
 
+        public List<Inventory> GetInventory(int companyId,string type,string size)
+        {
+            var res = _inventoryRepository.FindBy(a=>a.Quantity!=0);
+
+            if (companyId!=0)
+            {
+                res=res.Where(a => a.CompanyId == companyId);
+            }
+            if (!string.IsNullOrWhiteSpace(type))
+            {
+                res=res.Where(a => a.ProductType == type);
+            }
+            if (!string.IsNullOrWhiteSpace(size))
+            {
+                res= res.Where(a => a.Size == size);
+            }
+            return res.ToList();
+        }
         public List<InventoryDtos> GetAllAsync(long tenantId)
         {
             var res = _inventoryRepository.FindBy(a=>a.TenantId==tenantId).ToList();
@@ -144,6 +162,12 @@ namespace LPGManager.Data.Services.InventoryService
                         item.SupportQty = refilSales.SupportQty;
                         item.ExchangeQty = refilSales.ExchangeQty;
                     }
+                    else
+                    {
+                        item.EmptyBottle = item.Quantity;
+                        item.SupportQty = item.SupportQty;
+                        item.ExchangeQty = item.SupportQty;
+                    }
                 }
                 finalResult.Add(item);
             }
@@ -164,15 +188,22 @@ namespace LPGManager.Data.Services.InventoryService
             }
             return finalResult;
         }
-        public async Task<Inventory> GetAsync(long id)
+        public InventoryDtos Get(long tenantId, long companyId,string productType,string size)
         {
-            //var data = await _dbContext.PurchaseMasters
-            //           .Include(c => c.PurchasesDetails)
-            //           .Include(c => c.SupplierId).FirstOrDefaultAsync(i => i.Id == id);
-            //if (data == null)
-            //    throw new ArgumentException("Purchase Details is not exist");
-            //return (data);
-            return null;
+            var res = _inventoryRepository.FindBy(a => a.TenantId == tenantId && a.CompanyId == companyId &&
+                                                  a.ProductType == productType && a.Size == size).ToList();
+            var data = _mapper.Map<List<InventoryDtos>>(res);
+            var finalResult = new List<InventoryDtos>();
+            //bottle
+            var bottle = data.Where(a => a.ProductName == ProductNameEnum.Bottle.ToString()).FirstOrDefault();
+            var refilSales = res.Where(a => a.ProductName == ProductNameEnum.Refill.ToString()).FirstOrDefault();
+            if (refilSales != null)
+            {
+                bottle.EmptyBottle = bottle.Quantity - refilSales.Quantity - refilSales.SupportQty + refilSales.ExchangeQty;
+                bottle.SupportQty = refilSales.SupportQty;
+                bottle.ExchangeQty = refilSales.ExchangeQty;
+            }
+            return bottle;
         }
 
         public async Task<Inventory> UpdateAsync(InventoryDtos model)
