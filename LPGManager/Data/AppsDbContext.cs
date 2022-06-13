@@ -9,7 +9,7 @@ namespace LPGManager.Data
     {
         public AppsDbContext(DbContextOptions<AppsDbContext> options)
             : base(options)
-        {
+        {           
         }
 
         public DbSet<PurchaseDetails> PurchasesDetails { get; set; }
@@ -36,6 +36,7 @@ namespace LPGManager.Data
         public DbSet<CustomerDealerMapping> CustomerDealersMapping { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasDefaultSchema("public");
             modelBuilder.Entity<PurchaseDetails>()
                 .HasOne(p => p.PurchaseMaster)
                 .WithMany(b => b.PurchaseDetails)

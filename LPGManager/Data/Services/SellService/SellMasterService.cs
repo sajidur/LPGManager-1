@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LPGManager.Common;
 using LPGManager.Dtos;
+using LPGManager.Interfaces.InventoryInterface;
 using LPGManager.Interfaces.SellsInterface;
 using LPGManager.Models;
 
@@ -18,6 +19,8 @@ namespace LPGManager.Data.Services.SellService
         private IGenericRepository<CustomerEntity> _customerRepository;
         private IGenericRepository<ReturnMaster> _returnMaster;
         private IGenericRepository<ReturnDetails> _returnDetails;
+        private IInventoryService _inventoryService;
+
         public SellMasterService(IMapper mapper, 
             IGenericRepository<SellMaster> sellMasterRepository, 
             IGenericRepository<SellDetails> sellsDetailRepository, 
@@ -25,7 +28,8 @@ namespace LPGManager.Data.Services.SellService
             IGenericRepository<Company> companyRepository, 
             IGenericRepository<CustomerEntity> customerRepository,
             IGenericRepository<ReturnMaster> retrunMaster,
-            IGenericRepository<ReturnDetails> returnDetails)
+            IGenericRepository<ReturnDetails> returnDetails,
+            IInventoryService inventoryService)
         {
             _sellMasterRepository = sellMasterRepository;
             _sellDetailsRepository = sellsDetailRepository;
@@ -35,7 +39,7 @@ namespace LPGManager.Data.Services.SellService
             _mapper = mapper;
             _returnMaster = retrunMaster;
             _returnDetails = returnDetails;
-              
+            _inventoryService = inventoryService;
 
         }
         public SellMaster AddAsync(SellMasterDtos model)
@@ -46,6 +50,25 @@ namespace LPGManager.Data.Services.SellService
                 var sell = _mapper.Map<SellMaster>(model);
                 if (model.SellsDetails != null)
                 {
+                    foreach (var sellDetails in model.SellsDetails)
+                    {
+                        if (sellDetails.ProductName==ProductNameEnum.Bottle.ToString())
+                        {
+                            var data = _inventoryService.Get(model.TenantId, sellDetails.CompanyId, sellDetails.ProductType, sellDetails.Size);
+                            var riffle = model.SellsDetails.Where(a => a.ProductName == ProductNameEnum.Refill.ToString() && a.Size == sellDetails.Size && a.CompanyId == sellDetails.CompanyId && a.ProductType == sellDetails.ProductType).FirstOrDefault();
+                            if (riffle != null)
+                            {
+                                if (data == null || data.EmptyBottle + riffle.Quantity < sellDetails.Quantity)
+                                {
+                                    throw new Exception("Empty bottle qty is not enough to store riffle");
+                                }
+                            }
+                            else if (data == null || data.EmptyBottle < sellDetails.Quantity)
+                            {
+                                throw new Exception("Empty bottle qty is not enough to store riffle");
+                            }
+                        }
+                    }
                     sell.InvoiceNo = GenerateInvoice();
                     sell.InvoiceDate = Helper.ToEpoch(DateTime.Now);
                     sell.TotalPrice = model.SellsDetails.Sum(a => a.Quantity * a.Price);
@@ -54,19 +77,25 @@ namespace LPGManager.Data.Services.SellService
                     _sellMasterRepository.Save();
                     foreach (var item in model.SellsDetails)
                     {
-                      //  var selldetails = _mapper.Map<SellDetails>(item);
-                      //  selldetails.SellMasterId = res.Id;
-                     //   _sellDetailsRepository.Insert(selldetails);
-                        var inv = _inventoryRepository.FindBy(a => a.ProductName == item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId == 1 && a.TenantId == model.TenantId).FirstOrDefault();
+                        var inv = _inventoryRepository.FindBy(a => a.ProductName == item.ProductName && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType && a.WarehouseId == 1 && a.TenantId == model.TenantId).FirstOrDefault();         
                         if (inv != null)
                         {
                             if (item.ProductName == ProductNameEnum.Refill.ToString())
                             {
-                                //var bottleInv = _inventoryRepository.FindBy(a => a.ProductName == ProductNameEnum.Bottle.ToString() && a.Size == item.Size && a.CompanyId == item.CompanyId &&a.ProductType==item.ProductType).FirstOrDefault();
-                                //bottleInv.SupportQty += item.Quantity;
-                                //bottleInv.Quantity-=item.Quantity;
-                                //_inventoryRepository.Update(bottleInv);
-                                inv.SupportQty += item.Quantity;
+                                var bottleInv = model.SellsDetails.Where(a => a.ProductName == ProductNameEnum.Bottle.ToString() && a.Size == item.Size && a.CompanyId == item.CompanyId && a.ProductType == item.ProductType).FirstOrDefault();
+                                var supportqty = 0.0m;
+                                if (bottleInv != null)
+                                {
+                                    if (bottleInv.Quantity < inv.Quantity)
+                                    {
+                                        supportqty = item.Quantity - bottleInv.Quantity;
+                                    }
+                                }
+                                else
+                                {
+                                    supportqty = item.Quantity;
+                                }
+                                inv.SupportQty += supportqty;
                             }
                             inv.Quantity -= item.Quantity;
                             inv.SaleQuantity += item.Quantity;
