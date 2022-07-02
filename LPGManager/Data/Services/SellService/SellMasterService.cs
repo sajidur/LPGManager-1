@@ -47,7 +47,6 @@ namespace LPGManager.Data.Services.SellService
             SellMaster result;
             try
             {
-                var sell = _mapper.Map<SellMaster>(model);
                 if (model.SellsDetails != null)
                 {
                     foreach (var sellDetails in model.SellsDetails)
@@ -68,7 +67,31 @@ namespace LPGManager.Data.Services.SellService
                                 throw new Exception("Empty bottle qty is not enough to store riffle");
                             }
                         }
+                        else
+                        {
+                            if (sellDetails.ProductName == ProductNameEnum.Refill.ToString())
+                            {
+                                var riffle = model.SellsDetails.Where(a => a.ProductName == ProductNameEnum.Refill.ToString() && a.Size == sellDetails.Size && a.CompanyId == sellDetails.CompanyId && a.ProductType == sellDetails.ProductType).FirstOrDefault();
+                                var bottleInv = model.SellsDetails.Where(a => a.ProductName == ProductNameEnum.Bottle.ToString() && a.Size == sellDetails.Size && a.CompanyId == sellDetails.CompanyId && a.ProductType == sellDetails.ProductType).FirstOrDefault();
+                                var supportqty = 0.0m;
+                                if (bottleInv != null)
+                                {
+                                    if (bottleInv.Quantity < riffle.Quantity)
+                                    {
+                                        supportqty = sellDetails.Quantity - bottleInv.Quantity;
+                                    }
+                                }
+                                else
+                                {
+                                    supportqty = sellDetails.Quantity;
+                                }
+                                sellDetails.SupportQty += supportqty;
+                            }
+                        }
+                        // support quantity
+
                     }
+                    var sell = _mapper.Map<SellMaster>(model);
                     sell.InvoiceNo = GenerateInvoice();
                     sell.InvoiceDate = Helper.ToEpoch(DateTime.Now);
                     sell.TotalPrice = model.SellsDetails.Sum(a => a.Quantity * a.Price);

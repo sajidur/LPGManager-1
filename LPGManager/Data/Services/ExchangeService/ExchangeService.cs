@@ -52,6 +52,7 @@ namespace LPGManager.Data.Services.ExchangeService
                         {
                             inv.Quantity -= item.Quantity;
                             inv.PurchaseReturn += item.Quantity;
+                            inv.ExchangeQty -= item.Quantity;
                             _inventoryRepository.Update(inv);
                         }
                         else
