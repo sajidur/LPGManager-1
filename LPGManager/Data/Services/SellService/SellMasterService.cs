@@ -191,8 +191,16 @@ namespace LPGManager.Data.Services.SellService
                     details.Company = _companyRepository.GetById(details.CompanyId).Result;
                 }
                 item.Customer = _customerRepository.GetById(item.CustomerId).Result;
-            }           
-            return _mapper.Map<List<SellMasterDtos>>(data);
+            }
+            var sellMasterDetails = _mapper.Map<List<SellMasterDtos>>(data);
+            var returns = _returnMaster.FindBy(a => sellMasterDetails.Select(a => a.Id).Contains(a.SellMasterId)).Include(a => a.ReturnDetails);
+            foreach (var item in sellMasterDetails)
+            {
+                var returnMastre = returns.Where(a => a.SellMasterId == item.Id).FirstOrDefault();
+                var returnMasterDto = _mapper.Map<ReturnMasterDtos>(returnMastre);
+                item.ReturnMaster = returnMasterDto;
+            }
+            return sellMasterDetails;
         }
 
         public List<SellMasterDtos> GetAllAsync(long startDate,long endDate,long tenantId)
@@ -205,9 +213,17 @@ namespace LPGManager.Data.Services.SellService
                 {
                     details.Company = _companyRepository.GetById(details.CompanyId).Result;
                 }
-                item.Customer = _customerRepository.GetById(item.CustomerId).Result;
+                item.Customer = _customerRepository.GetById(item.CustomerId).Result;             
             }
-            return _mapper.Map<List<SellMasterDtos>>(data.Result);
+            var sellMasterDetails= _mapper.Map<List<SellMasterDtos>>(data.Result);
+            var returns=_returnMaster.FindBy(a => sellMasterDetails.Select(a => a.Id).Contains(a.SellMasterId)).Include(a=>a.ReturnDetails);
+            foreach (var item in sellMasterDetails)
+            {
+              var returnMastre = returns.Where(a => a.SellMasterId == item.Id).FirstOrDefault();
+                var returnMasterDto = _mapper.Map<ReturnMasterDtos>(returnMastre);
+                item.ReturnMaster = returnMasterDto;
+            }
+            return sellMasterDetails;
         }
 
         public SellMasterDtos GetAsync(long id)

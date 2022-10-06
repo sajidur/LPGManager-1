@@ -60,6 +60,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenGeneratorService, TokenGeneratorService>();
 builder.Services.AddScoped<IReturnMasterService, ReturnMasterService>();
 builder.Services.AddScoped<ITenantService, TenantService>();
+builder.Services.AddScoped<ISellRequisitionMasterService, SellRequisitionService>();
 
 // Adding Jwt Bearer
 

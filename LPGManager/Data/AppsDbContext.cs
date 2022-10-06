@@ -17,6 +17,8 @@ namespace LPGManager.Data
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<SellDetails> SellsDetails { get; set; }
         public DbSet<SellMaster> SellMasters { get; set; }
+        public DbSet<SellRequisitionDetails> SellRequisitionDetails { get; set; }
+        public DbSet<SellRequisitionMaster> SellRequisitionMasters { get; set; }
         public DbSet<Company> Companies { get; set; }
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<Role> Roles { get; set; }

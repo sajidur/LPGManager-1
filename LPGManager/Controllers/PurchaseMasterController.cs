@@ -12,7 +12,6 @@ namespace LPGManager.Controllers
     [ApiController]
     public class PurchaseMasterController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
         public readonly IMapper _mapper;
         IPurchaseMasterService _masterService;
         public PurchaseMasterController(IPurchaseMasterService masterService,IMapper mapper)
