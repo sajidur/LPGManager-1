@@ -18,8 +18,9 @@ namespace LPGManager.Data.Services.PurchaseService
         private IGenericRepository<PurchaseDetails> _purchaseDetailsRepository;
         private IGenericRepository<Inventory> _inventoryRepository;
         private IGenericRepository<Company> _companyRepository;
+        private IGenericRepository<Supplier> _supplierRepository;
         private IInventoryService _inventoryService;
-        public PurchaseMasterService(IInventoryService inventoryService,IMapper mapper, IGenericRepository<PurchaseMaster> purchaseMasterRepository, IGenericRepository<PurchaseDetails> purchaseDetailsRepository, IGenericRepository<Inventory> inventoryRepository, IGenericRepository<Company> companyRepository)
+        public PurchaseMasterService(IInventoryService inventoryService,IMapper mapper, IGenericRepository<PurchaseMaster> purchaseMasterRepository, IGenericRepository<PurchaseDetails> purchaseDetailsRepository, IGenericRepository<Inventory> inventoryRepository, IGenericRepository<Company> companyRepository, IGenericRepository<Supplier> supplierRepository)
         {
             _purchaseMasterRepository=purchaseMasterRepository;
             _purchaseDetailsRepository = purchaseDetailsRepository;
@@ -27,6 +28,7 @@ namespace LPGManager.Data.Services.PurchaseService
             _companyRepository = companyRepository;
             _mapper = mapper;
             _inventoryService = inventoryService;
+            _supplierRepository = supplierRepository;
 
         }
         public PurchaseMaster AddAsync(PurchaseMasterDtos model)
@@ -132,7 +134,12 @@ namespace LPGManager.Data.Services.PurchaseService
                     details.Company = _companyRepository.GetById(details.CompanyId).Result;
                 }
             }
-            return _mapper.Map<List<PurchaseMasterDtos>>(data);
+            var purchases= _mapper.Map<List<PurchaseMasterDtos>>(data);
+            foreach (var item in purchases)
+            {
+                item.Supplier= _mapper.Map<SupplierDtos>(_supplierRepository.GetById(item.SupplierId).Result);
+            }
+            return purchases;
         }
         public List<PurchaseMasterDtos> GetAllAsync(long startDate, long endDate, long tenantId)
         {

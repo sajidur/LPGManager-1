@@ -13,6 +13,8 @@
         public decimal TotalCommission { get; set; }
         public decimal DueAdvance { get; set; }
         public string PaymentType { get; set; }
+        public DateTime ReceiveDate { get; set; }
+        public int OrderId { get; set; }
         public string? Notes { get; set; }
         public List<PurchaseDetails> PurchaseDetails { get; set; }
     }

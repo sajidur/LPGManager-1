@@ -10,6 +10,8 @@
         public decimal DueAdvance { get; set; }
         public string PaymentType { get; set; }
         public string? Notes { get; set; }
+        public DateTime DeliveryDate { get; set; }
+        public int OrderId { get; set; }
         public CustomerEntity Customer { get; set; }
         public List<SellDetails> SellsDetails { get; set; }
     }
