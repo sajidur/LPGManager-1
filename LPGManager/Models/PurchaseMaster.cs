@@ -14,7 +14,8 @@
         public decimal DueAdvance { get; set; }
         public string PaymentType { get; set; }
         public DateTime ReceiveDate { get; set; }
-        public int OrderId { get; set; }
+        public string ReceiveBy { get; set; }
+        public string OrderBy { get; set; }
         public string? Notes { get; set; }
         public List<PurchaseDetails> PurchaseDetails { get; set; }
     }

@@ -16,8 +16,8 @@ namespace LPGManager.Models
         public decimal FilledQuantity { get; set; }
         public long SellRequisitionMasterId { get; set; }
         [JsonIgnore]
-        public Company Company { get; set; }
+        public Company? Company { get; set; }
         [JsonIgnore]
-        public SellRequisitionMaster SellRequisitionMaster { get; set; }
+        public SellRequisitionMaster? SellRequisitionMaster { get; set; }
     }
 }

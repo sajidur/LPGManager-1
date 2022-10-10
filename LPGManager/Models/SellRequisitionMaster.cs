@@ -8,7 +8,7 @@
         public decimal TotalPrice { get; set; }
         public decimal Discount { get; set; }
         public string? Notes { get; set; }
-        public CustomerEntity Customer { get; set; }
+        public CustomerEntity? Customer { get; set; }
         public List<SellRequisitionDetails> SellRequisitionDetails { get; set; }
     }
 }
