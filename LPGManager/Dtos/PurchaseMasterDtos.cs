@@ -14,7 +14,7 @@ namespace LPGManager.Dtos
         public decimal DueAdvance { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please provide valid PaymentType")]
         public string PaymentType { get; set; }
-        public DateTime ReceiveDate { get; set; }
+        public long ReceiveDate { get; set; }
         public string? ReceiveBy { get; set; }
         public string? OrderBy { get; set; }
         public string? Notes { get; set; }

@@ -10,7 +10,7 @@
         public decimal DueAdvance { get; set; }
         public string PaymentType { get; set; }
         public string? Notes { get; set; }
-        public DateTime DeliveryDate { get; set; }
+        public long DeliveryDate { get; set; }
         public string ReceiveBy { get; set; }
         public string OrderBy { get; set; }
 

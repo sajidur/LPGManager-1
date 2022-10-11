@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LPGManager.Migrations
 {
     [DbContext(typeof(AppsDbContext))]
-    [Migration("20221006063748_sell requisition")]
-    partial class sellrequisition
+    [Migration("20221011163425_longmig")]
+    partial class longmig
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -466,9 +466,20 @@ namespace LPGManager.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("text");
 
+                    b.Property<string>("OrderBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("PaymentType")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<string>("ReceiveBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long>("ReceiveDate")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("SupplierId")
                         .HasColumnType("bigint");
@@ -762,6 +773,9 @@ namespace LPGManager.Migrations
                     b.Property<long>("CustomerId")
                         .HasColumnType("bigint");
 
+                    b.Property<long>("DeliveryDate")
+                        .HasColumnType("bigint");
+
                     b.Property<decimal>("Discount")
                         .HasColumnType("numeric");
 
@@ -781,7 +795,15 @@ namespace LPGManager.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("text");
 
+                    b.Property<string>("OrderBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("PaymentType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ReceiveBy")
                         .IsRequired()
                         .HasColumnType("text");
 

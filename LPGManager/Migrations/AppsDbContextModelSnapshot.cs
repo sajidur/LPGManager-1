@@ -476,8 +476,8 @@ namespace LPGManager.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("ReceiveDate")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<long>("ReceiveDate")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("SupplierId")
                         .HasColumnType("bigint");
@@ -771,8 +771,8 @@ namespace LPGManager.Migrations
                     b.Property<long>("CustomerId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("DeliveryDate")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<long>("DeliveryDate")
+                        .HasColumnType("bigint");
 
                     b.Property<decimal>("Discount")
                         .HasColumnType("numeric");

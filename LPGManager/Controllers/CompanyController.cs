@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LPGManager.Controllers
 {
-    [Authorize]
+   // [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CompanyController : ControllerBase
