@@ -19,6 +19,10 @@ namespace LPGManager.Data.Services.CustomerService
         {
             return _customerRepository.FindBy(a=>a.TenantId==tenantId).FirstOrDefault();
         }
+        public Task<CustomerEntity> GetById(int Id)
+        {
+            return _customerRepository.GetById(Id);
+        }
         public IEnumerable<CustomerEntity> SearchAsync(string customerName,User user)
         {
             var alreadyAssigned = CustomerDealerMappingsList(user);
@@ -35,6 +39,7 @@ namespace LPGManager.Data.Services.CustomerService
             var list= _mappingRepository.FindBy(a => a.TenantId == tenant.TenantId).Select(a=>a.RefCustomerId).ToList();
             return _customerRepository.FindBy(a => list.Contains(a.Id)&&a.CustomerType!=tenant.UserType);
         }
+
         public CustomerEntity Save(CustomerEntity customerEntity)
         {
             _customerRepository.Insert(customerEntity);
@@ -89,6 +94,7 @@ namespace LPGManager.Data.Services.CustomerService
     public interface ICustomerService
     {
         CustomerEntity GetByAsync(long tenantId);
+        Task<CustomerEntity> GetById(int Id);
         IEnumerable<CustomerEntity> SearchAsync(string customerName,User user);
         CustomerEntity Save(CustomerEntity customerEntity);
         IEnumerable<CustomerEntity> CustomerDealerMappingsList(User user);

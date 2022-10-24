@@ -96,6 +96,7 @@ namespace LPGManager.Data.Services.SellService
                     sell.InvoiceDate = Helper.ToEpoch(DateTime.Now);
                     sell.TotalPrice = model.SellsDetails.Sum(a => a.Quantity * a.Price);
                     sell.Discount = model.SellsDetails.Sum(a => a.Discount * a.Quantity);
+                    sell.DeliveryStatus = DeliveryEnum.Pending.ToString();
                     var res = _sellMasterRepository.Insert(sell);
                     _sellMasterRepository.Save();
                     foreach (var item in model.SellsDetails)
@@ -126,6 +127,7 @@ namespace LPGManager.Data.Services.SellService
                         }
                         _inventoryRepository.Save();
                     }
+                    return res;
                 }
                 return null;
             }
@@ -202,6 +204,28 @@ namespace LPGManager.Data.Services.SellService
             }
             return sellMasterDetails;
         }
+        public List<SellMasterDtos> GetAllAsyncByCustomerId(int customerId)
+        {
+            var data = _sellMasterRepository.FindBy(a => a.CustomerId == customerId).ToList();
+            foreach (var item in data)
+            {
+                item.SellsDetails = _sellDetailsRepository.FindBy(a => a.SellMasterId == item.Id).ToList();
+                foreach (var details in item.SellsDetails)
+                {
+                    details.Company = _companyRepository.GetById(details.CompanyId).Result;
+                }
+                item.Customer = _customerRepository.GetById(item.CustomerId).Result;
+            }
+            var sellMasterDetails = _mapper.Map<List<SellMasterDtos>>(data);
+            var returns = _returnMaster.FindBy(a => sellMasterDetails.Select(a => a.Id).Contains(a.SellMasterId)).Include(a => a.ReturnDetails);
+            foreach (var item in sellMasterDetails)
+            {
+                var returnMastre = returns.Where(a => a.SellMasterId == item.Id).FirstOrDefault();
+                var returnMasterDto = _mapper.Map<ReturnMasterDtos>(returnMastre);
+                item.ReturnMaster = returnMasterDto;
+            }
+            return sellMasterDetails;
+        }
 
         public List<SellMasterDtos> GetAllAsync(long startDate,long endDate,long tenantId)
         {
@@ -245,6 +269,27 @@ namespace LPGManager.Data.Services.SellService
             var returnMasterDto = _mapper.Map<ReturnMasterDtos>(returnMaster);
             dataDto.ReturnMaster = returnMasterDto;
             return dataDto;
+        }
+
+        public async Task<SellMaster> Delivery(DeliveryDtos delivery)
+        {
+            try
+            {
+                var sellMaster = _sellMasterRepository.GetById(delivery.SellmasterId).Result;
+                sellMaster.DeliveryDate = delivery.DeliveryDate;
+                sellMaster.DeliveryStatus = DeliveryEnum.Delivered.ToString();
+                sellMaster.ReceiveBy=delivery.ReceiveBy;
+                sellMaster.DeliveryBy = delivery.DeliveryBy;
+                _sellMasterRepository.Update(sellMaster);
+                _sellMasterRepository.Save();
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(
+                  $"{ex}.");
+            }
+            return null;
         }
 
         public async Task<SellMaster> UpdateAsync(SellMasterDtos model)

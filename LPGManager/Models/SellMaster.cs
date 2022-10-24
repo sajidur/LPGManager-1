@@ -13,8 +13,9 @@
         public long DeliveryDate { get; set; }
         public string ReceiveBy { get; set; }
         public string OrderBy { get; set; }
-
+        public string DeliveryStatus { get; set; }
         public CustomerEntity Customer { get; set; }
         public List<SellDetails> SellsDetails { get; set; }
+        public string DeliveryBy { get; set; }
     }
 }

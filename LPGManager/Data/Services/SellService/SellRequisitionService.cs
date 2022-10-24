@@ -63,7 +63,7 @@ namespace LPGManager.Data.Services.SellService
 
         public List<SellRequisitionMaster> GetAllAsync(long tenantId)
         {
-            var data = _sellMasterRepository.FindBy(a => a.TenantId == tenantId).ToList();
+            var data = _sellMasterRepository.FindBy(a => a.TenantId == tenantId && a.IsActive==1).ToList();
             foreach (var item in data)
             {
                 item.SellRequisitionDetails = _sellDetailsRepository.FindBy(a => a.SellRequisitionMasterId == item.Id).ToList();
@@ -76,9 +76,29 @@ namespace LPGManager.Data.Services.SellService
             return data;
         }
 
+        public SellRequisitionMaster UpdateAsync(SellRequisitionMaster model)
+        {
+            try
+            {
+                _sellMasterRepository.Update(model);
+                _sellMasterRepository.Save();
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(
+                  $"{ex}.");
+            }
+            return null;
+        }
+
         public SellRequisitionMaster GetAsync(long id)
         {
             var data = _sellMasterRepository.GetById(id).Result;
+            if (data==null)
+            {
+                return data;
+            }
             data.SellRequisitionDetails = _sellDetailsRepository.FindBy(a => a.SellRequisitionMasterId == id).ToList();
             foreach (var details in data.SellRequisitionDetails)
             {
@@ -94,6 +114,7 @@ namespace LPGManager.Data.Services.SellService
         List<SellRequisitionMaster> GetAllAsync(long tenantId);
         SellRequisitionMaster GetAsync(long id);
         SellRequisitionMaster AddAsync(SellRequisitionMaster model);
+        SellRequisitionMaster UpdateAsync(SellRequisitionMaster model);
         Task DeleteAsync(long id);
     }
 

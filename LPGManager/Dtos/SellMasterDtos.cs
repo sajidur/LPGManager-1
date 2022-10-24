@@ -16,6 +16,9 @@ namespace LPGManager.Dtos
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please provide valid PaymentType")]
         public string PaymentType { get; set; }
         public long DeliveryDate { get; set; }
+        public string DeliveryStatus { get; set; }
+        public long DeliveryConfirmationDate { get; set; }
+        public string DeliveryBy { get; set; }
         public string? ReceiveBy { get; set; }
         public string? OrderBy { get; set; }
         public int SellRequisitionMasterId { get; set; }

@@ -7,10 +7,12 @@ namespace LPGManager.Interfaces.SellsInterface
     {
      
         List<SellMasterDtos> GetAllAsync(long tenantId);
+        List<SellMasterDtos> GetAllAsyncByCustomerId(int customerId);
         List<SellMasterDtos> GetAllAsync(long startDate, long endDate, long tenantId);
         SellMasterDtos GetAsync(long id);
         SellMaster AddAsync(SellMasterDtos model);
         Task<SellMaster> UpdateAsync(SellMasterDtos model);
         Task DeleteAsync(long id);
+        Task<SellMaster> Delivery(DeliveryDtos sellMaster);
     }
 }

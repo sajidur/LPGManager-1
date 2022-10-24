@@ -13,4 +13,9 @@
         Company=4
         //1=for retailer 2=consumer 3=supplier/dealer  4=company
     }
+    public enum DeliveryEnum
+    {
+        Pending,
+        Delivered
+    }
 }

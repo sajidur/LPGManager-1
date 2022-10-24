@@ -16,11 +16,13 @@ namespace LPGManager.Controllers
     {
         private readonly ISellMasterService _sellService;
         private readonly IReturnMasterService _returnMaster;
+        private readonly ISellRequisitionMasterService _sellRequisitionService;
 
-        public SellMasterController(ISellMasterService sellService, IReturnMasterService returnMaster)
+        public SellMasterController(ISellMasterService sellService, IReturnMasterService returnMaster, ISellRequisitionMasterService sellRequisitionService)
         {
             _sellService = sellService;
             _returnMaster = returnMaster;
+            _sellRequisitionService = sellRequisitionService;
         }
         // GET: api/<PurchaseMasterController(>        
         [HttpGet]
@@ -57,6 +59,12 @@ namespace LPGManager.Controllers
                 model.TenantId = tenant.TenantId;
                 model.CreatedBy = tenant.Id;
                 result = _sellService.AddAsync(model);
+                var requisition=_sellRequisitionService.GetAsync(model.SellRequisitionMasterId);
+                if (requisition!=null)
+                {
+                    requisition.IsActive = 0;
+                    _sellRequisitionService.UpdateAsync(requisition);
+                }
             }
             catch (Exception ex)
             {
@@ -66,6 +74,24 @@ namespace LPGManager.Controllers
 
             return Ok(new { data = result });
         }
+
+        [HttpPost("Delivery")]
+        public async Task<IActionResult> Delivery(DeliveryDtos delivery)
+        {
+            SellMaster result;
+            try
+            {
+                result= _sellService.Delivery(delivery).Result;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(
+                  $"{ex}.");
+            }
+
+            return Ok(new { data = result });
+        }
+
         [HttpPost("return")]
         public async Task<IActionResult> Return(ReturnMasterDtos model)
         {
