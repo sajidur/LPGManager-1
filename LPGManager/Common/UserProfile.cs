@@ -23,6 +23,7 @@ namespace LPGManager.Common
             CreateMap<ReturnDetails, ReturnDetailsDto>().ReverseMap();
             CreateMap<ExchangeMaster, ExchangeMasterDtos>().ReverseMap();
             CreateMap<ExchangeDetails, ExchangeDetailsDto>().ReverseMap();
+            CreateMap<LedgerPosting, LedgerPostingDtos>().ReverseMap();
 
         }
     }

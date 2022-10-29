@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LPGManager.Common;
+using LPGManager.Data.Services.Ledger;
 using LPGManager.Dtos;
 using LPGManager.Interfaces.InventoryInterface;
 using LPGManager.Interfaces.SellsInterface;
@@ -20,7 +21,7 @@ namespace LPGManager.Data.Services.SellService
         private IGenericRepository<ReturnMaster> _returnMaster;
         private IGenericRepository<ReturnDetails> _returnDetails;
         private IInventoryService _inventoryService;
-
+        private ILedgerPostingService _ledgerPostingService;
         public SellMasterService(IMapper mapper, 
             IGenericRepository<SellMaster> sellMasterRepository, 
             IGenericRepository<SellDetails> sellsDetailRepository, 
@@ -29,7 +30,8 @@ namespace LPGManager.Data.Services.SellService
             IGenericRepository<CustomerEntity> customerRepository,
             IGenericRepository<ReturnMaster> retrunMaster,
             IGenericRepository<ReturnDetails> returnDetails,
-            IInventoryService inventoryService)
+            IInventoryService inventoryService,
+            ILedgerPostingService ledgerPostingService)
         {
             _sellMasterRepository = sellMasterRepository;
             _sellDetailsRepository = sellsDetailRepository;
@@ -40,6 +42,7 @@ namespace LPGManager.Data.Services.SellService
             _returnMaster = retrunMaster;
             _returnDetails = returnDetails;
             _inventoryService = inventoryService;
+            _ledgerPostingService = ledgerPostingService;
 
         }
         public SellMaster AddAsync(SellMasterDtos model)
@@ -94,8 +97,8 @@ namespace LPGManager.Data.Services.SellService
                     var sell = _mapper.Map<SellMaster>(model);
                     sell.InvoiceNo = GenerateInvoice();
                     sell.InvoiceDate = Helper.ToEpoch(DateTime.Now);
-                    sell.TotalPrice = model.SellsDetails.Sum(a => a.Quantity * a.Price);
                     sell.Discount = model.SellsDetails.Sum(a => a.Discount * a.Quantity);
+                    sell.TotalPrice = model.SellsDetails.Sum(a => a.Quantity * a.Price)-sell.Discount;
                     sell.DeliveryStatus = DeliveryEnum.Pending.ToString();
                     var res = _sellMasterRepository.Insert(sell);
                     _sellMasterRepository.Save();
@@ -127,6 +130,21 @@ namespace LPGManager.Data.Services.SellService
                         }
                         _inventoryRepository.Save();
                     }
+                    //ledger posting
+                    var ledger = new LedgerPostingDtos()
+                    {
+                        LedgerId = model.CustomerId,
+                        Credit = sell.TotalPrice,
+                        TransactionType=(int)TransactionTypeEnum.Sell,
+                        VoucherTypeId= 0,
+                        VoucherNo=sell.InvoiceNo,
+                        ReferanceInvoiceNo=sell.InvoiceNo,
+                        Notes=sell.Notes,
+                        CreatedDate= sell.CreatedDate,
+                        CreatedBy=sell.CreatedBy,
+                        PostingDate=sell.InvoiceDate
+                    };
+                    _ledgerPostingService.AddAsync(ledger);
                     return res;
                 }
                 return null;

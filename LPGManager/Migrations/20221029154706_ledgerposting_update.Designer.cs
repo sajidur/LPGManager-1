@@ -3,6 +3,7 @@ using System;
 using LPGManager.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LPGManager.Migrations
 {
     [DbContext(typeof(AppsDbContext))]
-    partial class AppsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221029154706_ledgerposting_update")]
+    partial class ledgerposting_update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -387,8 +389,8 @@ namespace LPGManager.Migrations
                     b.Property<int>("IsActive")
                         .HasColumnType("integer");
 
-                    b.Property<long>("LedgerId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("LedgerId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Notes")
                         .IsRequired()

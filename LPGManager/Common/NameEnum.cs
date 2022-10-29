@@ -18,4 +18,10 @@
         Pending,
         Delivered
     }
+    public enum TransactionTypeEnum
+    {
+        Sell=1,
+        Payment=2,
+        Purchase=3
+    }
 }

@@ -3,6 +3,7 @@ using System;
 using LPGManager.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LPGManager.Migrations
 {
     [DbContext(typeof(AppsDbContext))]
-    partial class AppsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221029152103_ledgerposting")]
+    partial class ledgerposting
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -365,12 +367,11 @@ namespace LPGManager.Migrations
                     b.Property<decimal>("Balance")
                         .HasColumnType("numeric");
 
-                    b.Property<long>("ChequeDate")
-                        .HasColumnType("bigint");
+                    b.Property<decimal>("ChequeDate")
+                        .HasColumnType("numeric");
 
-                    b.Property<string>("ChequeNo")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<decimal>("ChequeNo")
+                        .HasColumnType("numeric");
 
                     b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
@@ -387,8 +388,8 @@ namespace LPGManager.Migrations
                     b.Property<int>("IsActive")
                         .HasColumnType("integer");
 
-                    b.Property<long>("LedgerId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("LedgerId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Notes")
                         .IsRequired()
@@ -403,9 +404,8 @@ namespace LPGManager.Migrations
                     b.Property<int>("ReferanceId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("ReferanceInvoiceNo")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("ReferanceInvoiceNo")
+                        .HasColumnType("integer");
 
                     b.Property<long>("TenantId")
                         .HasColumnType("bigint");

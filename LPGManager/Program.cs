@@ -5,6 +5,7 @@ using LPGManager.Data.Services.CompanyService;
 using LPGManager.Data.Services.CustomerService;
 using LPGManager.Data.Services.ExchangeService;
 using LPGManager.Data.Services.InventoryService;
+using LPGManager.Data.Services.Ledger;
 using LPGManager.Data.Services.PurchaseService;
 using LPGManager.Data.Services.RoleService;
 using LPGManager.Data.Services.SellService;
@@ -61,6 +62,7 @@ builder.Services.AddScoped<ITokenGeneratorService, TokenGeneratorService>();
 builder.Services.AddScoped<IReturnMasterService, ReturnMasterService>();
 builder.Services.AddScoped<ITenantService, TenantService>();
 builder.Services.AddScoped<ISellRequisitionMasterService, SellRequisitionService>();
+builder.Services.AddScoped<ILedgerPostingService, LedgerPostingService>();
 
 // Adding Jwt Bearer
 

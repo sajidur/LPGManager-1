@@ -3,6 +3,7 @@ using System;
 using LPGManager.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LPGManager.Migrations
 {
     [DbContext(typeof(AppsDbContext))]
-    partial class AppsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221029151940_ledger")]
+    partial class ledger
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -352,83 +354,6 @@ namespace LPGManager.Migrations
                     b.HasIndex("WarehouseId");
 
                     b.ToTable("Inventories", "public");
-                });
-
-            modelBuilder.Entity("LPGManager.Models.LedgerPosting", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<decimal>("Balance")
-                        .HasColumnType("numeric");
-
-                    b.Property<long>("ChequeDate")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("ChequeNo")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<long>("CreatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<decimal>("Credit")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("Debit")
-                        .HasColumnType("numeric");
-
-                    b.Property<int>("IsActive")
-                        .HasColumnType("integer");
-
-                    b.Property<long>("LedgerId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Notes")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("PaymentType")
-                        .HasColumnType("integer");
-
-                    b.Property<long>("PostingDate")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("ReferanceId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ReferanceInvoiceNo")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<long>("TenantId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("TransactionType")
-                        .HasColumnType("integer");
-
-                    b.Property<long>("UpdatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("VoucherNo")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("VoucherTypeId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("LedgerPostings", "public");
                 });
 
             modelBuilder.Entity("LPGManager.Models.PurchaseDetails", b =>
