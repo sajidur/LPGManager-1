@@ -13,7 +13,7 @@
         public long ChequeDate { get; set; }
         public int PaymentType { get; set; } //1=cash 2=cheque //3=adjust
         public int TransactionType { get; set; } //1 sell, 1=receive, 3=purchase, 4=payment 
-        public int ReferanceId { get; set; } //sell , purchase table id
+        public long ReferanceId { get; set; } //sell , purchase table id
         public string ReferanceInvoiceNo { get; set; } //sell purchase id
         public string Notes { get; set; }
 

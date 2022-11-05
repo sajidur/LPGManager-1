@@ -22,6 +22,7 @@
     {
         Sell=1,
         Payment=2,
+        Receive=4,
         Purchase=3
     }
 }

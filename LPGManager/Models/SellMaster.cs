@@ -7,6 +7,8 @@
         public long CustomerId { get; set; }
         public decimal TotalPrice { get; set; }
         public decimal Discount { get; set; }
+        public decimal TotalPaid { get; set; }
+        public decimal TotalDue { get; set; }
         public decimal DueAdvance { get; set; }
         public string PaymentType { get; set; }
         public string? Notes { get; set; }

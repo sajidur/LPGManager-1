@@ -134,10 +134,11 @@ namespace LPGManager.Data.Services.SellService
                     var ledger = new LedgerPostingDtos()
                     {
                         LedgerId = model.CustomerId,
-                        Credit = sell.TotalPrice,
+                        Credit = sell.TotalPaid,
                         TransactionType=(int)TransactionTypeEnum.Sell,
                         VoucherTypeId= 0,
                         VoucherNo=sell.InvoiceNo,
+                        ReferanceId=sell.Id,
                         ReferanceInvoiceNo=sell.InvoiceNo,
                         Notes=sell.Notes,
                         CreatedDate= sell.CreatedDate,
@@ -300,6 +301,48 @@ namespace LPGManager.Data.Services.SellService
                 sellMaster.DeliveryBy = delivery.DeliveryBy;
                 _sellMasterRepository.Update(sellMaster);
                 _sellMasterRepository.Save();
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(
+                  $"{ex}.");
+            }
+            return null;
+        }
+
+        public async Task<SellMaster> DueReceive(List<DueReceiveDtos> dueReceives, User user)
+        {
+            try
+            {
+                var sellMasters = _sellMasterRepository.FindBy(a=> dueReceives.Select(b=>b.SalesMasterId).Contains(a.Id)).ToList();
+                foreach (var sellMaster in sellMasters)
+                {
+                    var dueObj = dueReceives.Where(a => a.SalesMasterId == sellMaster.Id).FirstOrDefault();
+                    sellMaster.TotalPaid += dueObj.PaidAmount;
+                    sellMaster.TotalDue -= dueObj.PaidAmount;
+                    sellMaster.UpdatedBy = user.Id;
+                    sellMaster.UpdatedDate= DateTime.Now;
+                    _sellMasterRepository.Update(sellMaster);
+                    _sellMasterRepository.Save();
+
+                    //ledger posting
+                    var ledger = new LedgerPostingDtos()
+                    {
+                        LedgerId = sellMaster.CustomerId,
+                        Credit = dueObj.PaidAmount,
+                        TransactionType = (int)TransactionTypeEnum.Receive,
+                        VoucherTypeId = 0,
+                        VoucherNo = sellMaster.InvoiceNo,
+                        ReferanceId = sellMaster.Id,
+                        ReferanceInvoiceNo = sellMaster.InvoiceNo,
+                        Notes = dueObj.Notes,
+                        CreatedDate = DateTime.Now,
+                        CreatedBy = user.Id,
+                        PostingDate = dueObj.PostingDate
+                    };
+                    _ledgerPostingService.AddAsync(ledger);
+                }
                 return null;
             }
             catch (Exception ex)

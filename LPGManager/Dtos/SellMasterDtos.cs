@@ -11,6 +11,8 @@ namespace LPGManager.Dtos
         public long CustomerId { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please provide TotalPrice")]
         public decimal TotalPrice { get; set; }
+        public decimal TotalPaid { get; set; }
+        public decimal TotalDue { get; set; }
         public decimal Discount { get; set; }
         public decimal DueAdvance { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please provide valid PaymentType")]

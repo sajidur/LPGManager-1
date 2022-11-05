@@ -75,6 +75,24 @@ namespace LPGManager.Controllers
             return Ok(new { data = result });
         }
 
+        [HttpPost("DueReceive")]
+        public async Task<IActionResult> DueReceive(List<DueReceiveDtos> dueReceives)
+        {
+            try
+            {
+                //validation
+                var tenant = Helper.GetTenant(HttpContext);
+                var result=_sellService.DueReceive(dueReceives,tenant).Result;
+                return Ok(new { data = result });
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(
+                  $"{ex}.");
+            }
+
+        }
+
         [HttpPost("Delivery")]
         public async Task<IActionResult> Delivery(DeliveryDtos delivery)
         {

@@ -11,6 +11,7 @@ namespace LPGManager.Interfaces.SellsInterface
         List<SellMasterDtos> GetAllAsync(long startDate, long endDate, long tenantId);
         SellMasterDtos GetAsync(long id);
         SellMaster AddAsync(SellMasterDtos model);
+        Task<SellMaster> DueReceive(List<DueReceiveDtos> dueReceives, User user);
         Task<SellMaster> UpdateAsync(SellMasterDtos model);
         Task DeleteAsync(long id);
         Task<SellMaster> Delivery(DeliveryDtos sellMaster);
