@@ -7,34 +7,23 @@ namespace LPGManager.Data.Services.SellService
 {
     public class ReturnMasterService: IReturnMasterService
     {
-        IMapper _mapper;
-        private IGenericRepository<SellMaster> _sellMasterRepository;
+        private IMapper _mapper;
         private IGenericRepository<SellDetails> _sellDetailsRepository;
         private IGenericRepository<Inventory> _inventoryRepository;
-        private IGenericRepository<Company> _companyRepository;
-        private IGenericRepository<CustomerEntity> _customerRepository;
         private IGenericRepository<ReturnMaster> _returnMaster;
-        private IGenericRepository<ReturnDetails> _returnDetails;
         public ReturnMasterService(IMapper mapper,
             IGenericRepository<Inventory> inventoryRepository,
-            IGenericRepository<Company> companyRepository,
-            IGenericRepository<CustomerEntity> customerRepository,
             IGenericRepository<ReturnMaster> retrunMaster,
-            IGenericRepository<ReturnDetails> returnDetails,
             IGenericRepository<SellDetails> sellDetailsRepository)
         {
             _inventoryRepository = inventoryRepository;
-            _companyRepository = companyRepository;
-            _customerRepository = customerRepository;
             _mapper = mapper;
             _returnMaster = retrunMaster;
-            _returnDetails = returnDetails;
             _sellDetailsRepository=sellDetailsRepository;
 
         }
         public ReturnMaster AddAsync(ReturnMasterDtos model)
         {
-            ReturnMaster result;
             try
             {
                 var sell = _mapper.Map<ReturnMaster>(model);
@@ -58,9 +47,9 @@ namespace LPGManager.Data.Services.SellService
                                         invv.SupportQty -= item.Quantity;
                                         invv.UpdatedBy = model.CreatedBy;
                                         _inventoryRepository.Update(invv);
-                                        _inventoryRepository.Save();
                                     }
                                 }
+                                _inventoryRepository.Save();
                             }
                             else
                             {

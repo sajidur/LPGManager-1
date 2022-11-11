@@ -100,6 +100,10 @@ namespace LPGManager.Data.Services.SellService
                     sell.Discount = model.SellsDetails.Sum(a => a.Discount * a.Quantity);
                     sell.TotalPrice = model.SellsDetails.Sum(a => a.Quantity * a.Price)-sell.Discount;
                     sell.DeliveryStatus = DeliveryEnum.Pending.ToString();
+                    if (model.DeliveryStatus== DeliveryEnum.Delivered.ToString())
+                    {
+                        sell.DeliveryStatus = DeliveryEnum.Delivered.ToString();
+                    }
                     var res = _sellMasterRepository.Insert(sell);
                     _sellMasterRepository.Save();
                     foreach (var item in model.SellsDetails)
