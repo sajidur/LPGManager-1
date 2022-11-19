@@ -221,8 +221,8 @@ namespace LPGManager.Data.Services.SellService
             var returns = _returnMaster.FindBy(a => sellMasterDetails.Select(a => a.Id).Contains(a.SellMasterId)).Include(a => a.ReturnDetails);
             foreach (var item in sellMasterDetails)
             {
-                var returnMastre = returns.Where(a => a.SellMasterId == item.Id).FirstOrDefault();
-                var returnMasterDto = _mapper.Map<ReturnMasterDtos>(returnMastre);
+                var returnMastre = returns.Where(a => a.SellMasterId == item.Id);
+                var returnMasterDto = _mapper.Map<List<ReturnMasterDtos>>(returnMastre);
                 item.ReturnMaster = returnMasterDto;
             }
             return sellMasterDetails;
@@ -243,9 +243,10 @@ namespace LPGManager.Data.Services.SellService
             var returns = _returnMaster.FindBy(a => sellMasterDetails.Select(a => a.Id).Contains(a.SellMasterId)).Include(a => a.ReturnDetails);
             foreach (var item in sellMasterDetails)
             {
-                var returnMastre = returns.Where(a => a.SellMasterId == item.Id).FirstOrDefault();
-                var returnMasterDto = _mapper.Map<ReturnMasterDtos>(returnMastre);
+                var returnMastre = returns.Where(a => a.SellMasterId == item.Id);
+                var returnMasterDto = _mapper.Map<List<ReturnMasterDtos>>(returnMastre);
                 item.ReturnMaster = returnMasterDto;
+                item.TotalReturnQty= returnMasterDto.Sum(a=>a.ReturnDetails.Sum(b=>b.ReturnQuantity));
             }
             return sellMasterDetails;
         }
@@ -266,8 +267,8 @@ namespace LPGManager.Data.Services.SellService
             var returns=_returnMaster.FindBy(a => sellMasterDetails.Select(a => a.Id).Contains(a.SellMasterId)).Include(a=>a.ReturnDetails);
             foreach (var item in sellMasterDetails)
             {
-              var returnMastre = returns.Where(a => a.SellMasterId == item.Id).FirstOrDefault();
-                var returnMasterDto = _mapper.Map<ReturnMasterDtos>(returnMastre);
+              var returnMastre = returns.Where(a => a.SellMasterId == item.Id);
+                var returnMasterDto = _mapper.Map<List<ReturnMasterDtos>>(returnMastre);
                 item.ReturnMaster = returnMasterDto;
             }
             return sellMasterDetails;
@@ -283,13 +284,8 @@ namespace LPGManager.Data.Services.SellService
             }
             data.Customer = _customerRepository.GetById(data.CustomerId).Result;
             var dataDto= _mapper.Map<SellMasterDtos>(data);
-            var returnMaster=_returnMaster.FindBy(a=>a.SellMasterId==id).FirstOrDefault();
-            if (returnMaster != null)
-            {
-                var details=_returnDetails.FindBy(a=>a.ReturnMasterId.Equals(returnMaster.Id)).ToList();
-                returnMaster.ReturnDetails = details;
-            }
-            var returnMasterDto = _mapper.Map<ReturnMasterDtos>(returnMaster);
+            var returnMaster=_returnMaster.FindBy(a=>a.SellMasterId==id).Include(a => a.ReturnDetails).ToList();
+            var returnMasterDto = _mapper.Map<List<ReturnMasterDtos>>(returnMaster);
             dataDto.ReturnMaster = returnMasterDto;
             return dataDto;
         }

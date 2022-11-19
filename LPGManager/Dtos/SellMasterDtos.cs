@@ -15,6 +15,8 @@ namespace LPGManager.Dtos
         public decimal TotalDue { get; set; }
         public decimal Discount { get; set; }
         public decimal DueAdvance { get; set; }
+        public decimal TotalReturnQty { get; set; }
+
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please provide valid PaymentType")]
         public string PaymentType { get; set; }
         public long DeliveryDate { get; set; }
@@ -27,7 +29,7 @@ namespace LPGManager.Dtos
         public string? Notes { get; set; }
         public List<SellDetailsDtos> SellsDetails { get; set; }
         public CustomerDto? Customer { get; set; }
-        public ReturnMasterDtos? ReturnMaster {get;set;}
+        public List<ReturnMasterDtos>? ReturnMaster {get;set;}
 
     }
 }

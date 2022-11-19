@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LPGManager.Common;
 using LPGManager.Data.Services.CustomerService;
 using LPGManager.Data.Services.SellService;
 using LPGManager.Dtos;
@@ -38,7 +39,11 @@ namespace LPGManager.Controllers
             LedgerSummary ledgerSummary= new LedgerSummary();
             ledgerSummary.TotalDiscount = customerLedger.SellList.Sum(a => a.Discount);
             ledgerSummary.TotalSupport = customerLedger.SellList.Sum(a => a.SellsDetails.Sum(b=>b.SupportQty));
-            ledgerSummary.TotalQty = customerLedger.SellList.Sum(a => (a.SellsDetails.Sum(b => b.Quantity)+ a.SellsDetails.Sum(b => b.OpeningQuantity)+ a.SellsDetails.Sum(b => b.ReceivingQuantity)- a.SellsDetails.Sum(b => b.ReturnQuantity)));
+            ledgerSummary.TotalBottleQty = customerLedger.SellList.Sum(a => (a.SellsDetails.Where(a=>a.ProductName==ProductNameEnum.Bottle.ToString()).Sum(b => b.Quantity)+ a.SellsDetails.Where(a => a.ProductName == ProductNameEnum.Bottle.ToString()).Sum(b => b.OpeningQuantity)+ a.SellsDetails.Where(a => a.ProductName == ProductNameEnum.Bottle.ToString()).Sum(b => b.ReceivingQuantity)- a.SellsDetails.Where(a => a.ProductName == ProductNameEnum.Bottle.ToString()).Sum(b => b.ReturnQuantity)));
+            ledgerSummary.TotalRiffleQty = customerLedger.SellList.Sum(a => (a.SellsDetails.Where(a => a.ProductName == ProductNameEnum.Refill.ToString()).Sum(b => b.Quantity) + a.SellsDetails.Where(a => a.ProductName == ProductNameEnum.Refill.ToString()).Sum(b => b.OpeningQuantity) + a.SellsDetails.Where(a => a.ProductName == ProductNameEnum.Refill.ToString()).Sum(b => b.ReceivingQuantity) - a.SellsDetails.Where(a => a.ProductName == ProductNameEnum.Refill.ToString()).Sum(b => b.ReturnQuantity)));
+            ledgerSummary.TotalReturnQty = customerLedger.SellList.Sum(a => (a.ReturnMaster.Sum(b => b.TotalReturnQty)));
+            ledgerSummary.TotalDue = customerLedger.SellList.Sum(a => a.TotalDue);
+            customerLedger.LedgerSummary = ledgerSummary;
             return Ok(customerLedger);
         }
     }
